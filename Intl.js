@@ -9,7 +9,7 @@ define([], function(){
 			for (var i=0;i<identifier.length;i++) {
 				var cp = identifier.charCodeAt(i);
 				if (cp >= 0x0061 && cp <= 0x007A) { // 'a' through 'z'
-                    result += identifier[i].toUpperCase();				
+					result += identifier[i].toUpperCase();				
 				} else {
 					result += identifier[i];
 				}
