@@ -1,0 +1,266 @@
+{
+  "main": {
+    "tr": {
+      "dates": {
+        "calendars": {
+          "roc": {
+            "months": {
+              "format": {
+                "abbreviated": {
+                  "1": "Oca",
+                  "2": "Şub",
+                  "3": "Mar",
+                  "4": "Nis",
+                  "5": "May",
+                  "6": "Haz",
+                  "7": "Tem",
+                  "8": "Ağu",
+                  "9": "Eyl",
+                  "10": "Eki",
+                  "11": "Kas",
+                  "12": "Ara"
+                },
+                "narrow": {
+                  "1": "O",
+                  "2": "Ş",
+                  "3": "M",
+                  "4": "N",
+                  "5": "M",
+                  "6": "H",
+                  "7": "T",
+                  "8": "A",
+                  "9": "E",
+                  "10": "E",
+                  "11": "K",
+                  "12": "A"
+                },
+                "wide": {
+                  "1": "Ocak",
+                  "2": "Şubat",
+                  "3": "Mart",
+                  "4": "Nisan",
+                  "5": "Mayıs",
+                  "6": "Haziran",
+                  "7": "Temmuz",
+                  "8": "Ağustos",
+                  "9": "Eylül",
+                  "10": "Ekim",
+                  "11": "Kasım",
+                  "12": "Aralık"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "1": "Oca",
+                  "2": "Şub",
+                  "3": "Mar",
+                  "4": "Nis",
+                  "5": "May",
+                  "6": "Haz",
+                  "7": "Tem",
+                  "8": "Ağu",
+                  "9": "Eyl",
+                  "10": "Eki",
+                  "11": "Kas",
+                  "12": "Ara"
+                },
+                "narrow": {
+                  "1": "O",
+                  "2": "Ş",
+                  "3": "M",
+                  "4": "N",
+                  "5": "M",
+                  "6": "H",
+                  "7": "T",
+                  "8": "A",
+                  "9": "E",
+                  "10": "E",
+                  "11": "K",
+                  "12": "A"
+                },
+                "wide": {
+                  "1": "Ocak",
+                  "2": "Şubat",
+                  "3": "Mart",
+                  "4": "Nisan",
+                  "5": "Mayıs",
+                  "6": "Haziran",
+                  "7": "Temmuz",
+                  "8": "Ağustos",
+                  "9": "Eylül",
+                  "10": "Ekim",
+                  "11": "Kasım",
+                  "12": "Aralık"
+                }
+              }
+            },
+            "days": {
+              "format": {
+                "abbreviated": {
+                  "sun": "Paz",
+                  "mon": "Pzt",
+                  "tue": "Sal",
+                  "wed": "Çar",
+                  "thu": "Per",
+                  "fri": "Cum",
+                  "sat": "Cmt"
+                },
+                "narrow": {
+                  "sun": "P",
+                  "mon": "P",
+                  "tue": "S",
+                  "wed": "Ç",
+                  "thu": "P",
+                  "fri": "C",
+                  "sat": "C"
+                },
+                "short": {
+                  "sun": "Pa",
+                  "mon": "Pt",
+                  "tue": "Sa",
+                  "wed": "Ça",
+                  "thu": "Pe",
+                  "fri": "Cu",
+                  "sat": "Ct"
+                },
+                "wide": {
+                  "sun": "Pazar",
+                  "mon": "Pazartesi",
+                  "tue": "Salı",
+                  "wed": "Çarşamba",
+                  "thu": "Perşembe",
+                  "fri": "Cuma",
+                  "sat": "Cumartesi"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "sun": "Paz",
+                  "mon": "Pzt",
+                  "tue": "Sal",
+                  "wed": "Çar",
+                  "thu": "Per",
+                  "fri": "Cum",
+                  "sat": "Cmt"
+                },
+                "narrow": {
+                  "sun": "P",
+                  "mon": "P",
+                  "tue": "S",
+                  "wed": "Ç",
+                  "thu": "P",
+                  "fri": "C",
+                  "sat": "C"
+                },
+                "short": {
+                  "sun": "Pa",
+                  "mon": "Pt",
+                  "tue": "Sa",
+                  "wed": "Ça",
+                  "thu": "Pe",
+                  "fri": "Cu",
+                  "sat": "Ct"
+                },
+                "wide": {
+                  "sun": "Pazar",
+                  "mon": "Pazartesi",
+                  "tue": "Salı",
+                  "wed": "Çarşamba",
+                  "thu": "Perşembe",
+                  "fri": "Cuma",
+                  "sat": "Cumartesi"
+                }
+              }
+            },
+            "dayPeriods": {
+              "format": {
+                "abbreviated": {
+                  "am": "ÖÖ",
+                  "pm": "ÖS"
+                },
+                "narrow": {
+                  "am": "ÖÖ",
+                  "pm": "ÖS"
+                },
+                "wide": {
+                  "am": "ÖÖ",
+                  "pm": "ÖS"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "am": "ÖÖ",
+                  "pm": "ÖS"
+                },
+                "narrow": {
+                  "am": "ÖÖ",
+                  "pm": "ÖS"
+                },
+                "wide": {
+                  "am": "ÖÖ",
+                  "pm": "ÖS"
+                }
+              }
+            },
+            "eras": {
+              "eraNames": {
+                "0": "Before R.O.C.",
+                "1": "Minguo"
+              },
+              "eraAbbr": {
+                "0": "Before R.O.C.",
+                "1": "Minguo"
+              },
+              "eraNarrow": {
+                "0": "Before R.O.C.",
+                "1": "Minguo"
+              }
+            },
+            "dateTimeFormats": {
+              "availableFormats": {
+                "d": "d",
+                "Ed": "d E",
+                "Ehm": "E h:mm a",
+                "EHm": "E HH:mm",
+                "Ehms": "E h:mm:ss a",
+                "EHms": "E HH:mm:ss",
+                "Gy": "G y",
+                "GyMMM": "G MMM y",
+                "GyMMMd": "G d MMM y",
+                "GyMMMEd": "G d MMM y E",
+                "h": "h a",
+                "H": "HH",
+                "hm": "h:mm a",
+                "Hm": "HH:mm",
+                "hms": "h:mm:ss a",
+                "Hms": "HH:mm:ss",
+                "M": "L",
+                "Md": "dd/MM",
+                "MEd": "dd/MM E",
+                "MMM": "LLL",
+                "MMMd": "d MMM",
+                "MMMEd": "d MMM E",
+                "MMMMd": "dd MMMM",
+                "MMMMEd": "dd MMMM E",
+                "mmss": "mm:ss",
+                "ms": "mm:ss",
+                "y": "G y",
+                "yyyy": "G y",
+                "yyyyM": "GGGGG M/y",
+                "yyyyMd": "GGGGG dd.MM.y",
+                "yyyyMEd": "GGGGG dd.MM.y E",
+                "yyyyMM": "MM.y G",
+                "yyyyMMM": "G MMM y",
+                "yyyyMMMd": "G dd MMM y",
+                "yyyyMMMEd": "G d MMM y E",
+                "yyyyMMMM": "MMMM y G",
+                "yyyyQQQ": "G y/QQQ",
+                "yyyyQQQQ": "G y/QQQQ"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

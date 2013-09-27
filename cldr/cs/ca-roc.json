@@ -1,0 +1,268 @@
+{
+  "main": {
+    "cs": {
+      "dates": {
+        "calendars": {
+          "roc": {
+            "months": {
+              "format": {
+                "abbreviated": {
+                  "1": "led",
+                  "2": "úno",
+                  "3": "bře",
+                  "4": "dub",
+                  "5": "kvě",
+                  "6": "čvn",
+                  "7": "čvc",
+                  "8": "srp",
+                  "9": "zář",
+                  "10": "říj",
+                  "11": "lis",
+                  "12": "pro"
+                },
+                "narrow": {
+                  "1": "1",
+                  "2": "2",
+                  "3": "3",
+                  "4": "4",
+                  "5": "5",
+                  "6": "6",
+                  "7": "7",
+                  "8": "8",
+                  "9": "9",
+                  "10": "10",
+                  "11": "11",
+                  "12": "12"
+                },
+                "wide": {
+                  "1": "ledna",
+                  "2": "února",
+                  "3": "března",
+                  "4": "dubna",
+                  "5": "května",
+                  "6": "června",
+                  "7": "července",
+                  "8": "srpna",
+                  "9": "září",
+                  "10": "října",
+                  "11": "listopadu",
+                  "12": "prosince"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "1": "led",
+                  "2": "úno",
+                  "3": "bře",
+                  "4": "dub",
+                  "5": "kvě",
+                  "6": "čvn",
+                  "7": "čvc",
+                  "8": "srp",
+                  "9": "zář",
+                  "10": "říj",
+                  "11": "lis",
+                  "12": "pro"
+                },
+                "narrow": {
+                  "1": "l",
+                  "2": "ú",
+                  "3": "b",
+                  "4": "d",
+                  "5": "k",
+                  "6": "č",
+                  "7": "č",
+                  "8": "s",
+                  "9": "z",
+                  "10": "ř",
+                  "11": "l",
+                  "12": "p"
+                },
+                "wide": {
+                  "1": "leden",
+                  "2": "únor",
+                  "3": "březen",
+                  "4": "duben",
+                  "5": "květen",
+                  "6": "červen",
+                  "7": "červenec",
+                  "8": "srpen",
+                  "9": "září",
+                  "10": "říjen",
+                  "11": "listopad",
+                  "12": "prosinec"
+                }
+              }
+            },
+            "days": {
+              "format": {
+                "abbreviated": {
+                  "sun": "ne",
+                  "mon": "po",
+                  "tue": "út",
+                  "wed": "st",
+                  "thu": "čt",
+                  "fri": "pá",
+                  "sat": "so"
+                },
+                "narrow": {
+                  "sun": "N",
+                  "mon": "P",
+                  "tue": "Ú",
+                  "wed": "S",
+                  "thu": "Č",
+                  "fri": "P",
+                  "sat": "S"
+                },
+                "short": {
+                  "sun": "ne",
+                  "mon": "po",
+                  "tue": "út",
+                  "wed": "st",
+                  "thu": "čt",
+                  "fri": "pá",
+                  "sat": "so"
+                },
+                "wide": {
+                  "sun": "neděle",
+                  "mon": "pondělí",
+                  "tue": "úterý",
+                  "wed": "středa",
+                  "thu": "čtvrtek",
+                  "fri": "pátek",
+                  "sat": "sobota"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "sun": "ne",
+                  "mon": "po",
+                  "tue": "út",
+                  "wed": "st",
+                  "thu": "čt",
+                  "fri": "pá",
+                  "sat": "so"
+                },
+                "narrow": {
+                  "sun": "N",
+                  "mon": "P",
+                  "tue": "Ú",
+                  "wed": "S",
+                  "thu": "Č",
+                  "fri": "P",
+                  "sat": "S"
+                },
+                "short": {
+                  "sun": "ne",
+                  "mon": "po",
+                  "tue": "út",
+                  "wed": "st",
+                  "thu": "čt",
+                  "fri": "pá",
+                  "sat": "so"
+                },
+                "wide": {
+                  "sun": "neděle",
+                  "mon": "pondělí",
+                  "tue": "úterý",
+                  "wed": "středa",
+                  "thu": "čtvrtek",
+                  "fri": "pátek",
+                  "sat": "sobota"
+                }
+              }
+            },
+            "dayPeriods": {
+              "format": {
+                "abbreviated": {
+                  "am": "AM",
+                  "pm": "PM"
+                },
+                "narrow": {
+                  "am": "AM",
+                  "pm": "PM"
+                },
+                "wide": {
+                  "am": "AM",
+                  "pm": "PM"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "am": "AM",
+                  "pm": "PM"
+                },
+                "narrow": {
+                  "am": "AM",
+                  "pm": "PM"
+                },
+                "wide": {
+                  "am": "AM",
+                  "pm": "PM"
+                }
+              }
+            },
+            "eras": {
+              "eraNames": {
+                "0": "Před R. O. C.",
+                "1": "R.O.C."
+              },
+              "eraAbbr": {
+                "0": "Před R. O. C.",
+                "1": "R.O.C."
+              },
+              "eraNarrow": {
+                "0": "Před R. O. C.",
+                "1": "R.O.C."
+              }
+            },
+            "dateTimeFormats": {
+              "availableFormats": {
+                "d": "d.",
+                "Ed": "E d.",
+                "Ehm": "E h:mm a",
+                "EHm": "E HH:mm",
+                "Ehms": "E h:mm:ss a",
+                "EHms": "E HH:mm:ss",
+                "Gy": "y G",
+                "GyMMM": "LLLL y G",
+                "GyMMMd": "d. M. y G",
+                "GyMMMEd": "E d. M. y G",
+                "GyMMMMd": "d. MMMM y G",
+                "GyMMMMEd": "E d. MMMM y G",
+                "h": "h a",
+                "H": "H",
+                "hm": "h:mm a",
+                "Hm": "H:mm",
+                "hms": "h:mm:ss a",
+                "Hms": "H:mm:ss",
+                "M": "L",
+                "Md": "d. M.",
+                "MEd": "E d. M.",
+                "MMM": "LLL",
+                "MMMd": "d. M.",
+                "MMMEd": "E d. M.",
+                "MMMMd": "d. MMMM",
+                "MMMMEd": "E d. MMMM",
+                "ms": "mm:ss",
+                "y": "y G",
+                "yyyy": "y G",
+                "yyyyM": "M/y GGGGG",
+                "yyyyMd": "d. M. y GGGGG",
+                "yyyyMEd": "E d. M. y GGGGG",
+                "yyyyMMM": "LLLL y G",
+                "yyyyMMMd": "d. M. y G",
+                "yyyyMMMEd": "E d. M. y G",
+                "yyyyMMMM": "LLLL y G",
+                "yyyyMMMMd": "d. MMMM y G",
+                "yyyyMMMMEd": "E d. MMMM y G",
+                "yyyyQQQ": "QQQ y G",
+                "yyyyQQQQ": "QQQQ y G"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

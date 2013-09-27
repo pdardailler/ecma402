@@ -1,0 +1,261 @@
+{
+  "main": {
+    "fi": {
+      "dates": {
+        "calendars": {
+          "buddhist": {
+            "months": {
+              "format": {
+                "abbreviated": {
+                  "1": "tammikuuta",
+                  "2": "helmikuuta",
+                  "3": "maaliskuuta",
+                  "4": "huhtikuuta",
+                  "5": "toukokuuta",
+                  "6": "kesäkuuta",
+                  "7": "heinäkuuta",
+                  "8": "elokuuta",
+                  "9": "syyskuuta",
+                  "10": "lokakuuta",
+                  "11": "marraskuuta",
+                  "12": "joulukuuta"
+                },
+                "narrow": {
+                  "1": "T",
+                  "2": "H",
+                  "3": "M",
+                  "4": "H",
+                  "5": "T",
+                  "6": "K",
+                  "7": "H",
+                  "8": "E",
+                  "9": "S",
+                  "10": "L",
+                  "11": "M",
+                  "12": "J"
+                },
+                "wide": {
+                  "1": "tammikuuta",
+                  "2": "helmikuuta",
+                  "3": "maaliskuuta",
+                  "4": "huhtikuuta",
+                  "5": "toukokuuta",
+                  "6": "kesäkuuta",
+                  "7": "heinäkuuta",
+                  "8": "elokuuta",
+                  "9": "syyskuuta",
+                  "10": "lokakuuta",
+                  "11": "marraskuuta",
+                  "12": "joulukuuta"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "1": "tammi",
+                  "2": "helmi",
+                  "3": "maalis",
+                  "4": "huhti",
+                  "5": "touko",
+                  "6": "kesä",
+                  "7": "heinä",
+                  "8": "elo",
+                  "9": "syys",
+                  "10": "loka",
+                  "11": "marras",
+                  "12": "joulu"
+                },
+                "narrow": {
+                  "1": "T",
+                  "2": "H",
+                  "3": "M",
+                  "4": "H",
+                  "5": "T",
+                  "6": "K",
+                  "7": "H",
+                  "8": "E",
+                  "9": "S",
+                  "10": "L",
+                  "11": "M",
+                  "12": "J"
+                },
+                "wide": {
+                  "1": "tammikuu",
+                  "2": "helmikuu",
+                  "3": "maaliskuu",
+                  "4": "huhtikuu",
+                  "5": "toukokuu",
+                  "6": "kesäkuu",
+                  "7": "heinäkuu",
+                  "8": "elokuu",
+                  "9": "syyskuu",
+                  "10": "lokakuu",
+                  "11": "marraskuu",
+                  "12": "joulukuu"
+                }
+              }
+            },
+            "days": {
+              "format": {
+                "abbreviated": {
+                  "sun": "su",
+                  "mon": "ma",
+                  "tue": "ti",
+                  "wed": "ke",
+                  "thu": "to",
+                  "fri": "pe",
+                  "sat": "la"
+                },
+                "narrow": {
+                  "sun": "S",
+                  "mon": "M",
+                  "tue": "T",
+                  "wed": "K",
+                  "thu": "T",
+                  "fri": "P",
+                  "sat": "L"
+                },
+                "short": {
+                  "sun": "su",
+                  "mon": "ma",
+                  "tue": "ti",
+                  "wed": "ke",
+                  "thu": "to",
+                  "fri": "pe",
+                  "sat": "la"
+                },
+                "wide": {
+                  "sun": "sunnuntaina",
+                  "mon": "maanantaina",
+                  "tue": "tiistaina",
+                  "wed": "keskiviikkona",
+                  "thu": "torstaina",
+                  "fri": "perjantaina",
+                  "sat": "lauantaina"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "sun": "su",
+                  "mon": "ma",
+                  "tue": "ti",
+                  "wed": "ke",
+                  "thu": "to",
+                  "fri": "pe",
+                  "sat": "la"
+                },
+                "narrow": {
+                  "sun": "S",
+                  "mon": "M",
+                  "tue": "T",
+                  "wed": "K",
+                  "thu": "T",
+                  "fri": "P",
+                  "sat": "L"
+                },
+                "short": {
+                  "sun": "su",
+                  "mon": "ma",
+                  "tue": "ti",
+                  "wed": "ke",
+                  "thu": "to",
+                  "fri": "pe",
+                  "sat": "la"
+                },
+                "wide": {
+                  "sun": "sunnuntai",
+                  "mon": "maanantai",
+                  "tue": "tiistai",
+                  "wed": "keskiviikko",
+                  "thu": "torstai",
+                  "fri": "perjantai",
+                  "sat": "lauantai"
+                }
+              }
+            },
+            "dayPeriods": {
+              "format": {
+                "abbreviated": {
+                  "am": "ap.",
+                  "pm": "ip."
+                },
+                "narrow": {
+                  "am": "ap.",
+                  "pm": "ip."
+                },
+                "wide": {
+                  "am": "ap.",
+                  "pm": "ip."
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "am": "ap.",
+                  "pm": "ip."
+                },
+                "narrow": {
+                  "am": "ap.",
+                  "pm": "ip."
+                },
+                "wide": {
+                  "am": "ap.",
+                  "pm": "ip."
+                }
+              }
+            },
+            "eras": {
+              "eraNames": {
+                "0": "BE"
+              },
+              "eraAbbr": {
+                "0": "BE"
+              },
+              "eraNarrow": {
+                "0": "BE"
+              }
+            },
+            "dateTimeFormats": {
+              "availableFormats": {
+                "d": "d",
+                "Ed": "E d.",
+                "Ehm": "E h:mm a",
+                "EHm": "E HH:mm",
+                "Ehms": "E h:mm:ss a",
+                "EHms": "E HH:mm:ss",
+                "Gy": "y G",
+                "GyMMM": "LLL y G",
+                "GyMMMd": "d. MMM y G",
+                "GyMMMEd": "E d. MMM y G",
+                "h": "h a",
+                "H": "H",
+                "hm": "h.mm a",
+                "Hm": "H.mm",
+                "hms": "h.mm.ss a",
+                "Hms": "H.mm.ss",
+                "M": "L",
+                "Md": "d.M.",
+                "MEd": "E d.M.",
+                "MMM": "LLL",
+                "MMMd": "d. MMM",
+                "MMMEd": "ccc d. MMM",
+                "ms": "mm.ss",
+                "y": "y G",
+                "yyyy": "y G",
+                "yyyyM": "L.y G",
+                "yyyyMd": "d.M.y G",
+                "yyyyMEd": "E d.M.y G",
+                "yyyyMM": "M.y G",
+                "yyyyMMM": "LLL y G",
+                "yyyyMMMd": "d. MMM y G",
+                "yyyyMMMEd": "E d. MMM y G",
+                "yyyyMMMM": "LLLL y G",
+                "yyyyMMMMccccd": "cccc d. MMMM y G",
+                "yyyyQQQ": "QQQ y G",
+                "yyyyQQQQ": "QQQQ y G"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

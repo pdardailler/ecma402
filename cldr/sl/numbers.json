@@ -1,0 +1,21 @@
+{
+  "main": {
+    "sl": {
+      "numbers": {
+        "symbols-numberSystem-latn": {
+          "decimal": ",",
+          "group": "."
+        },
+        "decimalFormats-numberSystem-latn": {
+          "standard": "#,##0.###"
+        },
+        "percentFormats-numberSystem-latn": {
+          "standard": "#,##0%"
+        },
+        "currencyFormats-numberSystem-latn": {
+          "standard": "¤#,##0.00;(¤#,##0.00)"
+        }
+      }
+    }
+  }
+}

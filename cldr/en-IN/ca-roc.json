@@ -1,0 +1,263 @@
+{
+  "main": {
+    "en-IN": {
+      "dates": {
+        "calendars": {
+          "roc": {
+            "months": {
+              "format": {
+                "abbreviated": {
+                  "1": "Jan",
+                  "2": "Feb",
+                  "3": "Mar",
+                  "4": "Apr",
+                  "5": "May",
+                  "6": "Jun",
+                  "7": "Jul",
+                  "8": "Aug",
+                  "9": "Sep",
+                  "10": "Oct",
+                  "11": "Nov",
+                  "12": "Dec"
+                },
+                "narrow": {
+                  "1": "J",
+                  "2": "F",
+                  "3": "M",
+                  "4": "A",
+                  "5": "M",
+                  "6": "J",
+                  "7": "J",
+                  "8": "A",
+                  "9": "S",
+                  "10": "O",
+                  "11": "N",
+                  "12": "D"
+                },
+                "wide": {
+                  "1": "January",
+                  "2": "February",
+                  "3": "March",
+                  "4": "April",
+                  "5": "May",
+                  "6": "June",
+                  "7": "July",
+                  "8": "August",
+                  "9": "September",
+                  "10": "October",
+                  "11": "November",
+                  "12": "December"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "1": "Jan",
+                  "2": "Feb",
+                  "3": "Mar",
+                  "4": "Apr",
+                  "5": "May",
+                  "6": "Jun",
+                  "7": "Jul",
+                  "8": "Aug",
+                  "9": "Sep",
+                  "10": "Oct",
+                  "11": "Nov",
+                  "12": "Dec"
+                },
+                "narrow": {
+                  "1": "J",
+                  "2": "F",
+                  "3": "M",
+                  "4": "A",
+                  "5": "M",
+                  "6": "J",
+                  "7": "J",
+                  "8": "A",
+                  "9": "S",
+                  "10": "O",
+                  "11": "N",
+                  "12": "D"
+                },
+                "wide": {
+                  "1": "January",
+                  "2": "February",
+                  "3": "March",
+                  "4": "April",
+                  "5": "May",
+                  "6": "June",
+                  "7": "July",
+                  "8": "August",
+                  "9": "September",
+                  "10": "October",
+                  "11": "November",
+                  "12": "December"
+                }
+              }
+            },
+            "days": {
+              "format": {
+                "abbreviated": {
+                  "sun": "Sun",
+                  "mon": "Mon",
+                  "tue": "Tue",
+                  "wed": "Wed",
+                  "thu": "Thu",
+                  "fri": "Fri",
+                  "sat": "Sat"
+                },
+                "narrow": {
+                  "sun": "S",
+                  "mon": "M",
+                  "tue": "T",
+                  "wed": "W",
+                  "thu": "T",
+                  "fri": "F",
+                  "sat": "S"
+                },
+                "short": {
+                  "sun": "Su",
+                  "mon": "Mo",
+                  "tue": "Tu",
+                  "wed": "We",
+                  "thu": "Th",
+                  "fri": "Fr",
+                  "sat": "Sa"
+                },
+                "wide": {
+                  "sun": "Sunday",
+                  "mon": "Monday",
+                  "tue": "Tuesday",
+                  "wed": "Wednesday",
+                  "thu": "Thursday",
+                  "fri": "Friday",
+                  "sat": "Saturday"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "sun": "Sun",
+                  "mon": "Mon",
+                  "tue": "Tue",
+                  "wed": "Wed",
+                  "thu": "Thu",
+                  "fri": "Fri",
+                  "sat": "Sat"
+                },
+                "narrow": {
+                  "sun": "S",
+                  "mon": "M",
+                  "tue": "T",
+                  "wed": "W",
+                  "thu": "T",
+                  "fri": "F",
+                  "sat": "S"
+                },
+                "short": {
+                  "sun": "Su",
+                  "mon": "Mo",
+                  "tue": "Tu",
+                  "wed": "We",
+                  "thu": "Th",
+                  "fri": "Fr",
+                  "sat": "Sa"
+                },
+                "wide": {
+                  "sun": "Sunday",
+                  "mon": "Monday",
+                  "tue": "Tuesday",
+                  "wed": "Wednesday",
+                  "thu": "Thursday",
+                  "fri": "Friday",
+                  "sat": "Saturday"
+                }
+              }
+            },
+            "dayPeriods": {
+              "format": {
+                "abbreviated": {
+                  "am": "am",
+                  "pm": "pm"
+                },
+                "narrow": {
+                  "am": "a",
+                  "pm": "p"
+                },
+                "wide": {
+                  "am": "am",
+                  "pm": "pm"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "am": "am",
+                  "pm": "pm"
+                },
+                "narrow": {
+                  "am": "a",
+                  "pm": "p"
+                },
+                "wide": {
+                  "am": "am",
+                  "pm": "pm"
+                }
+              }
+            },
+            "eras": {
+              "eraNames": {
+                "0": "Before R.O.C.",
+                "1": "Minguo"
+              },
+              "eraAbbr": {
+                "0": "Before R.O.C.",
+                "1": "Minguo"
+              },
+              "eraNarrow": {
+                "0": "Before R.O.C.",
+                "1": "Minguo"
+              }
+            },
+            "dateTimeFormats": {
+              "availableFormats": {
+                "d": "d",
+                "Ed": "E d",
+                "Ehm": "E h:mm a",
+                "EHm": "E HH:mm",
+                "Ehms": "E h:mm:ss a",
+                "EHms": "E HH:mm:ss",
+                "Gy": "y G",
+                "GyMMM": "MMM y G",
+                "GyMMMd": "d MMM y G",
+                "GyMMMEd": "E, d MMM y G",
+                "h": "h a",
+                "H": "HH",
+                "hm": "h:mm a",
+                "Hm": "HH:mm",
+                "hms": "h:mm:ss a",
+                "Hms": "HH:mm:ss",
+                "M": "LL",
+                "Md": "dd/MM",
+                "MEd": "E dd/MM",
+                "MMM": "LLL",
+                "MMMd": "d MMM",
+                "MMMEd": "E d MMM",
+                "MMMMd": "d MMMM",
+                "ms": "mm:ss",
+                "y": "y G",
+                "yyyy": "y G",
+                "yyyyM": "MM/y GGGGG",
+                "yyyyMd": "d/M/y G",
+                "yyyyMEd": "E d/M/y G",
+                "yyyyMMM": "MMM y G",
+                "yyyyMMMd": "d MMM y G",
+                "yyyyMMMEd": "E d MMM, y G",
+                "yyyyMMMM": "MMMM y G",
+                "yyyyQQQ": "QQQ y G",
+                "yyyyQQQQ": "QQQQ y G"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

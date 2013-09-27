@@ -1,0 +1,261 @@
+{
+  "main": {
+    "fr": {
+      "dates": {
+        "calendars": {
+          "gregorian": {
+            "months": {
+              "format": {
+                "abbreviated": {
+                  "1": "janv.",
+                  "2": "févr.",
+                  "3": "mars",
+                  "4": "avr.",
+                  "5": "mai",
+                  "6": "juin",
+                  "7": "juil.",
+                  "8": "août",
+                  "9": "sept.",
+                  "10": "oct.",
+                  "11": "nov.",
+                  "12": "déc."
+                },
+                "narrow": {
+                  "1": "J",
+                  "2": "F",
+                  "3": "M",
+                  "4": "A",
+                  "5": "M",
+                  "6": "J",
+                  "7": "J",
+                  "8": "A",
+                  "9": "S",
+                  "10": "O",
+                  "11": "N",
+                  "12": "D"
+                },
+                "wide": {
+                  "1": "janvier",
+                  "2": "février",
+                  "3": "mars",
+                  "4": "avril",
+                  "5": "mai",
+                  "6": "juin",
+                  "7": "juillet",
+                  "8": "août",
+                  "9": "septembre",
+                  "10": "octobre",
+                  "11": "novembre",
+                  "12": "décembre"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "1": "janv.",
+                  "2": "févr.",
+                  "3": "mars",
+                  "4": "avr.",
+                  "5": "mai",
+                  "6": "juin",
+                  "7": "juil.",
+                  "8": "août",
+                  "9": "sept.",
+                  "10": "oct.",
+                  "11": "nov.",
+                  "12": "déc."
+                },
+                "narrow": {
+                  "1": "J",
+                  "2": "F",
+                  "3": "M",
+                  "4": "A",
+                  "5": "M",
+                  "6": "J",
+                  "7": "J",
+                  "8": "A",
+                  "9": "S",
+                  "10": "O",
+                  "11": "N",
+                  "12": "D"
+                },
+                "wide": {
+                  "1": "janvier",
+                  "2": "février",
+                  "3": "mars",
+                  "4": "avril",
+                  "5": "mai",
+                  "6": "juin",
+                  "7": "juillet",
+                  "8": "août",
+                  "9": "septembre",
+                  "10": "octobre",
+                  "11": "novembre",
+                  "12": "décembre"
+                }
+              }
+            },
+            "days": {
+              "format": {
+                "abbreviated": {
+                  "sun": "dim.",
+                  "mon": "lun.",
+                  "tue": "mar.",
+                  "wed": "mer.",
+                  "thu": "jeu.",
+                  "fri": "ven.",
+                  "sat": "sam."
+                },
+                "narrow": {
+                  "sun": "D",
+                  "mon": "L",
+                  "tue": "M",
+                  "wed": "M",
+                  "thu": "J",
+                  "fri": "V",
+                  "sat": "S"
+                },
+                "short": {
+                  "sun": "di",
+                  "mon": "lu",
+                  "tue": "ma",
+                  "wed": "me",
+                  "thu": "je",
+                  "fri": "ve",
+                  "sat": "sa"
+                },
+                "wide": {
+                  "sun": "dimanche",
+                  "mon": "lundi",
+                  "tue": "mardi",
+                  "wed": "mercredi",
+                  "thu": "jeudi",
+                  "fri": "vendredi",
+                  "sat": "samedi"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "sun": "dim.",
+                  "mon": "lun.",
+                  "tue": "mar.",
+                  "wed": "mer.",
+                  "thu": "jeu.",
+                  "fri": "ven.",
+                  "sat": "sam."
+                },
+                "narrow": {
+                  "sun": "D",
+                  "mon": "L",
+                  "tue": "M",
+                  "wed": "M",
+                  "thu": "J",
+                  "fri": "V",
+                  "sat": "S"
+                },
+                "short": {
+                  "sun": "dim.",
+                  "mon": "lun.",
+                  "tue": "mar.",
+                  "wed": "mer.",
+                  "thu": "jeu.",
+                  "fri": "ven.",
+                  "sat": "sam."
+                },
+                "wide": {
+                  "sun": "dimanche",
+                  "mon": "lundi",
+                  "tue": "mardi",
+                  "wed": "mercredi",
+                  "thu": "jeudi",
+                  "fri": "vendredi",
+                  "sat": "samedi"
+                }
+              }
+            },
+            "dayPeriods": {
+              "format": {
+                "abbreviated": {
+                  "am": "AM",
+                  "pm": "PM"
+                },
+                "narrow": {
+                  "am": "AM",
+                  "pm": "p"
+                },
+                "wide": {
+                  "am": "AM",
+                  "pm": "PM"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "am": "AM",
+                  "pm": "PM"
+                },
+                "narrow": {
+                  "am": "AM",
+                  "pm": "p"
+                },
+                "wide": {
+                  "am": "AM",
+                  "pm": "PM"
+                }
+              }
+            },
+            "eras": {
+              "eraNames": {
+                "0": "avant Jésus-Christ",
+                "1": "après Jésus-Christ"
+              },
+              "eraAbbr": {
+                "0": "av. J.-C.",
+                "1": "ap. J.-C."
+              },
+              "eraNarrow": {
+                "0": "av. J.-C.",
+                "1": "ap. J.-C."
+              }
+            },
+            "dateTimeFormats": {
+              "availableFormats": {
+                "d": "d",
+                "Ed": "E d",
+                "Ehm": "E h:mm a",
+                "EHm": "E HH:mm",
+                "Ehms": "E h:mm:ss a",
+                "EHms": "E HH:mm:ss",
+                "Gy": "y G",
+                "GyMMM": "MMM y G",
+                "GyMMMd": "d MMM y G",
+                "GyMMMEd": "E d MMM y G",
+                "h": "h a",
+                "H": "HH 'h'",
+                "hm": "h:mm a",
+                "Hm": "HH:mm",
+                "hms": "h:mm:ss a",
+                "Hms": "HH:mm:ss",
+                "M": "L",
+                "Md": "d/M",
+                "MEd": "E d/M",
+                "MMM": "LLL",
+                "MMMd": "d MMM",
+                "MMMEd": "E d MMM",
+                "ms": "mm:ss",
+                "y": "y",
+                "yM": "M/y",
+                "yMd": "d/M/y",
+                "yMEd": "E d/M/y",
+                "yMMM": "MMM y",
+                "yMMMd": "d MMM y",
+                "yMMMEd": "E d MMM y",
+                "yMMMM": "MMMM y",
+                "yQQQ": "QQQ y",
+                "yQQQQ": "QQQQ y"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

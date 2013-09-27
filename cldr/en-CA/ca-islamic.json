@@ -1,0 +1,258 @@
+{
+  "main": {
+    "en-CA": {
+      "dates": {
+        "calendars": {
+          "islamic": {
+            "months": {
+              "format": {
+                "abbreviated": {
+                  "1": "Muh.",
+                  "2": "Saf.",
+                  "3": "Rab. I",
+                  "4": "Rab. II",
+                  "5": "Jum. I",
+                  "6": "Jum. II",
+                  "7": "Raj.",
+                  "8": "Sha.",
+                  "9": "Ram.",
+                  "10": "Shaw.",
+                  "11": "Dhuʻl-Q.",
+                  "12": "Dhuʻl-H."
+                },
+                "narrow": {
+                  "1": "1",
+                  "2": "2",
+                  "3": "3",
+                  "4": "4",
+                  "5": "5",
+                  "6": "6",
+                  "7": "7",
+                  "8": "8",
+                  "9": "9",
+                  "10": "10",
+                  "11": "11",
+                  "12": "12"
+                },
+                "wide": {
+                  "1": "Muharram",
+                  "2": "Safar",
+                  "3": "Rabiʻ I",
+                  "4": "Rabiʻ II",
+                  "5": "Jumada I",
+                  "6": "Jumada II",
+                  "7": "Rajab",
+                  "8": "Shaʻban",
+                  "9": "Ramadan",
+                  "10": "Shawwal",
+                  "11": "Dhuʻl-Qiʻdah",
+                  "12": "Dhuʻl-Hijjah"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "1": "Muh.",
+                  "2": "Saf.",
+                  "3": "Rab. I",
+                  "4": "Rab. II",
+                  "5": "Jum. I",
+                  "6": "Jum. II",
+                  "7": "Raj.",
+                  "8": "Sha.",
+                  "9": "Ram.",
+                  "10": "Shaw.",
+                  "11": "Dhuʻl-Q.",
+                  "12": "Dhuʻl-H."
+                },
+                "narrow": {
+                  "1": "1",
+                  "2": "2",
+                  "3": "3",
+                  "4": "4",
+                  "5": "5",
+                  "6": "6",
+                  "7": "7",
+                  "8": "8",
+                  "9": "9",
+                  "10": "10",
+                  "11": "11",
+                  "12": "12"
+                },
+                "wide": {
+                  "1": "Muharram",
+                  "2": "Safar",
+                  "3": "Rabiʻ I",
+                  "4": "Rabiʻ II",
+                  "5": "Jumada I",
+                  "6": "Jumada II",
+                  "7": "Rajab",
+                  "8": "Shaʻban",
+                  "9": "Ramadan",
+                  "10": "Shawwal",
+                  "11": "Dhuʻl-Qiʻdah",
+                  "12": "Dhuʻl-Hijjah"
+                }
+              }
+            },
+            "days": {
+              "format": {
+                "abbreviated": {
+                  "sun": "Sun",
+                  "mon": "Mon",
+                  "tue": "Tue",
+                  "wed": "Wed",
+                  "thu": "Thu",
+                  "fri": "Fri",
+                  "sat": "Sat"
+                },
+                "narrow": {
+                  "sun": "S",
+                  "mon": "M",
+                  "tue": "T",
+                  "wed": "W",
+                  "thu": "T",
+                  "fri": "F",
+                  "sat": "S"
+                },
+                "short": {
+                  "sun": "Su",
+                  "mon": "Mo",
+                  "tue": "Tu",
+                  "wed": "We",
+                  "thu": "Th",
+                  "fri": "Fr",
+                  "sat": "Sa"
+                },
+                "wide": {
+                  "sun": "Sunday",
+                  "mon": "Monday",
+                  "tue": "Tuesday",
+                  "wed": "Wednesday",
+                  "thu": "Thursday",
+                  "fri": "Friday",
+                  "sat": "Saturday"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "sun": "Sun",
+                  "mon": "Mon",
+                  "tue": "Tue",
+                  "wed": "Wed",
+                  "thu": "Thu",
+                  "fri": "Fri",
+                  "sat": "Sat"
+                },
+                "narrow": {
+                  "sun": "S",
+                  "mon": "M",
+                  "tue": "T",
+                  "wed": "W",
+                  "thu": "T",
+                  "fri": "F",
+                  "sat": "S"
+                },
+                "short": {
+                  "sun": "Su",
+                  "mon": "Mo",
+                  "tue": "Tu",
+                  "wed": "We",
+                  "thu": "Th",
+                  "fri": "Fr",
+                  "sat": "Sa"
+                },
+                "wide": {
+                  "sun": "Sunday",
+                  "mon": "Monday",
+                  "tue": "Tuesday",
+                  "wed": "Wednesday",
+                  "thu": "Thursday",
+                  "fri": "Friday",
+                  "sat": "Saturday"
+                }
+              }
+            },
+            "dayPeriods": {
+              "format": {
+                "abbreviated": {
+                  "am": "AM",
+                  "pm": "PM"
+                },
+                "narrow": {
+                  "am": "a",
+                  "pm": "p"
+                },
+                "wide": {
+                  "am": "AM",
+                  "pm": "PM"
+                }
+              },
+              "stand-alone": {
+                "abbreviated": {
+                  "am": "AM",
+                  "pm": "PM"
+                },
+                "narrow": {
+                  "am": "a",
+                  "pm": "p"
+                },
+                "wide": {
+                  "am": "AM",
+                  "pm": "PM"
+                }
+              }
+            },
+            "eras": {
+              "eraNames": {
+                "0": "AH"
+              },
+              "eraAbbr": {
+                "0": "AH"
+              },
+              "eraNarrow": {
+                "0": "AH"
+              }
+            },
+            "dateTimeFormats": {
+              "availableFormats": {
+                "d": "d",
+                "Ed": "d E",
+                "Ehm": "E h:mm a",
+                "EHm": "E HH:mm",
+                "Ehms": "E h:mm:ss a",
+                "EHms": "E HH:mm:ss",
+                "Gy": "y G",
+                "GyMMM": "MMM y G",
+                "GyMMMd": "MMM d, y G",
+                "GyMMMEd": "E, MMM d, y G",
+                "h": "h a",
+                "H": "HH",
+                "hm": "h:mm a",
+                "Hm": "HH:mm",
+                "hms": "h:mm:ss a",
+                "Hms": "HH:mm:ss",
+                "M": "L",
+                "Md": "M/d",
+                "MEd": "E, M/d",
+                "MMM": "LLL",
+                "MMMd": "MMM d",
+                "MMMEd": "E, MMM d",
+                "ms": "mm:ss",
+                "y": "y G",
+                "yyyy": "y G",
+                "yyyyM": "M/y GGGGG",
+                "yyyyMd": "M/d/y GGGGG",
+                "yyyyMEd": "E, M/d/y GGGGG",
+                "yyyyMMM": "MMM y G",
+                "yyyyMMMd": "MMM d, y G",
+                "yyyyMMMEd": "E, MMM d, y G",
+                "yyyyQQQ": "QQQ y G",
+                "yyyyQQQQ": "QQQQ y G"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
