@@ -76,14 +76,21 @@ define({
 	loader : {
 		// Packages that should be registered with the loader in each testing
 		// environment
-		packages : [ {
-			name : 'Intl',
-			location : 'g11n4js'
-		} ]
+		packages : [ 
+		    		{
+		    			name : 'Intl',
+		    			location : 'g11n4js'
+		    		},
+		    		{
+		    			name : 'testIntl',
+		    			location : 'g11n4js/tests/intl402/harness'
+		    		},
+		]
 	},
 
 	// Non-functional test suite(s) to run in each browser
-	suites : [ 'g11n4js/tests/Intl' ],
+	suites : [  'g11n4js/tests/Intl',
+	            'g11n4js/tests/intl402/suite/ch06/6.2' ],
 
 	// Functional test suite(s) to run in each browser once non-functional tests
 	// are completed

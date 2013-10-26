@@ -2,21 +2,23 @@ define(
 	[ 'intern!object', 'intern/chai!assert', 'g11n4js/Intl' ], function(registerSuite, assert, Intl) {
 	registerSuite({
 		name : 'Intl',
-
+		showDefaultLocale : function() {
+			console.log("Default locale is ==> "+Intl.DefaultLocale());
+		},
 		wellFormedCurrency : function() {
 			var wellFormedCurrencyCodes =
 				[ "BOB", "EUR", "usd", "XdR", "xTs" ];
 			wellFormedCurrencyCodes.forEach(function(code) {
-				assert.strictEqual(Intl.IsWellFormedCurrencyCode(code), true, 'IsWellFormedCurrencyCode() should return true for valid currency code "'+code
-					+'"');
+				assert.strictEqual(Intl.IsWellFormedCurrencyCode(code), true,
+					'IsWellFormedCurrencyCode() should return true for valid currency code "'+code+'"');
 			});
 		},
 		notWellFormedCurrency : function() {
 			var invalidCurrencyCodes =
 				[ "", "€", "$", "SFr.", "DM", "KR₩", "702", "ßP", "ınr" ];
 			invalidCurrencyCodes.forEach(function(code) {
-				assert.strictEqual(Intl.IsWellFormedCurrencyCode(code), false, 'IsWellFormedCurrencyCode() should return false for invalid currency code "'
-					+code+'"');
+				assert.strictEqual(Intl.IsWellFormedCurrencyCode(code), false,
+					'IsWellFormedCurrencyCode() should return false for invalid currency code "'+code+'"');
 			});
 		},
 		structurallyValidLanguageTag : function() {
@@ -151,7 +153,90 @@ define(
 
 			testLanguageTags.forEach(function(currentTag) {
 				assert.strictEqual(Intl.CanonicalizeLanguageTag(currentTag.input), currentTag.expected,
-					'CanonicalizeLanguageTag() should return the properly canonicalized tag for language tag "'+currentTag.input+'"');
+					'CanonicalizeLanguageTag() should return the properly canonicalized tag for language tag "'
+						+currentTag.input+'"');
+			});
+		},
+		matcherFunctions : function() {
+			var testLanguageTags =
+				[ {
+					"input" : "en-US",
+					"lookup" : "en-US",
+					"bestfit" : "en-US",
+				}, {
+					"input" : "en-BS",
+					"lookup" : "en",
+					"bestfit" : "en",
+				}, {
+					"input" : "foo",
+					"lookup" : "en-US",
+					"bestfit" : "root",
+				}, {
+					"input" : "de-de",
+					"lookup" : "de",
+					"bestfit" : "de",
+				}, {
+					"input" : "de-ch",
+					"lookup" : "de",
+					"bestfit" : "de",
+				}, {
+					"input" : "ja-jp",
+					"lookup" : "ja",
+					"bestfit" : "ja",
+				}, {
+					"input" : "iw-il",
+					"lookup" : "he",
+					"bestfit" : "he",
+				}, {
+					"input" : "zh-CN",
+					"lookup" : "zh",
+					"bestfit" : "zh",
+				}, {
+					"input" : "zh-TW",
+					"lookup" : "zh",
+					"bestfit" : "zh-Hant",
+				}, {
+					"input" : "zh-MO",
+					"lookup" : "zh",
+					"bestfit" : "zh-Hant",
+				}, {
+					"input" : "zh-HK-VARIANT",
+					"lookup" : "zh",
+					"bestfit" : "zh-Hant",
+				}, {
+					"input" : "sr-ME",
+					"lookup" : "sr",
+					"bestfit" : "root",
+				}, {
+					"input" : "sr-YU",
+					"lookup" : "sr",
+					"bestfit" : "sr",
+				}, {
+					"input" : "pt-AO",
+					"lookup" : "pt",
+					"bestfit" : "pt-PT",
+				}, {
+					"input" : "en-GB-u-co-phonebk",
+					"lookup" : "en-GB",
+					"bestfit" : "en-GB",
+					"extension" : "-u-co-phonebk",
+				}, {
+					"input" : "en-NZ-u-ca-japanese",
+					"lookup" : "en",
+					"bestfit" : "en-GB",
+					"extension" : "-u-ca-japanese",
+				} ];
+
+			testLanguageTags.forEach(function(currentTag) {
+				var nf = new Intl.NumberFormat(currentTag.input);
+				assert.strictEqual(nf.resolvedOptions().lookup.locale, currentTag.lookup,
+					'LookupMatcher() should return the correct locale for language tag "'+currentTag.input+'"');
+				assert.equal(nf.resolvedOptions().lookup.extension, currentTag.extension,
+					'LookupMatcher() should return the correct extension for language tag "'+currentTag.input+'"');
+				assert.strictEqual(nf.resolvedOptions().bestfit.locale, currentTag.bestfit,
+					'BestFitMatcher() should return the correct locale for language tag "'+currentTag.input+'"');
+				assert.equal(nf.resolvedOptions().bestfit.extension, currentTag.extension,
+					'BestFitMatcher() should return the correct extension for language tag "'+currentTag.input+'"');
 			});
 		}
 	});
