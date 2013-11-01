@@ -238,6 +238,76 @@ define(
 				assert.equal(nf.resolvedOptions().bestfit.extension, currentTag.extension,
 					'BestFitMatcher() should return the correct extension for language tag "'+currentTag.input+'"');
 			});
+		},
+		ToString : function() {
+			var testValues =
+				[ {
+					"input" : Number.NaN,
+					"expected" : "NaN"
+				}, {
+					"input" : 35,
+					"expected" : "35"
+				}, {
+					"input" : 7,
+					"expected" : "7"
+				}, {
+					"input" : -134,
+					"expected" : "-134"
+				}, {
+					"input" : 0,
+					"expected" : "0"
+				}, {
+					"input" : Number.POSITIVE_INFINITY,
+					"expected" : "Infinity"
+				}, {
+					"input" : 1234056700,
+					"expected" : "1234056700"
+				} ];
+
+			testValues.forEach(function(currentValue) {
+				var val = Intl.ToString(currentValue.input);
+				assert.strictEqual(val, currentValue.expected, 'ToString() should return the correct value for value "'
+					+currentValue.input+'"');
+			});
+		},
+		GetOption : function() {
+			var testValues =
+				[ {
+					"options" : {
+						style : "decimal"
+					},
+					"property" : "style",
+					"type" : "string",
+					"values" :
+						[ "decimal", "percent", "currency" ],
+					"fallback" : "decimal",
+					"expected" : "decimal"
+				}, {
+					"options" : {
+						style : "currency"
+					},
+					"property" : "style",
+					"type" : "string",
+					"values" :
+						[ "decimal", "percent", "currency" ],
+					"fallback" : "decimal",
+					"expected" : "currency"
+				}, {
+					"options" : {
+						style : "currency"
+					},
+					"property" : "style",
+					"type" : "string",
+					"fallback" : "decimal",
+					"expected" : "decimal"
+				} ];
+
+			testValues.forEach(function(currentValue) {
+				var val = Intl.GetOption(currentValue.options, currentValue.property, currentValue.type,
+					currentValue.values, currentValue.fallback);
+				assert.strictEqual(val, currentValue.expected,
+					'GetOption() should return the correct value for value "'+currentValue.toString()+'"');
+			});
 		}
 	});
 });

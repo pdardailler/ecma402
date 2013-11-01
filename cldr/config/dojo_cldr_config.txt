@@ -5,4 +5,5 @@ section=ca-roc ; path=//cldr/main/[^/]++/dates/calendars/roc/((months|days|dateT
 section=numbers ; path=//cldr/main/[^/]++/numbers/(symbols\[@numberSystem="latn"\]/(decimal|group|currencyDecimal|currencyGroup)|(decimal|currency|percent)Formats\[@numberSystem="latn"\]/standard)
 section=currencyData ; path=//cldr/supplemental/currencyData/fractions/.*
 section=parentLocales ; path=//cldr/supplemental/parentLocales/.*
+section=numberingSystems ; path=//cldr/supplemental/numberingSystems/.*
 section=aliases ; path=//cldr/supplemental/metadata/alias/(language|script|territory|variant|zone)Alias.*
