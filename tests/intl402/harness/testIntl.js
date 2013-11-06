@@ -23,7 +23,7 @@ define(
 			 */
 			testWithIntlConstructors : function(f) {
 				var constructors =
-					[ /*"Collator", */ "NumberFormat", "DateTimeFormat" ];
+					[ /*"Collator", */ "NumberFormat" /*, "DateTimeFormat"*/ ];
 				return constructors.every(function(constructor) {
 					var Constructor = Intl[constructor];
 					var result;

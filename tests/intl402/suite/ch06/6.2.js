@@ -11,7 +11,8 @@ define(
 		name : '6.2',
 		Test_6_2_2_a : function() {
 			var validLanguageTags =
-				[ "de", // ISO 639 language code
+				[ 
+				"de", // ISO 639 language code
 				"de-DE", // + ISO 3166-1 country code
 				"DE-de", // tags are case-insensitive
 				"cmn", // ISO 639 language code
@@ -109,19 +110,18 @@ define(
 				return true;
 			});
 		},
-		/* Can't do this test until we have more structure
 		 Test_6_2_3 : function() {
 		 var canonicalizedTags = {
 		 "de": ["de"],
 		 "de-DE": ["de-DE", "de"],
 		 "DE-de": ["de-DE", "de"],
-		 "cmn": ["cmn"],
-		 "CMN-hANS": ["cmn-Hans", "cmn"],
-		 "cmn-hans-cn": ["cmn-Hans-CN", "cmn-Hans", "cmn"],
+		 "cmn": [ "cmn"],
+		 "CMN-hANS": [ "cmn-Hans", "cmn", ],
+		 "cmn-hans-cn": [ "cmn-Hans-CN", "cmn-Hans", "cmn"],
 		 "es-419": ["es-419", "es"],
 		 "es-419-u-nu-latn": ["es-419-u-nu-latn", "es-419", "es", "es-u-nu-latn"],
 		 // -u-ca is incomplete, so it will not show up in resolvedOptions().locale
-		 "cmn-hans-cn-u-ca-t-ca-x-t-u": ["cmn-Hans-CN-t-ca-u-ca-x-t-u", "cmn-Hans-CN-t-ca-x-t-u", "cmn-Hans-CN-t-ca-x-t", "cmn-Hans-CN-t-ca", "cmn-Hans-CN", "cmn-Hans", "cmn"],
+		 "cmn-hans-cn-u-ca-t-ca-x-t-u": [ "cmn-Hans-CN-t-ca-u-ca-x-t-u", "cmn-Hans-CN-t-ca-x-t-u", "cmn-Hans-CN-t-ca-x-t", "cmn-Hans-CN-t-ca", "cmn-Hans-CN", "cmn-Hans", "cmn"],
 		 "enochian-enochian": ["enochian-enochian", "enochian"],
 		 "de-gregory-u-ca-gregory": ["de-gregory-u-ca-gregory", "de-gregory", "de-u-ca-gregory", "de"],
 		 "no-nyn": ["nn"],
@@ -136,41 +136,42 @@ define(
 		 };
 
 		 // make sure the data above is correct
-		 Object.getOwnPropertyNames(canonicalizedTags).forEach(function (tag) {
-		 canonicalizedTags[tag].forEach(function (canonicalTag) {
-		 assert.isTrue(testIntl.isCanonicalizedStructurallyValidLanguageTag(canonicalTag),
-		 "Test data \"" + canonicalTag + "\" is not canonicalized and structurally valid language tag.");
-		 });
-		 });
+			Object.getOwnPropertyNames(canonicalizedTags).forEach(
+				function(tag) {
+					canonicalizedTags[tag]
+						.forEach(function(canonicalTag) {
+							assert.isTrue(testIntl.isCanonicalizedStructurallyValidLanguageTag(canonicalTag),
+								"Test data \""+canonicalTag
+									+"\" is not canonicalized and structurally valid language tag.");
+						});
+				});
 
-		 // now the actual test
-		 testIntl.testWithIntlConstructors(function (Constructor) {
-		 var resolvedOptions = new Constructor().resolvedOptions();
-		 console.log("ro = "+resolvedOptions.toString());
-		 var defaultLocale = new Constructor().resolvedOptions().locale;
-		 Object.getOwnPropertyNames(canonicalizedTags).forEach(function (tag) {
-		 // use lookup locale matcher to keep the set of possible return values predictable
+			// now the actual test
+			testIntl.testWithIntlConstructors(function(Constructor) {
+				var resolvedOptions = new Constructor().resolvedOptions();
+				var defaultLocale = new Constructor().resolvedOptions().locale;
+				Object.getOwnPropertyNames(canonicalizedTags).forEach(function(tag) {
+					// use lookup locale matcher to keep the set of possible return values predictable
 
-		 // Variant 1: construct an object and see whether its locale is canonicalized.
-		 // In this variant, shortened forms or the default locale may be returned
-		 var object = new Constructor([tag], {localeMatcher: "lookup"});
-		 var locale = object.resolvedOptions().locale;
-		 if (canonicalizedTags[tag].indexOf(locale) === -1 && locale !== defaultLocale) {
-		 $ERROR("For " + tag + " got " + locale + "; expected one of " +
-		 canonicalizedTags[tag].join(", ") + ".");
-		 }
-		
-		 // Variant 2: get the supported locales. If the tag is supported, it should be returned canonicalized but unshortened
-		 var supported = Constructor.supportedLocalesOf([tag]);
-		 if (supported.length > 0 && supported[0] !== canonicalizedTags[tag][0]) {
-		 $ERROR("For " + tag + " got " + supported[0] + "; expected " +
-		 canonicalizedTags[tag][0] + ".");
-		 }            
-		 });
-		 return true;
-		 });
-		 }
-		 */
+					// Variant 1: construct an object and see whether its locale is canonicalized.
+					// In this variant, shortened forms or the default locale may be returned
+					var object = new Constructor(
+						[ tag ], {
+						localeMatcher : "lookup"
+					});
+					var locale = object.resolvedOptions().locale;
+					assert(!(canonicalizedTags[tag].indexOf(locale)===-1&&locale!==defaultLocale),
+						"For "+tag+" got "+locale+"; expected one of "+canonicalizedTags[tag].join(", ")+".");
+					
+					// Variant 2: get the supported locales. If the tag is supported, it should be returned canonicalized but unshortened
+					var supported = object.supportedLocalesOf(
+						[ tag ]);
+					assert(!(supported[length]>0&&supported[0]!==canonicalizedTags[tag][0]),
+						"For "+tag+" got "+supported[0]+"; expected "+canonicalizedTags[tag][0]+".");
+				});
+				return true;
+			});
+		},
 		Test_6_2_4 : function() {
 			testIntl.testWithIntlConstructors(function (Constructor) {
 			    var defaultLocale = new Constructor().resolvedOptions().locale;
