@@ -2,14 +2,12 @@ define(
 		[ "dojo/request" ],
 	function(request) {
 
-		var aliases = getCLDRJson("supplemental", "aliases").supplemental.metadata.alias;
-		var localeAliases = getCLDRJson("supplemental", "localeAliases").supplemental.metadata.alias;
-		var parentLocales = getCLDRJson("supplemental", "parentLocales").supplemental.parentLocales;
-		var unicodeLocaleExtensions = /-u(-[a-z0-9]{2,8})+/g;
-
-		var numberingSystems = getCLDRJson("supplemental", "numberingSystems").supplemental.numberingSystems;
-		var availableNumberingSystems =
-			[ "latn" ];
+		aliases = getCLDRJson("supplemental", "aliases").supplemental.metadata.alias;
+		localeAliases = getCLDRJson("supplemental", "localeAliases").supplemental.metadata.alias;
+		parentLocales = getCLDRJson("supplemental", "parentLocales").supplemental.parentLocales;
+		unicodeLocaleExtensions = /-u(-[a-z0-9]{2,8})+/g;
+		numberingSystems = getCLDRJson("supplemental", "numberingSystems").supplemental.numberingSystems;
+		availableNumberingSystems =	[ "latn" ];
 		for( var ns in numberingSystems){
 			if(numberingSystems[ns]._type=="numeric"&&ns!="latn"){
 				availableNumberingSystems.push(ns);
@@ -563,129 +561,268 @@ define(
 			}
 			return 2;
 		}
+		
+		// ECMA 402 Section 11.1.1.1
+		function InitializeNumberFormat(numberFormat, locales, options) {
+			if(numberFormat.initializedIntlObject){
+				throw new TypeError("NumberFormat is already initialized.");
+			}
+			numberFormat.initializedIntlObject = true;
+			var requestedLocales = CanonicalizeLocaleList(locales);
+			if(options===undefined){
+				options = {};
+			}else{
+				options = Object(options);
+			}
+			var opt = {};
+			var matcher = GetOption(options, "localeMatcher", "string",
+				[ "lookup", "best fit" ], "best fit");
+			opt.localeMatcher = matcher;
+			var localeData = numberFormat.localeData;
+			var r = ResolveLocale(numberFormat.availableLocales, requestedLocales, opt,
+				numberFormat.relevantExtensionKeys, localeData);
+			numberFormat.locale = r.locale;
+			numberFormat.dataLocale = r.dataLocale;
+			numberFormat.numberingSystem = r.nu;
+			var s = GetOption(options, "style", "string",
+				[ "decimal", "percent", "currency" ], "decimal");
+			numberFormat.style = s;
+			var c = GetOption(options, "currency", "string");
+			if(c!==undefined&&!IsWellFormedCurrencyCode(c)){
+				throw new RangeError("Invalid currency code "+c);
+			}
+			if(s=="currency"&&c===undefined){
+				throw new TypeError("No currency code specified.");
+			}
+			var cDigits = 2;
+			if(s=="currency"){
+				c = _toUpperCaseIdentifier(c);
+				numberFormat.currency = c;
+				numberFormat.currencySymbol = c;
+				numberFormat.currencyDisplayName = c;
+				cDigits = CurrencyDigits(c);
+				var cd = GetOption(options, "currencyDisplay", "string",
+					[ "code", "symbol", "name" ], "symbol");
+				numberFormat.currencyDisplay = cd;
+				if(cd=="symbol"||cd=="name"){
+					var currencies = getCLDRJson(numberFormat.dataLocale, "currencies").main[numberFormat.dataLocale].numbers.currencies;
+					if(currencies[numberFormat.currency]){
+						numberFormat.currencySymbol = currencies[numberFormat.currency].symbol;
+						numberFormat.currencyDisplayName = currencies[numberFormat.currency].displayName;
+					}
+				}
+			}
+			var mnid = GetNumberOption(options, "minimumIntegerDigits", 1, 21, 1);
+			numberFormat.minimumIntegerDigits = mnid;
+			var mnfdDefault;
+			if(s=="currency"){
+				mnfdDefault = cDigits;
+			}else{
+				mnfdDefault = 0;
+			}
+			var mnfd = GetNumberOption(options, "minimumFractionDigits", 0, 20, mnfdDefault);
+			numberFormat.minimumFractionDigits = mnfd;
+			var mxfdDefault;
+			if(s=="currency"){
+				mxfdDefault = Math.max(mnfd, cDigits);
+			}else if(s=="percent"){
+				mxfdDefault = Math.max(mnfd, 0);
+			}else{
+				mxfdDefault = Math.max(mnfd, 0);
+			}
+			var mxfd = GetNumberOption(options, "maximumFractionDigits", mnfd, 20, mxfdDefault);
+			numberFormat.maximumFractionDigits = mxfd;
+			var mnsd = options["minimumSignificantDigits"];
+			var mxsd = options["maximumSignificantDigits"];
+			if(mnsd!==undefined||mxsd!==undefined){
+				mnsd = GetNumberOption(options, "minimumSignificantDigits", 1, 21, 1);
+				mxsd = GetNumberOption(options, "maximumSignificantDigits", mnsd, 21, 1);
+				numberFormat.minimumSignificantDigits = mnsd;
+				numberFormat.maximumSignificantDigits = mxsd;
+			}
+			var g = GetOption(options, "useGrouping", "boolean", undefined, true);
+			numberFormat.useGrouping = g;
+			var numbers = getCLDRJson(numberFormat.dataLocale, "numbers").main[numberFormat.dataLocale].numbers;
+			if(r.locale==r.dataLocale){
+				numberFormat.numberingSystem = numbers.defaultNumberingSystem;
+			}
+			var numberInfo = _getNumberInfo(numbers, numberFormat.numberingSystem);
+			numberFormat.localeData = {
+					"symbols" : numberInfo.symbols,
+					"patterns" : numberInfo.patterns[s],
+			};
+			numberFormat.boundFormat = undefined;
+			numberFormat.initializedNumberFormat = true;
+		}
 
+		// Utility function to insert grouping separators into the proper locations in a string of digits
+		// based on the CLDR pattern string.
+		function doGrouping(n,pattern){
+			var numExp = /[0-9#.,]+/;
+			var number = pattern.match(numExp)[0];
+			var dPos = number.lastIndexOf(".");
+			if(dPos!=-1){
+				number = number.substring(0,dPos);
+			}
+			var groupings = number.split(",");
+			groupings.reverse();
+			groupings.pop();
+			var currentGrouping = groupings.shift();
+			var ungroupedDigits = n.match(/^\d+/);
+			while (ungroupedDigits&&ungroupedDigits[0].length>currentGrouping.length){
+				var digitsLeft = ungroupedDigits[0].length-currentGrouping.length;
+				n = n.substr(0,digitsLeft) + "," + n.substring(digitsLeft);
+				if(groupings.length>1){
+					currentGrouping = groupings.shift();
+				}
+				ungroupedDigits = n.match(/^\d+/);
+			}
+			return n;
+		}
+		// ECMA 402 Section 11.3.2
+		function ToRawPrecision(x,minPrecision,maxPrecision){
+			var m = x.toPrecision(maxPrecision).toString();
+			if(/\./.test(m)&&maxPrecision > minPrecision){
+				var cut = maxPrecision-minPrecision;
+				while(cut>0&&/0$/.test(m)){
+					m = m.replace( /0$/, "");
+					cut--;
+				}
+				if(m.test(/\.$/)){
+					m = m.replace( /\.$/, "");
+				}
+			}
+			return m;
+		}
+		// ECMA 402 Section 11.3.2
+		function ToRawFixed(x,minInteger,minFraction,maxFraction){
+			var m = x.toFixed(maxFraction).toString();
+			var cut = maxFraction-minFraction;
+			while(cut>0&&/0$/.test(m)){
+				m = m.replace( /0$/, "");
+				cut--;
+			}
+			if(/\.$/.test(m)){
+				m = m.replace( /\.$/, "");
+			}
+			
+			var dPos = m.indexOf(".");
+			var int = dPos>0 ? dPos : m.length;
+			while(int<minInteger){
+				 m = "0"+m;
+				 int++;
+			}
+			return m;
+			
+		}
+		// ECMA 402 Section 11.3.2
+		function FormatNumber(numberFormat, x) {
+			var negative = false;
+			var n;
+			if(!isFinite(x)){
+				if(isNan(x)){
+					n = numberFormat.localeData.symbols.nan;
+				}else{
+					n = numberFormat.localeData.symbols.infinity;
+					if(x<0){
+						negative = true;
+					}
+				}
+			}else{
+				if(x<0){
+					negative = true;
+					x = -x;
+				}
+				if(numberFormat.style=="percent"){
+					x *= 100;
+				}
+				if(numberFormat.minimumSignificantDigits!==undefined&&numberFormat.maximumSignificantDigits!==undefined){
+					n = ToRawPrecision(x,numberFormat.minimumSignificantDigits,numberFormat.maximumSignificantDigits);
+				}else{
+					n = ToRawFixed(x,numberFormat.minimumIntegerDigits,numberFormat.minimumFractionDigits,numberFormat.maximumFractionDigits);
+				}
+				if (numberFormat.useGrouping){
+					n = doGrouping(n,numberFormat.localeData.patterns.cldrPattern);
+				}
+				if (numberFormat.numberingSystem!="latn"){
+					var alldigits = /\d/g;
+					n = n.replace(alldigits,function(m){
+						return numberingSystems[numberFormat.numberingSystem]._digits.charAt(m);
+					});
+				}
+				n = n.replace(/[.,]/g,function(m){
+					if(m=="."){
+						return numberFormat.localeData.symbols.decimal?numberFormat.localeData.symbols.decimal:m;
+					}
+					return numberFormat.localeData.symbols.group?numberFormat.localeData.symbols.group:m;
+				});
+			}
+			var result;
+			if(negative){
+				result = numberFormat.localeData.patterns.negativePattern;
+			}else{
+				result = numberFormat.localeData.patterns.positivePattern;
+			}
+			result = result.replace("-",numberFormat.localeData.symbols.minusSign);
+			result = result.replace("%",numberFormat.localeData.symbols.percentSign);
+			result = result.replace("{number}",n);
+			if(numberFormat.style=="currency"){
+				var currency = numberFormat.currency;
+				var cd = currency;;
+				if(numberFormat.currencyDisplay=="symbol"){
+					cd = numberFormat.currencySymbol;
+				}else if(numberFormat.currencyDisplay=="name"){
+					cd = numberFormat.currencyDisplayName;
+				}
+				result = result.replace("{currency}",cd);
+			}			
+			return result;
+		}
+		
+		// Utility function to retrive necessary number fields from the CLDR data		
+		function _getNumberInfo(numbers, numberingSystem) {
+			result = {};
+			result.symbols = {};
+			var numberExp = /[0-9#.,]+/;
+			key = "symbols-numberSystem-"+numberingSystem;
+			altkey = "symbols-numberSystem-latn";
+			var cldrSymbols = numbers[key] ? numbers[key] : numbers[altkey];
+			result.symbols = cldrSymbols;
+
+			result.patterns = {};
+			var styles =
+				[ "decimal", "percent", "currency" ];
+			for( var s in styles){
+				var style = styles[s];
+				var key = style+"Formats-numberSystem-"+numberingSystem;
+				var altkey = style+"Formats-numberSystem-latn";
+				var cldrPattern = numbers[key] ? numbers[key].standard : numbers[altkey].standard;
+				var patterns = cldrPattern.split(";");
+				var positivePattern, negativePattern;
+				positivePattern = patterns[0];
+				if(patterns[length]==2){
+					negativePattern = patterns[1];
+				}else{
+					negativePattern = "-"+positivePattern;
+				}
+				positivePattern = positivePattern.replace(numberExp, "{number}")
+					.replace(/\u00A4/, "{currency}");
+				negativePattern = negativePattern.replace(numberExp, "{number}")
+					.replace(/\u00A4/, "{currency}");
+				result.patterns[style] = {
+					"cldrPattern" : cldrPattern,
+					"positivePattern" : positivePattern,
+					"negativePattern" : negativePattern
+				};
+			}
+			return result;
+		}
+		
 		var Intl = {
-			Collator : function(/* String */locale) {
+			Collator : function(locales, options) {
 				throw new TypeError("Intl.Collator is not supported.");
 			},
 			NumberFormat : function(locales, options) {
-				function _getNumberInfo(numbers, numberingSystem) {
-					result = {};
-					result.patterns = {};
-					var numberExp = /[0-9#.,]+/;
-					var styles =
-						[ "decimal", "percent", "currency" ];
-					for( var s in styles){
-						var style = styles[s];
-						var key = style+"Formats-numberSystem-"+numberingSystem;
-						var altkey = style+"Formats-numberSystem-latn";
-						var cldrPattern = numbers[key] ? numbers[key].standard : numbers[altkey].standard;
-						var patterns = cldrPattern.split(";");
-						var positivePattern, negativePattern;
-						positivePattern = patterns[0];
-						if(patterns[length]==2){
-							negativePattern = patterns[1];
-						}else{
-							negativePattern = "-"+positivePattern;
-						}
-						positivePattern = positivePattern.replace(numberExp, "{number}")
-							.replace(/\u00A4/, "{currency}");
-						negativePattern = negativePattern.replace(numberExp, "{number}")
-							.replace(/\u00A4/, "{currency}");
-						result.patterns[style] = {
-							"cldrPattern" : cldrPattern,
-							"positivePattern" : positivePattern,
-							"negativePattern" : negativePattern
-						};
-					}
-					return result;
-				}
-				// ECMA 402 Section 11.1.1.1
-				function InitializeNumberFormat(numberFormat, locales, options) {
-					if(numberFormat.initializedIntlObject){
-						throw new TypeError("NumberFormat is already initialized.");
-					}
-					numberFormat.initializedIntlObject = true;
-					var requestedLocales = CanonicalizeLocaleList(locales);
-					if(options===undefined){
-						options = {};
-					}else{
-						options = Object(options);
-					}
-					var opt = {};
-					var matcher = GetOption(options, "localeMatcher", "string",
-						[ "lookup", "best fit" ], "best fit");
-					opt.localeMatcher = matcher;
-					var localeData = numberFormat.localeData;
-					var r = ResolveLocale(numberFormat.availableLocales, requestedLocales, opt,
-						numberFormat.relevantExtensionKeys, localeData);
-					numberFormat.locale = r.locale;
-					numberFormat.dataLocale = r.dataLocale;
-					numberFormat.numberingSystem = r.nu;
-					var s = GetOption(options, "style", "string",
-						[ "decimal", "percent", "currency" ], "decimal");
-					numberFormat.style = s;
-					var c = GetOption(options, "currency", "string");
-					if(c!==undefined&&!IsWellFormedCurrencyCode(c)){
-						throw new RangeError("Invalid currency code "+c);
-					}
-					if(s=="currency"&&c===undefined){
-						throw new TypeError("No currency code specified.");
-					}
-					var cDigits = 2;
-					if(s=="currency"){
-						c = _toUpperCaseIdentifier(c);
-						numberFormat.currency = c;
-						cDigits = CurrencyDigits(c);
-					}
-					var cd = GetOption(options, "currencyDisplay", "string",
-						[ "code", "symbol", "name" ], "symbol");
-					if(s=="currency"){
-						numberFormat.currencyDisplay = cd;
-					}
-					var mnid = GetNumberOption(options, "minimumIntegerDigits", 1, 21, 1);
-					numberFormat.minimumIntegerDigits = mnid;
-					var mnfdDefault;
-					if(s=="currency"){
-						mnfdDefault = cDigits;
-					}else{
-						mnfdDefault = 0;
-					}
-					var mnfd = GetNumberOption(options, "minimumFractionDigits", 0, 20, mnfdDefault);
-					numberFormat.minimumFractionDigits = mnfd;
-					var mxfdDefault;
-					if(s=="currency"){
-						mxfdDefault = Math.max(mnfd, cDigits);
-					}else if(s=="percent"){
-						mxfdDefault = Math.max(mnfd, 0);
-					}else{
-						mxfdDefault = Math.max(mnfd, 0);
-					}
-					var mxfd = GetNumberOption(options, "maximumFractionDigits", mnfd, 20, mxfdDefault);
-					numberFormat.maximumFractionDigits = mxfd;
-					var mnsd = options["minimumSignificantDigits"];
-					var mxsd = options["maximumSignificantDigits"];
-					if(mnsd!==undefined||mxsd!==undefined){
-						mnsd = GetNumberOption(options, "minimumSignificantDigits", 1, 21, 1);
-						mxsd = GetNumberOption(options, "maximumSignificantDigits", mnsd, 21, 1);
-						numberFormat.minimumSignificantDigits = mnsd;
-						numberFormat.maximumSignificantDigits = mxsd;
-					}
-					var g = GetOption(options, "useGrouping", "boolean", undefined, true);
-					numberFormat.useGrouping = g;
-					var numbers = getCLDRJson(numberFormat.dataLocale, "numbers").main[numberFormat.dataLocale].numbers;
-					var numberInfo = _getNumberInfo(numbers, numberFormat.numberingSystem);
-					numberFormat.positivePattern = numberInfo.patterns[s].positivePattern;
-					numberFormat.negativePattern = numberInfo.patterns[s].negativePattern;
-					numberFormat.localeData = {
-						locale : {
-							"nu" : availableNumberingSystems,
-							"patterns" : numberInfo.patterns
-						}
-					};
-					numberFormat.boundFormat = undefined;
-					numberFormat.initializedNumberFormat = true;
-				}
 
 				// ECMA 402 Section 11.2.2
 				this.supportedLocalesOf = function(locales, options) {
@@ -697,25 +834,31 @@ define(
 				};
 
 				this.resolvedOptions = function() {
+					var fields = [ "locale", "numberingSystem", "style", "currency", "currencyDisplay", "minimumIntegerDigits", "minimumFractionDigits", "maximumFractionDigits", "minimumSignificantDigits", "maximumSignificantDigits", "useGrouping" ];
 					result = {};
-					result.locale = this.locale;
-					result.numberingSystem = this.numberingSystem;
-					result.options = this.options;
+					for (var f in fields){
+						if (this[fields[f]]!==undefined){
+							result[fields[f]] = this[fields[f]];
+						}
+					}
 					return result;
 				};
-
+				this.format = function(value){
+					var x = Number(value);
+					return FormatNumber(this,x);
+				};
 				this.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
-				this.relevantExtensionKeys =
-					[ "nu" ];
-				this.localeData = {};
-				for( var loc in this.availableLocales){
-					this.localeData[this.availableLocales[loc]] = {
+				this.relevantExtensionKeys = [ "nu" ];
+				var localeData = {};
+				this.availableLocales.forEach(function(loc) {
+					localeData[loc] = {
 						"nu" : availableNumberingSystems
 					};
-				}
+				});
+				this.localeData = localeData;
 				InitializeNumberFormat(this, locales, options);
 			},
-			DateTimeFormat : function(/* String */locale) {
+			DateTimeFormat : function(locales, options) {
 				throw new TypeError("Intl.DateTimeFormat is not supported.");
 			}
 		};

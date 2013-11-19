@@ -2,9 +2,14 @@
   "main": {
     "uk": {
       "numbers": {
+        "defaultNumberingSystem": "latn",
         "symbols-numberSystem-latn": {
           "decimal": ",",
-          "group": " "
+          "group": " ",
+          "percentSign": "%",
+          "minusSign": "-",
+          "infinity": "∞",
+          "nan": "Не число"
         },
         "decimalFormats-numberSystem-latn": {
           "standard": "#,##0.###"

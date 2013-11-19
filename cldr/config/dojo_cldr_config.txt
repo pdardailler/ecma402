@@ -2,7 +2,7 @@ section=ca-buddhist ; path=//cldr/main/[^/]++/dates/calendars/buddhist/((months|
 section=ca-gregorian ; path=//cldr/main/[^/]++/dates/calendars/gregorian/((months|days|dateTimeFormats/availableFormats).*|eras.*/era\[@type="(0|1)"\]|dayPeriods.*/dayPeriod\[@type="(am|pm)"\])
 section=ca-islamic ; path=//cldr/main/[^/]++/dates/calendars/islamic/((months|days|dateTimeFormats/availableFormats).*|eras.*/era\[@type="(0)"\]|dayPeriods.*/dayPeriod\[@type="(am|pm)"\])
 section=ca-roc ; path=//cldr/main/[^/]++/dates/calendars/roc/((months|days|dateTimeFormats/availableFormats).*|eras.*/era\[@type="(0|1)"\]|dayPeriods.*/dayPeriod\[@type="(am|pm)"\])
-section=numbers ; path=//cldr/main/[^/]++/numbers/(symbols\[@numberSystem="latn"\]/(decimal|group|currencyDecimal|currencyGroup)|(decimal|currency|percent)Formats\[@numberSystem="latn"\]/standard)
+section=numbers ; path=//cldr/main/[^/]++/numbers/(symbols\[@numberSystem="[a-z]{4,8}"\]/(decimal|group|nan|infinity|minusSign|percentSign)|(decimal|currency|percent)Formats\[@numberSystem="[a-z]{4,8}"\]/standard|defaultNumberingSystem)
 section=currencyData ; path=//cldr/supplemental/currencyData/fractions/.*
 section=parentLocales ; path=//cldr/supplemental/parentLocales/.*
 section=numberingSystems ; path=//cldr/supplemental/numberingSystems/.*

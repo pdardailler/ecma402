@@ -2,9 +2,14 @@
   "main": {
     "ko": {
       "numbers": {
+        "defaultNumberingSystem": "latn",
         "symbols-numberSystem-latn": {
           "decimal": ".",
-          "group": ","
+          "group": ",",
+          "percentSign": "%",
+          "minusSign": "-",
+          "infinity": "∞",
+          "nan": "NaN"
         },
         "decimalFormats-numberSystem-latn": {
           "standard": "#,##0.###"

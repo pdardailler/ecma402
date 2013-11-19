@@ -2,10 +2,14 @@
   "main": {
     "sv": {
       "numbers": {
+        "defaultNumberingSystem": "latn",
         "symbols-numberSystem-latn": {
           "decimal": ",",
           "group": " ",
-          "currencyDecimal": ":"
+          "percentSign": "%",
+          "minusSign": "−",
+          "infinity": "∞",
+          "nan": "¤¤¤"
         },
         "decimalFormats-numberSystem-latn": {
           "standard": "#,##0.###"
