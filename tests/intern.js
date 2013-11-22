@@ -82,6 +82,22 @@ define({
 		    			location : 'g11n4js'
 		    		},
 		    		{
+		    			name : 'Intl_common',
+		    			location : 'g11n4js'
+		    		},
+		    		{
+		    			name : 'Collator',
+		    			location : 'g11n4js'
+		    		},
+		    		{
+		    			name : 'NumberFormat',
+		    			location : 'g11n4js'
+		    		},
+		    		{
+		    			name : 'DateTimeFormat',
+		    			location : 'g11n4js'
+		    		},
+		    		{
 		    			name : 'testIntl',
 		    			location : 'g11n4js/tests/intl402/harness'
 		    		},
@@ -91,7 +107,8 @@ define({
 	// Non-functional test suite(s) to run in each browser
 	suites : [  'g11n4js/tests/Intl',
 	            'g11n4js/tests/intl402/suite/ch06/6.2',
-	            'g11n4js/tests/intl402/suite/ch06/6.3' ],
+	            'g11n4js/tests/intl402/suite/ch06/6.3',
+	            'g11n4js/tests/intl402/suite/ch09/9.1'],
 
 	// Functional test suite(s) to run in each browser once non-functional tests
 	// are completed
