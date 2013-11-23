@@ -97,7 +97,8 @@ define({
 	            'g11n4js/tests/intl402/suite/ch06/6.2',
 	            'g11n4js/tests/intl402/suite/ch06/6.3',
 	            'g11n4js/tests/intl402/suite/ch08/8.0',
-	            'g11n4js/tests/intl402/suite/ch09/9.1'],
+	            'g11n4js/tests/intl402/suite/ch09/9.1',
+	            'g11n4js/tests/intl402/suite/ch09/9.2'],
 
 	// Functional test suite(s) to run in each browser once non-functional tests
 	// are completed

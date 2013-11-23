@@ -507,14 +507,12 @@ define(
 				subset = LookupSupportedLocales(availableLocales, requestedLocales);
 			}
 			for( var P in Object.getOwnPropertyNames(subset)){
-				var desc;
-				desc = Object.getOwnPropertyDescriptor(subset, P);
-				if(desc===undefined){
-					desc = {};
+				var desc = Object.getOwnPropertyDescriptor(subset, P);
+				if(desc!==undefined){
+					desc.writable = false;
+					desc.configurable = false;
+					Object.defineProperty(subset, P, desc);
 				}
-				desc.writable = false;
-				desc.configurable = false;
-				Object.defineProperty(subset, P, desc);
 			}
 			return subset;
 		}
