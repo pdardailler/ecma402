@@ -136,7 +136,7 @@ define(
 				[ "CN", "IN", "US", "PK", "JP", "TW", "HK", "SG" ];
 			var localeSupportInfo = {};
 
-			var constructorName = getConstructorName(Constructor);
+			var constructorName = this.getConstructorName(Constructor);
 			if(localeSupportInfo[constructorName]!==undefined){
 				return localeSupportInfo[constructorName];
 			}

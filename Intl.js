@@ -1,3 +1,4 @@
+// Copyright 2013 International Business Machines Corporation. All rights reserved.
 define(
 	[ "dojo/request" ],
 	function(request) {
@@ -897,10 +898,17 @@ define(
 			var requestedLocales = CanonicalizeLocaleList(locales);
 			return SupportedLocales(availableLocales, requestedLocales, options);
 		};
-		
+
+		// ECMA 402 Section 7
+		Object.defineProperty(Intl, "NumberFormat", {
+			writable : true,
+			configurable : true,
+			enumerable : false
+		});
+
 		Intl.DateTimeFormat = function(locales, options) {
 			throw new TypeError("Intl.DateTimeFormat is not supported.");
 		};
-		
+
 		return Intl;
 	});

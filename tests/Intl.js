@@ -1,3 +1,4 @@
+// Copyright 2013 International Business Machines Corporation. All rights reserved.
 define([ 'intern!object', 'intern/chai!assert', 'g11n4js/Intl' ], function(registerSuite, assert, Intl) {
 	registerSuite({
 		name : 'Intl',
