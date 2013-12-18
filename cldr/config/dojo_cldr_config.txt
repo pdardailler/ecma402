@@ -4,6 +4,8 @@ section=ca-islamic ; path=//cldr/main/[^/]++/dates/calendars/islamic/((months|da
 section=ca-roc ; path=//cldr/main/[^/]++/dates/calendars/roc/((months|days|dateTimeFormats/availableFormats).*|eras.*/era\[@type="(0|1)"\]|dayPeriods.*/dayPeriod\[@type="(am|pm)"\])
 section=numbers ; path=//cldr/main/[^/]++/numbers/(symbols\[@numberSystem="[a-z]{4,8}"\]/(decimal|group|nan|infinity|minusSign|percentSign)|(decimal|currency|percent)Formats\[@numberSystem="[a-z]{4,8}"\]/standard|defaultNumberingSystem)
 section=currencyData ; path=//cldr/supplemental/currencyData/fractions/.*
+section=calendarPreferenceData ; path=//cldr/supplemental/calendarPreferenceData/.*
+section=timeData ; path=//cldr/supplemental/timeData/.*
 section=parentLocales ; path=//cldr/supplemental/parentLocales/.*
 section=numberingSystems ; path=//cldr/supplemental/numberingSystems/.*
 section=aliases ; path=//cldr/supplemental/metadata/alias/(language|script|territory|variant|zone)Alias.*

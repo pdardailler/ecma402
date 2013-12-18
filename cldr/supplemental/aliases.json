@@ -719,19 +719,19 @@
             "_replacement": "nb",
             "_reason": "legacy"
           },
-          "no-bok": {
-            "_replacement": "nb",
-            "_reason": "deprecated"
-          },
           "no-BOKMAL": {
             "_replacement": "nb",
             "_reason": "deprecated"
           },
-          "no-nyn": {
+          "no-NYNORSK": {
             "_replacement": "nn",
             "_reason": "deprecated"
           },
-          "no-NYNORSK": {
+          "no-bok": {
+            "_replacement": "nb",
+            "_reason": "deprecated"
+          },
+          "no-nyn": {
             "_replacement": "nn",
             "_reason": "deprecated"
           },

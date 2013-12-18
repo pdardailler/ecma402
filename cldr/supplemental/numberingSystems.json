@@ -1,70 +1,6 @@
 {
   "supplemental": {
     "numberingSystems": {
-      "armn": {
-        "_type": "algorithmic",
-        "_rules": "armenian-upper"
-      },
-      "armnlow": {
-        "_type": "algorithmic",
-        "_rules": "armenian-lower"
-      },
-      "ethi": {
-        "_type": "algorithmic",
-        "_rules": "ethiopic"
-      },
-      "geor": {
-        "_type": "algorithmic",
-        "_rules": "georgian"
-      },
-      "grek": {
-        "_type": "algorithmic",
-        "_rules": "greek-upper"
-      },
-      "greklow": {
-        "_type": "algorithmic",
-        "_rules": "greek-lower"
-      },
-      "hans": {
-        "_type": "algorithmic",
-        "_rules": "zh/SpelloutRules/spellout-cardinal"
-      },
-      "hansfin": {
-        "_type": "algorithmic",
-        "_rules": "zh/SpelloutRules/spellout-cardinal-financial"
-      },
-      "hant": {
-        "_type": "algorithmic",
-        "_rules": "zh_Hant/SpelloutRules/spellout-cardinal"
-      },
-      "hantfin": {
-        "_type": "algorithmic",
-        "_rules": "zh_Hant/SpelloutRules/spellout-cardinal-financial"
-      },
-      "hebr": {
-        "_type": "algorithmic",
-        "_rules": "hebrew"
-      },
-      "jpan": {
-        "_type": "algorithmic",
-        "_rules": "ja/SpelloutRules/spellout-cardinal"
-      },
-      "jpanfin": {
-        "_type": "algorithmic",
-        "_rules": "ja/SpelloutRules/spellout-cardinal-financial"
-      },
-      "roman": {
-        "_type": "algorithmic",
-        "_rules": "roman-upper"
-      },
-      "romanlow": {
-        "_type": "algorithmic",
-        "_rules": "roman-lower"
-      },
-      "taml": {
-        "_type": "algorithmic",
-        "_rules": "tamil"
-      },
       "arab": {
         "_digits": "٠١٢٣٤٥٦٧٨٩",
         "_type": "numeric"
@@ -208,6 +144,70 @@
       "vaii": {
         "_digits": "꘠꘡꘢꘣꘤꘥꘦꘧꘨꘩",
         "_type": "numeric"
+      },
+      "armn": {
+        "_type": "algorithmic",
+        "_rules": "armenian-upper"
+      },
+      "armnlow": {
+        "_type": "algorithmic",
+        "_rules": "armenian-lower"
+      },
+      "ethi": {
+        "_type": "algorithmic",
+        "_rules": "ethiopic"
+      },
+      "geor": {
+        "_type": "algorithmic",
+        "_rules": "georgian"
+      },
+      "grek": {
+        "_type": "algorithmic",
+        "_rules": "greek-upper"
+      },
+      "greklow": {
+        "_type": "algorithmic",
+        "_rules": "greek-lower"
+      },
+      "hans": {
+        "_type": "algorithmic",
+        "_rules": "zh/SpelloutRules/spellout-cardinal"
+      },
+      "hansfin": {
+        "_type": "algorithmic",
+        "_rules": "zh/SpelloutRules/spellout-cardinal-financial"
+      },
+      "hant": {
+        "_type": "algorithmic",
+        "_rules": "zh_Hant/SpelloutRules/spellout-cardinal"
+      },
+      "hantfin": {
+        "_type": "algorithmic",
+        "_rules": "zh_Hant/SpelloutRules/spellout-cardinal-financial"
+      },
+      "hebr": {
+        "_type": "algorithmic",
+        "_rules": "hebrew"
+      },
+      "jpan": {
+        "_type": "algorithmic",
+        "_rules": "ja/SpelloutRules/spellout-cardinal"
+      },
+      "jpanfin": {
+        "_type": "algorithmic",
+        "_rules": "ja/SpelloutRules/spellout-cardinal-financial"
+      },
+      "roman": {
+        "_type": "algorithmic",
+        "_rules": "roman-upper"
+      },
+      "romanlow": {
+        "_type": "algorithmic",
+        "_rules": "roman-lower"
+      },
+      "taml": {
+        "_type": "algorithmic",
+        "_rules": "tamil"
       }
     }
   }

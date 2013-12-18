@@ -119,6 +119,18 @@ define([ 'intern!object', 'intern/chai!assert', 'g11n4js/Intl' ], function(regis
 					'Intl.NumberFormat.format() should return expected string for locale"'+currentTest.locales
 						+'" style:'+currentTest.style);
 			});
+		},
+		dateTimeFormat : function() {
+			var testCases = [ {
+				"locales" : "zh-Hant",
+				"input" : 0,
+				"expected" : "1970-01-01 00:00:00"
+			} ];
+			testCases.forEach(function(currentTest) {
+				var df = new Intl.DateTimeFormat(currentTest.locales);
+				assert.strictEqual(df.format(currentTest.input), currentTest.expected,
+					'Intl.DateTimeFormat.format() should return expected string for locale"'+currentTest.locales);
+			});
 		}
 	});
 });
