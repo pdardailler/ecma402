@@ -547,7 +547,7 @@ define(
 		function GetNumberOption(options, property, minimum, maximum, fallback) {
 			var value = options[property];
 			if(value!==undefined){
-				value = ToNumber(value);
+				value = Number(value);
 				if(isNaN(value)||value<minimum||value>maximum){
 					throw new RangeError("The specified number value "+value+" is not in the allowed range");
 				}
@@ -876,7 +876,7 @@ define(
 			var bestScore = Number.NEGATIVE_INFINITY;
 			var bestFormat = undefined;
 			var i = 0;
-			var len = formats[length];
+			var len = formats.length;
 			while (i<len){
 				var format = formats[i.toString()];
 				var score = 0;
@@ -965,7 +965,7 @@ define(
 			var bestFormat = matcher=="basic" ? BasicFormatatcher(opt, formats) : BestFitFormatMatcher(
 				opt, formats);
 			dateTimeProperties.forEach(function(prop) {
-				var pDesc = bestFormat.getOwnProperty(prop);
+				var pDesc = Object.getOwnPropertyDescriptor(bestFormat,prop);
 				if(pDesc!=undefined){
 					var p = bestFormat[prop];
 					dateTimeFormat[prop] = p;
@@ -973,20 +973,20 @@ define(
 			});
 			var pattern;
 			var hr12 = GetOption(options, "hour12", "boolean", undefined, undefined);
-			if (dateTimeFormat[hour]!=undefined){
+			if (dateTimeFormat.hour!=undefined){
 				if (hr12==undefined){
-					hr12 = dataLocaleData["hour12"];
+					hr12 = dataLocaleData.hour12;
 				}
 				dateTimeFormat.hour12 = hr12;
 				if (hr12){
-					var hourNo0 =  dataLocaleData["hourNo0"];
+					var hourNo0 =  dataLocaleData.hourNo0;
 					dateTimeFormat.hourNo0 = hourNo0;
-					pattern = bestFormat["pattern12"];
+					pattern = bestFormat.pattern12;
 				} else {
-					pattern = bestFormat["pattern"];
+					pattern = bestFormat.pattern;
 				}
 			} else {
-				pattern = bestFormat["pattern"];
+				pattern = bestFormat.pattern;
 			}
 			dateTimeFormat.pattern = pattern;
 			dateTimeFormat.boundFormat = undefined;
@@ -1048,7 +1048,7 @@ define(
 			result.weekday = 4;
 			result.era = 1;
 			result.year = 1970;
-			result.month = 1;
+			result.month = 0;
 			result.day = 1;
 			result.hour = 0;
 			result.minute = 0;

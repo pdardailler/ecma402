@@ -122,12 +122,13 @@ define([ 'intern!object', 'intern/chai!assert', 'g11n4js/Intl' ], function(regis
 		},
 		dateTimeFormat : function() {
 			var testCases = [ {
-				"locales" : "zh-Hant",
+				"locales" : "en-US",
+				"options" : {era: "short", year:"numeric", month:"short", day:"numeric"},
 				"input" : 0,
-				"expected" : "1970-01-01 00:00:00"
+				"expected" : "Jan 1, 1970 AD"
 			} ];
 			testCases.forEach(function(currentTest) {
-				var df = new Intl.DateTimeFormat(currentTest.locales);
+				var df = new Intl.DateTimeFormat(currentTest.locales, currentTest.options);
 				assert.strictEqual(df.format(currentTest.input), currentTest.expected,
 					'Intl.DateTimeFormat.format() should return expected string for locale"'+currentTest.locales);
 			});
