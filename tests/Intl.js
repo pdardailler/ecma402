@@ -123,10 +123,16 @@ define([ 'intern!object', 'intern/chai!assert', 'g11n4js/Intl' ], function(regis
 		dateTimeFormat : function() {
 			var testCases = [ {
 				"locales" : "en-US",
-				"options" : {era: "short", year:"numeric", month:"short", day:"numeric"},
-				"input" : 0,
-				"expected" : "Jan 1, 1970 AD"
-			} ];
+				"options" : {era: "short", year:"numeric", month:"short", day:"numeric", weekday:"short"},
+				"input" : new Date("1970-01-01T00:00:00Z").getTime(),
+				"expected" : "Thu, Jan 1, 1970 AD"
+			},
+			{
+				"locales" : "en-US",
+				"options" : {hour: "numeric", minute: "numeric", second: "numeric"},
+				"input" : new Date("1970-01-01T00:00:00Z").getTime(),
+				"expected" : "12:00:00 AM"
+			}];
 			testCases.forEach(function(currentTest) {
 				var df = new Intl.DateTimeFormat(currentTest.locales, currentTest.options);
 				assert.strictEqual(df.format(currentTest.input), currentTest.expected,

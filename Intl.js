@@ -1,7 +1,7 @@
 // Copyright 2013 International Business Machines Corporation. All rights reserved.
 define(
-	[ "dojo/request" ],
-	function(request) {
+	[ "dojo/request", "g11n4js/calendars"],
+	function(request,calendars) {
 
 		aliases = getCLDRJson("supplemental", "aliases").supplemental.metadata.alias;
 		localeAliases = getCLDRJson("supplemental", "localeAliases").supplemental.metadata.alias;
@@ -975,11 +975,11 @@ define(
 			var hr12 = GetOption(options, "hour12", "boolean", undefined, undefined);
 			if (dateTimeFormat.hour!=undefined){
 				if (hr12==undefined){
-					hr12 = dataLocaleData.hour12;
+					hr12 = dateTimeFormat.localeData[dateTimeFormat.dataLocale]&&dateTimeFormat.localeData[dateTimeFormat.dataLocale].hour12;
 				}
 				dateTimeFormat.hour12 = hr12;
 				if (hr12){
-					var hourNo0 =  dataLocaleData.hourNo0;
+					var hourNo0 =  dateTimeFormat.localeData[dateTimeFormat.dataLocale]&&dateTimeFormat.localeData[dateTimeFormat.dataLocale].hourNo0;
 					dateTimeFormat.hourNo0 = hourNo0;
 					pattern = bestFormat.pattern12;
 				} else {
@@ -1044,19 +1044,7 @@ define(
 		}
 		// ECMA 402 Section 12.3.2
 		function ToLocalTime(date, calendar, timeZone) {
-			var result = {};
-			result.weekday = 4;
-			result.era = 1;
-			result.year = 1970;
-			result.month = 0;
-			result.day = 1;
-			result.hour = 0;
-			result.minute = 0;
-			result.second = 0;
-			result.inDST = false;
-			return result;
-
-			// return calendars.getLocalTime(date, calendar, timeZone);
+			return calendars.ToLocalTime(date, calendar, timeZone);
 		}
 		
 		function _getCalendarField(calData,standalone,property,format,value){
@@ -1339,26 +1327,27 @@ define(
 			dateTimeFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
 			dateTimeFormat.relevantExtensionKeys = [ "ca", "nu" ];
 			var localeData = {};
-			var regionTag = /(?:-)([a-z]{2})(?=(-|$))/;
+			var regionTag = /(?:-)([A-Z]{2})(?=(-|$))/;
 			dateTimeFormat.availableLocales.forEach(function(loc) {
+				// TODO : Deal with default content locales effectively...
 				var regionPos = loc.search(regionTag);
 				var calendarPreferences = [ "gregory" ];
 				var hour12 = false;
 				var hourNo0 = false;
 				if(regionPos>=0){
-					var region = loc.substr(regionPos, 2);
+					var region = loc.substr(regionPos+1, 2);
 					var thisRegionsPreferences = calendarPreferenceData[region];
 					if(thisRegionsPreferences){
 						// TODO: Add non-gregorian calendarPreferences = thisRegionsPreferences.replace("gregorian", "gregory").split(/\s+/);
 					}
-					hour12 = timeData[region]&&/h|K/.test(timeData[region]._preferred);
-					hourNo0 = timeData[region]&&/h|k/.test(timeData[region]._preferred);
+					hour12 = timeData[region]&&(/h|K/.test(timeData[region]._preferred));
+					hourNo0 = timeData[region]&&(/h|k/.test(timeData[region]._preferred));
 				}
 				localeData[loc] = {
 					"nu" : availableNumberingSystems,
 					"ca" : calendarPreferences,
 					"hour12" : hour12,
-					"hourNo0" : hourNo0
+					"hourNo0" : hourNo0,
 				};
 			});
 			dateTimeFormat.localeData = localeData;
