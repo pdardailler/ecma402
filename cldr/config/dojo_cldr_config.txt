@@ -9,3 +9,4 @@ section=timeData ; path=//cldr/supplemental/timeData/.*
 section=parentLocales ; path=//cldr/supplemental/parentLocales/.*
 section=numberingSystems ; path=//cldr/supplemental/numberingSystems/.*
 section=aliases ; path=//cldr/supplemental/metadata/alias/(language|script|territory|variant|zone)Alias.*
+section=likelySubtags ; path=//cldr/supplemental/likelySubtags/.*

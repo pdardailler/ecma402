@@ -11,6 +11,7 @@ define(
 		dateTimeProperties = [ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ];
 		calendarPreferenceData = getCLDRJson("supplemental", "calendarPreferenceData").supplemental.calendarPreferenceData;
 		timeData = getCLDRJson("supplemental", "timeData").supplemental.timeData;
+		likelySubtags = getCLDRJson("supplemental", "likelySubtags").supplemental.likelySubtags;
 		availableNumberingSystems = [ "latn" ];
 		for( var ns in numberingSystems){
 			if(numberingSystems[ns]._type=="numeric"&&ns!="latn"){
@@ -1088,7 +1089,10 @@ define(
 							return calData.dayPeriods.format.wide[value];
 					}
 				case "timeZoneName" :
-					return "UTC";
+					if (value=="UTC"){
+						return "UTC";
+					}
+					return "local";
 			}
 		}
 		// Utility function to convert the availableFormats from a CLDR JSON object into
@@ -1329,20 +1333,25 @@ define(
 			var localeData = {};
 			var regionTag = /(?:-)([A-Z]{2})(?=(-|$))/;
 			dateTimeFormat.availableLocales.forEach(function(loc) {
-				// TODO : Deal with default content locales effectively...
-				var regionPos = loc.search(regionTag);
 				var calendarPreferences = [ "gregory" ];
+				var region = "001";
 				var hour12 = false;
 				var hourNo0 = false;
+				var regionPos = loc.search(regionTag);
 				if(regionPos>=0){
-					var region = loc.substr(regionPos+1, 2);
-					var thisRegionsPreferences = calendarPreferenceData[region];
-					if(thisRegionsPreferences){
-						// TODO: Add non-gregorian calendarPreferences = thisRegionsPreferences.replace("gregorian", "gregory").split(/\s+/);
+					region = loc.substr(regionPos+1, 2);
+				}else{
+					var likelySubtag = likelySubtags[loc];
+					if(likelySubtag){
+						region=likelySubtag.substr(-2);
 					}
-					hour12 = timeData[region]&&(/h|K/.test(timeData[region]._preferred));
-					hourNo0 = timeData[region]&&(/h|k/.test(timeData[region]._preferred));
 				}
+				var thisRegionsPreferences = calendarPreferenceData[region];
+				if(thisRegionsPreferences){
+					// TODO: Add non-gregorian calendarPreferences = thisRegionsPreferences.replace("gregorian", "gregory").split(/\s+/);
+				}
+				hour12 = timeData[region]&&(/h|K/.test(timeData[region]._preferred));
+				hourNo0 = timeData[region]&&(/h|k/.test(timeData[region]._preferred));
 				localeData[loc] = {
 					"nu" : availableNumberingSystems,
 					"ca" : calendarPreferences,
