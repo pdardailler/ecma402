@@ -52,7 +52,7 @@ define(
 			case Intl.DateTimeFormat:
 				return "DateTimeFormat";
 			default:
-				$ERROR("test internal error: unknown Constructor");
+				assert(false,"test internal error: unknown Constructor");
 			}
 		},
 
@@ -65,7 +65,7 @@ define(
 		taintDataProperty : function(obj, property) {
 			Object.defineProperty(obj, property, {
 				set : function(value) {
-					$ERROR("Client code can adversely affect behavior: setter for "+property+".");
+					assert(false,"Client code can adversely affect behavior: setter for "+property+".");
 				},
 				enumerable : false,
 				configurable : true
@@ -81,7 +81,7 @@ define(
 		taintMethod : function(obj, property) {
 			Object.defineProperty(obj, property, {
 				value : function() {
-					$ERROR("Client code can adversely affect behavior: method "+property+".");
+					assert(false,"Client code can adversely affect behavior: method "+property+".");
 				},
 				writable : true,
 				enumerable : false,
@@ -109,12 +109,12 @@ define(
 		 * replacing some key methods with functions that throw exceptions.
 		 */
 		taintArray : function() {
-			taintDataProperty(Array.prototype, "0");
-			taintMethod(Array.prototype, "indexOf");
-			taintMethod(Array.prototype, "join");
-			taintMethod(Array.prototype, "push");
-			taintMethod(Array.prototype, "slice");
-			taintMethod(Array.prototype, "sort");
+			this.taintDataProperty(Array.prototype, "0");
+			this.taintMethod(Array.prototype, "indexOf");
+			this.taintMethod(Array.prototype, "join");
+			this.taintMethod(Array.prototype, "push");
+			this.taintMethod(Array.prototype, "slice");
+			this.taintMethod(Array.prototype, "sort");
 		},
 
 		/**
@@ -926,24 +926,21 @@ define(
 				addExtraOptions(options, value, testOptions);
 				obj = new Constructor(undefined, options);
 				if(noReturn){
-					if(obj.resolvedOptions().hasOwnProperty(property)){
-						$ERROR("Option property "+property+" is returned, but shouldn't be.");
-					}
+					assert(!obj.resolvedOptions().hasOwnProperty(property),
+						"Option property "+property+" is returned, but shouldn't be.");
 				}else{
 					actual = obj.resolvedOptions()[property];
 					if(isILD){
-						if(actual!==undefined&&values.indexOf(actual)===-1){
-							$ERROR("Invalid value "+actual+" returned for property "+property+".");
-						}
+						assert(actual===undefined||values.indexOf(actual)===-1,
+							"Invalid value "+actual+" returned for property "+property+".");
 					}else{
 						if(type==="boolean"){
 							expected = Boolean(value);
 						}else if(type==="string"){
 							expected = String(value);
 						}
-						if(actual!==expected&&!(isOptional&&actual===undefined)){
-							$ERROR("Option value "+value+" for property "+property+" was not accepted; got "+actual+" instead.");
-						}
+						assert(actual===expected||(isOptional&&actual===undefined),
+							"Option value "+value+" for property "+property+" was not accepted; got "+actual+" instead.");
 					}
 				}
 			});

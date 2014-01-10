@@ -1,7 +1,7 @@
 // Copyright 2013 International Business Machines Corporation. All rights reserved.
 define(
-	[ "dojo/request", "g11n4js/calendars"],
-	function(request,calendars) {
+	[ "dojo/request", "g11n4js/calendars" ],
+	function(request, calendars) {
 
 		aliases = getCLDRJson("supplemental", "aliases").supplemental.metadata.alias;
 		localeAliases = getCLDRJson("supplemental", "localeAliases").supplemental.metadata.alias;
@@ -255,8 +255,11 @@ define(
 
 		// ECMA 402 Section 9.2.1
 		function CanonicalizeLocaleList(locales) {
-			if(typeof locales=="undefined"){
+			if(locales===undefined){
 				return [];
+			}
+			if(locales===null){
+				throw new TypeError("Locale list can not be null");
 			}
 			var seen = [];
 			if(typeof locales=="string"){
@@ -963,10 +966,9 @@ define(
 			dateTimeFormat.calData = calData;
 			var formats = _convertAvailableDateTimeFormats(calData.dateTimeFormats.availableFormats);
 			matcher = GetOption(options, "formatMatcher", "string", [ "basic", "best fit" ], "best fit");
-			var bestFormat = matcher=="basic" ? BasicFormatatcher(opt, formats) : BestFitFormatMatcher(
-				opt, formats);
+			var bestFormat = matcher=="basic" ? BasicFormatatcher(opt, formats) : BestFitFormatMatcher(opt, formats);
 			dateTimeProperties.forEach(function(prop) {
-				var pDesc = Object.getOwnPropertyDescriptor(bestFormat,prop);
+				var pDesc = Object.getOwnPropertyDescriptor(bestFormat, prop);
 				if(pDesc!=undefined){
 					var p = bestFormat[prop];
 					dateTimeFormat[prop] = p;
@@ -974,19 +976,21 @@ define(
 			});
 			var pattern;
 			var hr12 = GetOption(options, "hour12", "boolean", undefined, undefined);
-			if (dateTimeFormat.hour!=undefined){
-				if (hr12==undefined){
-					hr12 = dateTimeFormat.localeData[dateTimeFormat.dataLocale]&&dateTimeFormat.localeData[dateTimeFormat.dataLocale].hour12;
+			if(dateTimeFormat.hour!=undefined){
+				if(hr12==undefined){
+					hr12 = dateTimeFormat.localeData[dateTimeFormat.dataLocale]
+						&&dateTimeFormat.localeData[dateTimeFormat.dataLocale].hour12;
 				}
 				dateTimeFormat.hour12 = hr12;
-				if (hr12){
-					var hourNo0 =  dateTimeFormat.localeData[dateTimeFormat.dataLocale]&&dateTimeFormat.localeData[dateTimeFormat.dataLocale].hourNo0;
+				if(hr12){
+					var hourNo0 = dateTimeFormat.localeData[dateTimeFormat.dataLocale]
+						&&dateTimeFormat.localeData[dateTimeFormat.dataLocale].hourNo0;
 					dateTimeFormat.hourNo0 = hourNo0;
 					pattern = bestFormat.pattern12;
-				} else {
+				}else{
 					pattern = bestFormat.pattern;
 				}
-			} else {
+			}else{
 				pattern = bestFormat.pattern;
 			}
 			dateTimeFormat.pattern = pattern;
@@ -1000,9 +1004,14 @@ define(
 				throw new RangeError;
 			}
 			var locale = dateTimeFormat.locale;
-			var nf = new Intl.NumberFormat(locale, {useGrouping: false});
-			var nf2 = new Intl.NumberFormat(locale, {minimumIntegerDigits: 2, useGrouping: false});
-			var tm = ToLocalTime(x,dateTimeFormat.calendar,dateTimeFormat.timeZone);
+			var nf = new Intl.NumberFormat(locale, {
+				useGrouping : false
+			});
+			var nf2 = new Intl.NumberFormat(locale, {
+				minimumIntegerDigits : 2,
+				useGrouping : false
+			});
+			var tm = ToLocalTime(x, dateTimeFormat.calendar, dateTimeFormat.timeZone);
 			var pm = false;
 			var result = dateTimeFormat.pattern;
 			dateTimeProperties.forEach(function(prop) {
@@ -1019,27 +1028,27 @@ define(
 				if(p=="hour"&&dateTimeFormat.hour12){
 					v = v%12;
 					pm = (v!=tm[p]);
-					if (v==0&&dateTimeFormat.hourNo0){
-						v=12;
+					if(v==0&&dateTimeFormat.hourNo0){
+						v = 12;
 					}
 				}
 				if(f=="numeric"){
-					fv=FormatNumber(nf,v);
+					fv = FormatNumber(nf, v);
 				}else if(f=="2-digit"){
-					fv=FormatNumber(nf2,v);
+					fv = FormatNumber(nf2, v);
 					if(fv.length>2){
-						fv=fv.substr(-2);
+						fv = fv.substr(-2);
 					}
 				}else{
-					var standalone=(p=="month"&&dateTimeFormat.standaloneMonth);
-					fv=_getCalendarField(dateTimeFormat.calData,standalone,p,f,v);
+					var standalone = (p=="month"&&dateTimeFormat.standaloneMonth);
+					fv = _getCalendarField(dateTimeFormat.calData, standalone, p, f, v);
 				}
-				result=result.replace("{"+p+"}",fv);
+				result = result.replace("{"+p+"}", fv);
 			});
-			if (dateTimeFormat.hour12){
-				var ampm = pm?"pm":"am";
-				var fv=_getCalendarField(dateTimeFormat.calData,false,"dayperiod","short",ampm);
-				result=result.replace("{ampm}",fv);
+			if(dateTimeFormat.hour12){
+				var ampm = pm ? "pm" : "am";
+				var fv = _getCalendarField(dateTimeFormat.calData, false, "dayperiod", "short", ampm);
+				result = result.replace("{ampm}", fv);
 			}
 			return result;
 		}
@@ -1047,49 +1056,52 @@ define(
 		function ToLocalTime(date, calendar, timeZone) {
 			return calendars.ToLocalTime(date, calendar, timeZone);
 		}
-		
-		function _getCalendarField(calData,standalone,property,format,value){
-			switch (property){
-				case "weekday" :
+
+		function _getCalendarField(calData, standalone, property, format, value) {
+			switch(property) {
+				case "weekday":
 					var cldrWeekdayKeys = [ "sun", "mon", "tue", "wed", "thu", "fri", "sat" ];
 					var weekdayKey = cldrWeekdayKeys[value];
-					switch (format) {
-						case "narrow" :
+					switch(format) {
+						case "narrow":
 							return calData.days.format.narrow[weekdayKey];
-						case "short" :
+						case "short":
 							return calData.days.format.abbreviated[weekdayKey];
-						case "long" :
+						case "long":
 							return calData.days.format.wide[weekdayKey];
 					}
-				case "era" :
-					switch (format) {
-						case "narrow" :
+				case "era":
+					switch(format) {
+						case "narrow":
 							return calData.eras.eraNarrow[value];
-						case "short" :
+						case "short":
 							return calData.eras.eraAbbr[value];
-						case "long" :
+						case "long":
 							return calData.eras.eraNames[value];
 					}
-				case "month" :
-					switch (format) {
-						case "narrow" :
-							return standalone?calData.months.stand-alone.narrow[value]:calData.months.format.narrow[value];
-						case "short" :
-							return standalone?calData.months.stand-alone.abbreviated[value]:calData.months.format.abbreviated[value];
-						case "long" :
-							return standalone?calData.months.stand-alone.wide[value]:calData.months.format.wide[value];
+				case "month":
+					switch(format) {
+						case "narrow":
+							return standalone ? calData.months.stand-alone.narrow[value]
+								: calData.months.format.narrow[value];
+						case "short":
+							return standalone ? calData.months.stand-alone.abbreviated[value]
+								: calData.months.format.abbreviated[value];
+						case "long":
+							return standalone ? calData.months.stand-alone.wide[value]
+								: calData.months.format.wide[value];
 					}
-				case "dayperiod" :
-					switch (format) {
-						case "narrow" :
+				case "dayperiod":
+					switch(format) {
+						case "narrow":
 							return calData.dayPeriods.format.narrow[value];
-						case "short" :
+						case "short":
 							return calData.dayPeriods.format.abbreviated[value];
-						case "long" :
+						case "long":
 							return calData.dayPeriods.format.wide[value];
 					}
-				case "timeZoneName" :
-					if (value=="UTC"){
+				case "timeZoneName":
+					if(value=="UTC"){
 						return "UTC";
 					}
 					return "local";
@@ -1194,7 +1206,7 @@ define(
 			result.pattern = pieces.join("");
 			return result;
 		}
-		
+
 		// Utility function to convert the availableFormats from a CLDR JSON object into
 		// an array of available formats as defined by ECMA 402. For definition of fields,
 		// in CLDR, refer to http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
@@ -1202,10 +1214,10 @@ define(
 			var result = [];
 			var usableFormatSkeletons = /^G{0,5}y{0,4}M{0,5}E{0,5}d{0,2}H{0,2}m{0,2}s{0,2}$/;
 			for( var format in availableFormats){
-				var format12 = availableFormats[format.replace("H","h")];
+				var format12 = availableFormats[format.replace("H", "h")];
 				if(usableFormatSkeletons.test(format)&&format12!=undefined){
 					outputFormat = _ToIntlDateTimeFormat(availableFormats[format]);
-					if (/H/.test(format)){
+					if(/H/.test(format)){
 						outputFormat12 = _ToIntlDateTimeFormat(format12);
 						outputFormat.hour12 = outputFormat12.hour12;
 						outputFormat.pattern12 = outputFormat12.pattern;
@@ -1343,7 +1355,7 @@ define(
 				}else{
 					var likelySubtag = likelySubtags[loc];
 					if(likelySubtag){
-						region=likelySubtag.substr(-2);
+						region = likelySubtag.substr(-2);
 					}
 				}
 				var thisRegionsPreferences = calendarPreferenceData[region];
