@@ -1,6 +1,6 @@
 // Copyright 2013 International Business Machines Corporation. All rights reserved.
 define(
-	[ "dojo/request", "g11n4js/calendars" ],
+	[ "dojo/request", "ecma402/calendars" ],
 	function(request, calendars) {
 
 		aliases = getCLDRJson("supplemental", "aliases").supplemental.metadata.alias;
@@ -20,7 +20,7 @@ define(
 		}
 		// Utility function for Synchronous JSON loading using Dojo require.
 		function getCLDRJson(locale, path) {
-			var url = require.toUrl("g11n4js/cldr/"+locale+"/"+path+".json");
+			var url = require.toUrl("ecma402/cldr/"+locale+"/"+path+".json");
 			var options = {
 				sync : true,
 				handleAs : "json"

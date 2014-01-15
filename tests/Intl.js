@@ -1,5 +1,5 @@
 // Copyright 2013 International Business Machines Corporation. All rights reserved.
-define([ 'intern!object', 'intern/chai!assert', 'g11n4js/Intl', "g11n4js/List" ], function(registerSuite, assert, Intl, List) {
+define([ 'intern!object', 'intern/chai!assert', 'ecma402/Intl' ], function(registerSuite, assert, Intl) {
 	registerSuite({
 		name : 'Intl',
 		matcherFunctions : function() {
@@ -156,9 +156,6 @@ define([ 'intern!object', 'intern/chai!assert', 'g11n4js/Intl', "g11n4js/List" ]
 				assert.strictEqual(df.format(currentTest.input), currentTest.expected,
 					'Intl.DateTimeFormat.format() should return expected string for locale"'+currentTest.locales);
 			});
-		},
-		testList : function() {
-			var aList = new List();
 		}
 	});
 });

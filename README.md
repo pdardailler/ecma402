@@ -1,6 +1,7 @@
-#g11n4js
+#ecma402
 
-This project provides globalization utilities for JavaScript/AMD/Dojo Applications
+This project provides a Javascript implementation of ECMA 402 internationalization APIs for number formatting and
+date/time formatting.
 
 ## Status
 
@@ -17,9 +18,9 @@ All contributions require a [Dojo Foundation CLA](http://dojofoundation.org/abou
 
 ## Installation
 
- To install the latest master, go to the root Dojo installation directory and clone g11n4js from github
+ To install the latest master, go to the root Dojo installation directory and clone ecma402 from github
 
- git clone git://github.com/ibm-dojo/g11n4js.git
+ git clone git://github.com/ibm-dojo/ecma402.git
 
 ## Documentation
 

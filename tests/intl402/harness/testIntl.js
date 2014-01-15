@@ -8,7 +8,7 @@
  * @author Norbert Lindenberg
  */
 define(
-		[ 'intern!object', 'intern/chai!assert', 'g11n4js/Intl' ],
+		[ 'intern!object', 'intern/chai!assert', 'ecma402/Intl' ],
 	function(registerSuite, assert, Intl) {
 		var testIntl = {
 
