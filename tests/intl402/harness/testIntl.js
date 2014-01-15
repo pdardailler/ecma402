@@ -99,7 +99,7 @@ define(
 				var adaptedProperties =
 					[ property, "__"+property, "_"+property, property+"_", property+"__" ];
 				adaptedProperties.forEach(function(property) {
-					taintDataProperty(Object.prototype, property);
+					testIntl.taintDataProperty(Object.prototype, property);
 				});
 			});
 		},

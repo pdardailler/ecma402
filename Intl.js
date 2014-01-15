@@ -324,6 +324,7 @@ define(
 			}else{
 				result.locale = DefaultLocale();
 			}
+			
 			return result;
 		}
 
