@@ -42,6 +42,27 @@ define(
 				"ro", "root", "ru", "sk", "sl", "sr", "sv", "th", "tr", "uk", "vi", "zh", "zh-Hant");
 		}
 
+		// Implementation of the List abstract datatype from ECMA 402.
+		function List() {
+			this.length = 0;
+		}
+		
+		List.prototype.push = function(item){
+			this[this.length] = item;
+			this.length++;
+		};
+		
+		List.prototype.toArray = function(){
+			var i = 0;
+			var result = new Array(this.length);
+			while(i<this.length){
+				result[i] = this[i];
+				i++;
+			}
+
+			return result;
+		};
+		
 		// ECMA 262 Section 9.1
 		function IsPrimitive(x) {
 			return (typeof x).test(/undefined|null|boolean|string|number/);
@@ -464,7 +485,7 @@ define(
 		// ECMA 402 Section 9.2.6
 		function LookupSupportedLocales(availableLocales, requestedLocales) {
 			var len = requestedLocales.length;
-			var subset = [];
+			var subset = new List();
 			var k = 0;
 			while (k<len){
 				var locale = requestedLocales[k];
@@ -475,13 +496,14 @@ define(
 				}
 				k++;
 			}
-			return subset;
+			var subsetArray = subset.toArray();
+			return subsetArray;
 		}
 
 		// ECMA 402 Section 9.2.7
 		function BestFitSupportedLocales(availableLocales, requestedLocales) {
 			var len = requestedLocales.length;
-			var subset = [];
+			var subset = new List();
 			var k = 0;
 			while (k<len){
 				var locale = requestedLocales[k];
@@ -492,7 +514,8 @@ define(
 				}
 				k++;
 			}
-			return subset;
+			var subsetArray = subset.toArray();
+			return subsetArray;
 		}
 
 		// ECMA 402 Section 9.2.8
@@ -516,12 +539,13 @@ define(
 			}
 			for( var P in Object.getOwnPropertyNames(subset)){
 				var desc = Object.getOwnPropertyDescriptor(subset, P);
-				if(desc!==undefined){
+				if (desc!==undefined){
 					desc.writable = false;
 					desc.configurable = false;
 					Object.defineProperty(subset, P, desc);
 				}
 			}
+			Object.defineProperty(subset,"length",{writable:false, configurable:false});
 			return subset;
 		}
 
