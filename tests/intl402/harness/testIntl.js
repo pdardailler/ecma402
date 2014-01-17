@@ -863,9 +863,7 @@ define(
 			}
 
 			return typeof locale==="string"&&isStructurallyValidLanguageTag(locale)&&canonicalizeLanguageTag(locale)===locale;
-		}
-		};
-
+		},
 		/**
 		 * Tests whether the named options property is correctly handled by the given constructor.
 		 * @param {object} Constructor the constructor to test.
@@ -880,7 +878,7 @@ define(
 		 *     @param {object} extra additional option to pass along, properties are value -> {option: value}.
 		 * @return {boolean} whether the test succeeded.
 		 */
-		function testOption(Constructor, property, type, values, fallback, testOptions) {
+		testOption : function(Constructor, property, type, values, fallback, testOptions) {
 			var isOptional = testOptions!==undefined&&testOptions.isOptional===true;
 			var noReturn = testOptions!==undefined&&testOptions.noReturn===true;
 			var isILD = testOptions!==undefined&&testOptions.isILD===true;
@@ -965,11 +963,9 @@ define(
 					}catch(e){
 						error = e;
 					}
-					if(error===undefined){
-						$ERROR("Invalid option value "+value+" for property "+property+" was not rejected.");
-					}else if(error.name!=="RangeError"){
-						$ERROR("Invalid option value "+value+" for property "+property+" was rejected with wrong error "+error.name+".");
-					}
+					assert.isDefined(error,"Invalid option value "+value+" for property "+property+" was not rejected.");
+					assert.strictEqual(error.name,"RangeError",
+						"Invalid option value "+value+" for property "+property+" was rejected with wrong error "+error.name+".");
 				});
 			}
 
@@ -994,6 +990,9 @@ define(
 
 			return true;
 		}
+
+		};
+
 
 		/**
 		 * Tests whether the named property of the given object has a valid value

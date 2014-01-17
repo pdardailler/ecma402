@@ -41,7 +41,7 @@ define(
 				"ro", "root", "ru", "sk", "sl", "sr", "sv", "th", "tr", "uk", "vi", "zh", "zh-Hant");
 		}
 
-		// Implementation of the List abstract datatype from ECMA 402.
+		// Implementation of the List abstract data type from ECMA 402.
 		function List() {
 			this.length = 0;
 		}
@@ -1275,7 +1275,7 @@ define(
 			throw new TypeError("Intl.Collator is not supported.");
 		};
 
-		Intl.NumberFormat = function(locales, options) {
+		Intl.NumberFormat = function(locales,options) {
 			// ECMA 402 Section 11.1.3.1
 			InitializeNumberFormat(this, locales, options);
 		};
@@ -1309,6 +1309,7 @@ define(
 			var requestedLocales = CanonicalizeLocaleList(locales);
 			return SupportedLocales(availableLocales, requestedLocales, options);
 		};
+		
 		// ECMA 402 Section 11.3.2
 		Intl.NumberFormat.prototype.format = function(value) {
 			if(this.boundFormat===undefined){
