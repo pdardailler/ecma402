@@ -93,7 +93,7 @@ define({
 	},
 
 	// Non-functional test suite(s) to run in each browser
-	suites : [  'ecma402/tests/Intl',
+	suites : [  'ecma402/tests/unitTest',
 	            'ecma402/tests/intl402/suite/ch06/6.2',
 	            'ecma402/tests/intl402/suite/ch06/6.3',
 	            'ecma402/tests/intl402/suite/ch06/6.4',

@@ -45,23 +45,22 @@ define(
 		function List() {
 			this.length = 0;
 		}
-		
-		List.prototype.push = function(item){
+
+		List.prototype.push = function(item) {
 			this[this.length] = item;
 			this.length++;
 		};
-		
-		List.prototype.toArray = function(){
+
+		List.prototype.toArray = function() {
 			var i = 0;
 			var result = new Array(this.length);
-			while(i<this.length){
+			while (i<this.length){
 				result[i] = this[i];
 				i++;
 			}
-
 			return result;
 		};
-		
+
 		// ECMA 262 Section 9.1
 		function IsPrimitive(x) {
 			return (typeof x).test(/undefined|null|boolean|string|number/);
@@ -344,7 +343,7 @@ define(
 			}else{
 				result.locale = DefaultLocale();
 			}
-			
+
 			return result;
 		}
 
@@ -538,13 +537,16 @@ define(
 			}
 			for( var P in Object.getOwnPropertyNames(subset)){
 				var desc = Object.getOwnPropertyDescriptor(subset, P);
-				if (desc!==undefined){
+				if(desc!==undefined){
 					desc.writable = false;
 					desc.configurable = false;
 					Object.defineProperty(subset, P, desc);
 				}
 			}
-			Object.defineProperty(subset,"length",{writable:false, configurable:false});
+			Object.defineProperty(subset, "length", {
+				writable : false,
+				configurable : false
+			});
 			return subset;
 		}
 
@@ -958,9 +960,8 @@ define(
 			var opt = {};
 			var matcher = GetOption(options, "localeMatcher", "string", [ "lookup", "best fit" ], "best fit");
 			opt.localeMatcher = matcher;
-			var localeData = dateTimeFormat.localeData;
-			var r = ResolveLocale(dateTimeFormat.availableLocales, requestedLocales, opt,
-				dateTimeFormat.relevantExtensionKeys, localeData);
+			var r = ResolveLocale(Intl.DateTimeFormat.availableLocales, requestedLocales, opt,
+				Intl.DateTimeFormat.relevantExtensionKeys, Intl.DateTimeFormat.localeData);
 			dateTimeFormat.locale = r.locale;
 			dateTimeFormat.numberingSystem = r.nu;
 			dateTimeFormat.calendar = r.ca;
@@ -1001,13 +1002,13 @@ define(
 			var hr12 = GetOption(options, "hour12", "boolean", undefined, undefined);
 			if(dateTimeFormat.hour!=undefined){
 				if(hr12==undefined){
-					hr12 = dateTimeFormat.localeData[dateTimeFormat.dataLocale]
-						&&dateTimeFormat.localeData[dateTimeFormat.dataLocale].hour12;
+					hr12 = Intl.DateTimeFormat.localeData[dateTimeFormat.dataLocale]
+						&&Intl.DateTimeFormat.localeData[dateTimeFormat.dataLocale].hour12;
 				}
 				dateTimeFormat.hour12 = hr12;
 				if(hr12){
-					var hourNo0 = dateTimeFormat.localeData[dateTimeFormat.dataLocale]
-						&&dateTimeFormat.localeData[dateTimeFormat.dataLocale].hourNo0;
+					var hourNo0 = Intl.DateTimeFormat.localeData[dateTimeFormat.dataLocale]
+						&&Intl.DateTimeFormat.localeData[dateTimeFormat.dataLocale].hourNo0;
 					dateTimeFormat.hourNo0 = hourNo0;
 					pattern = bestFormat.pattern12;
 				}else{
@@ -1269,16 +1270,43 @@ define(
 		}
 
 		// Creation of the Intl object begins here.
-		var Intl = {};
-
-		Intl.Collator = function(locales, options) {
-			throw new TypeError("Intl.Collator is not supported.");
+		var Intl = {
+			Collator : function() {
+				throw new TypeError("Intl.Collator is not supported.");
+			},
+			NumberFormat : function() {
+				// ECMA 402 Section 11.1.3.1
+				var locales = undefined;
+				var options = undefined;
+				if(arguments.length>0){
+					locales = arguments[0];
+				}
+				if(arguments.length>1){
+					options = arguments[1];
+				}
+				InitializeNumberFormat(this, locales, options);
+			},
+			DateTimeFormat : function() {
+				// ECMA 402 Section 11.1.3.1
+				var locales = undefined;
+				var options = undefined;
+				if(arguments.length>0){
+					locales = arguments[0];
+				}
+				if(arguments.length>1){
+					options = arguments[1];
+				}
+				InitializeDateTimeFormat(this, locales, options);
+			}
 		};
 
-		Intl.NumberFormat = function(locales,options) {
-			// ECMA 402 Section 11.1.3.1
-			InitializeNumberFormat(this, locales, options);
-		};
+		// Intl.NumberFormat begins here.
+		// ECMA 402 Section 7
+		Object.defineProperty(Intl, "NumberFormat", {
+			writable : true,
+			configurable : true,
+			enumerable : false
+		});
 
 		Intl.NumberFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
 		Intl.NumberFormat.relevantExtensionKeys = [ "nu" ];
@@ -1289,7 +1317,7 @@ define(
 				"nu" : availableNumberingSystems
 			};
 		});
-		
+
 		// ECMA 402 Section 11.1.2.1
 		Intl.NumberFormat.call = function(thisObject, locales, options) {
 			if(thisObject==Intl||thisObject===undefined){
@@ -1303,13 +1331,25 @@ define(
 			return obj;
 		};
 
+		// ECMA 402 Section 7
+		Object.defineProperty(Intl.NumberFormat, "prototype", {
+			writable : false,
+			enumerable : false,
+			configurable : false
+		});
+
 		// ECMA 402 Section 11.2.2
 		Intl.NumberFormat.supportedLocalesOf = function(locales, options) {
 			var availableLocales = Intl.NumberFormat.availableLocales;
 			var requestedLocales = CanonicalizeLocaleList(locales);
 			return SupportedLocales(availableLocales, requestedLocales, options);
 		};
-		
+		Object.defineProperty(Intl.NumberFormat, "supportedLocalesOf", {
+			writable : true,
+			enumerable : false,
+			configurable : true
+		});
+
 		// ECMA 402 Section 11.3.2
 		Intl.NumberFormat.prototype.format = function(value) {
 			if(this.boundFormat===undefined){
@@ -1345,101 +1385,42 @@ define(
 			return result;
 		};
 
+		// Intl.DateTimeFormat begins here.
 		// ECMA 402 Section 7
-		Object.defineProperty(Intl, "NumberFormat", {
+		Object.defineProperty(Intl, "DateTimeFormat", {
 			writable : true,
 			configurable : true,
 			enumerable : false
 		});
 
-		Intl.DateTimeFormat = function(locales, options) {
-			var dateTimeFormat = {};
-			// ECMA 402 Section 12.2.3
-			dateTimeFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
-			dateTimeFormat.relevantExtensionKeys = [ "ca", "nu" ];
-			var localeData = {};
-			var regionTag = /(?:-)([A-Z]{2})(?=(-|$))/;
-			dateTimeFormat.availableLocales.forEach(function(loc) {
-				var calendarPreferences = [ "gregory" ];
-				var region = "001";
-				var hour12 = false;
-				var hourNo0 = false;
-				var regionPos = loc.search(regionTag);
-				if(regionPos>=0){
-					region = loc.substr(regionPos+1, 2);
-				}else{
-					var likelySubtag = likelySubtags[loc];
-					if(likelySubtag){
-						region = likelySubtag.substr(-2);
-					}
+		// ECMA 402 Section 12.2.3
+		Intl.DateTimeFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
+		Intl.DateTimeFormat.relevantExtensionKeys = [ "ca", "nu" ];
+		Intl.DateTimeFormat.localeData = {};
+		Intl.DateTimeFormat.availableLocales.forEach(function(loc) {
+			var calendarPreferences = [ "gregory" ];
+			var region = "001";
+			var hour12 = false;
+			var hourNo0 = false;
+			var regionPos = loc.search(/(?:-)([A-Z]{2})(?=(-|$))/);
+			if(regionPos>=0){
+				region = loc.substr(regionPos+1, 2);
+			}else{
+				var likelySubtag = likelySubtags[loc];
+				if(likelySubtag){
+					region = likelySubtag.substr(-2);
 				}
-				var thisRegionsPreferences = calendarPreferenceData[region];
-				if(thisRegionsPreferences){
-					// TODO: Add non-gregorian calendarPreferences = thisRegionsPreferences.replace("gregorian", "gregory").split(/\s+/);
-				}
-				hour12 = timeData[region]&&(/h|K/.test(timeData[region]._preferred));
-				hourNo0 = timeData[region]&&(/h|k/.test(timeData[region]._preferred));
-				localeData[loc] = {
-					"nu" : availableNumberingSystems,
-					"ca" : calendarPreferences,
-					"hour12" : hour12,
-					"hourNo0" : hourNo0,
-				};
-			});
-			dateTimeFormat.localeData = localeData;
-			dateTimeFormat.supportedLocalesOf = Intl.DateTimeFormat.supportedLocalesOf;
+			}
 
-			// ECMA 402 Section 12.3.2
-			dateTimeFormat.format = function(value) {
-				if(this.boundFormat===undefined){
-					var F = function(date) {
-						var x;
-						if(date==undefined){
-							x = Date.now();
-						}else{
-							x = Number(value);
-						}
-						return FormatDateTime(this, x);
-					};
-					var bf = F.bind(this);
-					this.boundFormat = bf;
-				}
-				return this.boundFormat(value);
+			hour12 = timeData[region]&&(/h|K/.test(timeData[region]._preferred));
+			hourNo0 = timeData[region]&&(/h|k/.test(timeData[region]._preferred));
+			Intl.DateTimeFormat.localeData[loc] = {
+				"nu" : availableNumberingSystems,
+				"ca" : calendarPreferences,
+				"hour12" : hour12,
+				"hourNo0" : hourNo0,
 			};
-
-			// ECMA 402 Section 12.3.3
-			dateTimeFormat.resolvedOptions = function() {
-				var fields = [
-					"locale",
-					"calendar",
-					"numberingSystem",
-					"timeZone",
-					"hour12",
-					"weekday",
-					"era",
-					"year",
-					"month",
-					"day",
-					"hour",
-					"minute",
-					"second",
-					"timeZoneName" ];
-
-				result = {};
-				for( var f in fields){
-					if(this[fields[f]]!==undefined){
-						result[fields[f]] = this[fields[f]];
-					}
-				}
-				return result;
-			};
-
-			// ECMA 402 Section 12.1.3.1
-			dateTimeFormat.prototype = Intl.DateTimeFormat.prototype;
-			dateTimeFormat.extensible = true;
-			InitializeDateTimeFormat(dateTimeFormat, locales, options);
-			return dateTimeFormat;
-		};
+		});
 
 		// ECMA 402 Section 12.1.2.1
 		Intl.DateTimeFormat.call = function(thisObject, locales, options) {
@@ -1453,20 +1434,62 @@ define(
 			InitializeDateTimeFormat(obj, locales, options);
 			return obj;
 		};
-
 		// ECMA 402 Section 12.2.2
 		Intl.DateTimeFormat.supportedLocalesOf = function(locales, options) {
 			var availableLocales = getAvailableLocales();
 			var requestedLocales = CanonicalizeLocaleList(locales);
 			return SupportedLocales(availableLocales, requestedLocales, options);
 		};
-
-		// ECMA 402 Section 7
-		Object.defineProperty(Intl, "DateTimeFormat", {
+		Object.defineProperty(Intl.DateTimeFormat, "supportedLocalesOf", {
 			writable : true,
-			configurable : true,
-			enumerable : false
+			enumerable : false,
+			configurable : true
 		});
+
+		// ECMA 402 Section 12.3.2
+		Intl.DateTimeFormat.prototype.format = function(value) {
+			if(this.boundFormat===undefined){
+				var F = function(date) {
+					var x;
+					if(date==undefined){
+						x = Date.now();
+					}else{
+						x = Number(value);
+					}
+					return FormatDateTime(this, x);
+				};
+				var bf = F.bind(this);
+				this.boundFormat = bf;
+			}
+			return this.boundFormat(value);
+		};
+
+		// ECMA 402 Section 12.3.3
+		Intl.DateTimeFormat.prototype.resolvedOptions = function() {
+			var fields = [
+				"locale",
+				"calendar",
+				"numberingSystem",
+				"timeZone",
+				"hour12",
+				"weekday",
+				"era",
+				"year",
+				"month",
+				"day",
+				"hour",
+				"minute",
+				"second",
+				"timeZoneName" ];
+
+			result = {};
+			for( var f in fields){
+				if(this[fields[f]]!==undefined){
+					result[fields[f]] = this[fields[f]];
+				}
+			}
+			return result;
+		};
 
 		return Intl;
 	});

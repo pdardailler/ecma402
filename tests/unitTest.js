@@ -1,7 +1,7 @@
 // Copyright 2013 International Business Machines Corporation. All rights reserved.
-define([ 'intern!object', 'intern/chai!assert', 'ecma402/Intl' ], function(registerSuite, assert, Intl) {
+define([ 'intern!object', 'intern/chai!assert', '../Intl' ], function(registerSuite, assert, Intl) {
 	registerSuite({
-		name : 'Intl',
+		name : 'unitTest',
 		matcherFunctions : function() {
 			var testLanguageTags = [ {
 				"input" : "en-US",
