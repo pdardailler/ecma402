@@ -164,12 +164,10 @@ define(
 						"For "+tag+" got "+locale+"; expected one of "+canonicalizedTags[tag].join(", ")+".");
 					
 					// Variant 2: get the supported locales. If the tag is supported, it should be returned canonicalized but unshortened
-					var supported = object.supportedLocalesOf(
-						[ tag ]);
+					var supported = Constructor.supportedLocalesOf([ tag ]);
 					assert(!(supported[length]>0&&supported[0]!==canonicalizedTags[tag][0]),
 						"For "+tag+" got "+supported[0]+"; expected "+canonicalizedTags[tag][0]+".");
 				});
-				return true;
 			});
 		},
 		Test_6_2_4 : function() {

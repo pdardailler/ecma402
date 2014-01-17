@@ -1,6 +1,5 @@
-// Copyright 2013 International Business Machines Corporation. All rights reserved.
 define(
-	[ "dojo/request", "ecma402/calendars" ],
+	[ "dojo/request", "./calendars" ],
 	function(request, calendars) {
 
 		aliases = getCLDRJson("supplemental", "aliases").supplemental.metadata.alias;
@@ -608,9 +607,8 @@ define(
 			var opt = {};
 			var matcher = GetOption(options, "localeMatcher", "string", [ "lookup", "best fit" ], "best fit");
 			opt.localeMatcher = matcher;
-			var localeData = numberFormat.localeData;
-			var r = ResolveLocale(numberFormat.availableLocales, requestedLocales, opt,
-				numberFormat.relevantExtensionKeys, localeData);
+			var r = ResolveLocale(Intl.NumberFormat.availableLocales, requestedLocales, opt,
+				Intl.NumberFormat.relevantExtensionKeys, Intl.NumberFormat.localeData);
 			numberFormat.locale = r.locale;
 			numberFormat.dataLocale = r.dataLocale;
 			numberFormat.numberingSystem = r.nu;
@@ -1278,70 +1276,27 @@ define(
 		};
 
 		Intl.NumberFormat = function(locales, options) {
-			var numberFormat = {};
-			// ECMA 402 Section 11.3.2
-			numberFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
-			numberFormat.relevantExtensionKeys = [ "nu" ];
-			var localeData = {};
-			numberFormat.availableLocales.forEach(function(loc) {
-				localeData[loc] = {
-					"nu" : availableNumberingSystems
-				};
-			});
-			numberFormat.localeData = localeData;
-
-			numberFormat.supportedLocalesOf = Intl.NumberFormat.supportedLocalesOf;
-
-			// ECMA 402 Section 11.3.2
-			numberFormat.format = function(value) {
-				if(this.boundFormat===undefined){
-					var F = function(value) {
-						var x = Number(value);
-						return FormatNumber(this, x);
-					};
-					var bf = F.bind(this);
-					this.boundFormat = bf;
-				}
-				return this.boundFormat(value);
-			};
-
-			// ECMA 402 Section 11.3.3
-			numberFormat.resolvedOptions = function() {
-				var fields = [
-					"locale",
-					"numberingSystem",
-					"style",
-					"currency",
-					"currencyDisplay",
-					"minimumIntegerDigits",
-					"minimumFractionDigits",
-					"maximumFractionDigits",
-					"minimumSignificantDigits",
-					"maximumSignificantDigits",
-					"useGrouping" ];
-				result = {};
-				for( var f in fields){
-					if(this[fields[f]]!==undefined){
-						result[fields[f]] = this[fields[f]];
-					}
-				}
-				return result;
-			};
-
 			// ECMA 402 Section 11.1.3.1
-			numberFormat.prototype = Intl.NumberFormat.prototype;
-			numberFormat.extensible = true;
-			InitializeNumberFormat(numberFormat, locales, options);
-			return numberFormat;
+			InitializeNumberFormat(this, locales, options);
 		};
 
+		Intl.NumberFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
+		Intl.NumberFormat.relevantExtensionKeys = [ "nu" ];
+		// ECMA 402 Section 11.3.2
+		Intl.NumberFormat.localeData = {};
+		Intl.NumberFormat.availableLocales.forEach(function(loc) {
+			Intl.NumberFormat.localeData[loc] = {
+				"nu" : availableNumberingSystems
+			};
+		});
+		
 		// ECMA 402 Section 11.1.2.1
 		Intl.NumberFormat.call = function(thisObject, locales, options) {
 			if(thisObject==Intl||thisObject===undefined){
 				return new Intl.NumberFormat(locales, options);
 			}
 			var obj = Object(thisObject);
-			if(!obj.isExtensible()){
+			if(!Object.isExtensible(obj)){
 				throw new TypeError;
 			}
 			InitializeNumberFormat(obj, locales, options);
@@ -1350,9 +1305,43 @@ define(
 
 		// ECMA 402 Section 11.2.2
 		Intl.NumberFormat.supportedLocalesOf = function(locales, options) {
-			var availableLocales = getAvailableLocales();
+			var availableLocales = Intl.NumberFormat.availableLocales;
 			var requestedLocales = CanonicalizeLocaleList(locales);
 			return SupportedLocales(availableLocales, requestedLocales, options);
+		};
+		// ECMA 402 Section 11.3.2
+		Intl.NumberFormat.prototype.format = function(value) {
+			if(this.boundFormat===undefined){
+				var F = function(value) {
+					var x = Number(value);
+					return FormatNumber(this, x);
+				};
+				var bf = F.bind(this);
+				this.boundFormat = bf;
+			}
+			return this.boundFormat(value);
+		};
+		// ECMA 402 Section 11.3.3
+		Intl.NumberFormat.prototype.resolvedOptions = function() {
+			var fields = [
+				"locale",
+				"numberingSystem",
+				"style",
+				"currency",
+				"currencyDisplay",
+				"minimumIntegerDigits",
+				"minimumFractionDigits",
+				"maximumFractionDigits",
+				"minimumSignificantDigits",
+				"maximumSignificantDigits",
+				"useGrouping" ];
+			var result = {};
+			for( var f in fields){
+				if(this[fields[f]]!==undefined){
+					result[fields[f]] = this[fields[f]];
+				}
+			}
+			return result;
 		};
 
 		// ECMA 402 Section 7
