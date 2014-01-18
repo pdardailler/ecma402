@@ -773,9 +773,10 @@ define(
 				if(numberFormat.useGrouping){
 					n = doGrouping(n, numberFormat.localeData.patterns.cldrPattern);
 				}
-				if(numberFormat.numberingSystem!="latn"){
+				if(numberFormat.numberingSystem!==undefined&&numberFormat.numberingSystem!="latn"){
 					var alldigits = /\d/g;
 					n = n.replace(alldigits, function(m) {
+						console.log("ns = "+numberFormat.numberingSystem);
 						return numberingSystems[numberFormat.numberingSystem]._digits.charAt(m);
 					});
 				}
@@ -1331,7 +1332,7 @@ define(
 			return obj;
 		};
 
-		// ECMA 402 Section 7
+		// ECMA 402 Section 11.2.1
 		Object.defineProperty(Intl.NumberFormat, "prototype", {
 			writable : false,
 			enumerable : false,
@@ -1434,6 +1435,14 @@ define(
 			InitializeDateTimeFormat(obj, locales, options);
 			return obj;
 		};
+
+		// ECMA 402 Section 12.2.1
+		Object.defineProperty(Intl.DateTimeFormat, "prototype", {
+			writable : false,
+			enumerable : false,
+			configurable : false
+		});
+
 		// ECMA 402 Section 12.2.2
 		Intl.DateTimeFormat.supportedLocalesOf = function(locales, options) {
 			var availableLocales = getAvailableLocales();
