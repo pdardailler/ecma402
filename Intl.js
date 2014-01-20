@@ -2,16 +2,16 @@ define(
 	[ "dojo/request", "./calendars" ],
 	function(request, calendars) {
 
-		aliases = getCLDRJson("supplemental", "aliases").supplemental.metadata.alias;
-		localeAliases = getCLDRJson("supplemental", "localeAliases").supplemental.metadata.alias;
-		parentLocales = getCLDRJson("supplemental", "parentLocales").supplemental.parentLocales;
-		unicodeLocaleExtensions = /-u(-[a-z0-9]{2,8})+/g;
-		numberingSystems = getCLDRJson("supplemental", "numberingSystems").supplemental.numberingSystems;
-		dateTimeProperties = [ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ];
-		calendarPreferenceData = getCLDRJson("supplemental", "calendarPreferenceData").supplemental.calendarPreferenceData;
-		timeData = getCLDRJson("supplemental", "timeData").supplemental.timeData;
-		likelySubtags = getCLDRJson("supplemental", "likelySubtags").supplemental.likelySubtags;
-		availableNumberingSystems = [ "latn" ];
+		var aliases = getCLDRJson("supplemental", "aliases").supplemental.metadata.alias;
+		var localeAliases = getCLDRJson("supplemental", "localeAliases").supplemental.metadata.alias;
+		var parentLocales = getCLDRJson("supplemental", "parentLocales").supplemental.parentLocales;
+		var unicodeLocaleExtensions = /-u(-[a-z0-9]{2,8})+/g;
+		var numberingSystems = getCLDRJson("supplemental", "numberingSystems").supplemental.numberingSystems;
+		var dateTimeProperties = [ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ];
+		var calendarPreferenceData = getCLDRJson("supplemental", "calendarPreferenceData").supplemental.calendarPreferenceData;
+		var timeData = getCLDRJson("supplemental", "timeData").supplemental.timeData;
+		var likelySubtags = getCLDRJson("supplemental", "likelySubtags").supplemental.likelySubtags;
+		var availableNumberingSystems = [ "latn" ];
 		for( var ns in numberingSystems){
 			if(numberingSystems[ns]._type=="numeric"&&ns!="latn"){
 				availableNumberingSystems.push(ns);
