@@ -19,12 +19,12 @@ define(
 		}
 		// Utility function for Synchronous JSON loading using Dojo require.
 		function getCLDRJson(locale, path) {
+			var result = undefined;
 			var url = require.toUrl("ecma402/cldr/"+locale+"/"+path+".json");
 			var options = {
 				sync : true,
 				handleAs : "json"
 			};
-			var result = undefined;
 			request(url, options).then(function(data) {
 				result = data;
 			}, function(error) {
@@ -43,7 +43,10 @@ define(
 
 		// Implementation of the List abstract data type from ECMA 402.
 		function List() {
-			this.length = 0;
+			for(var i=0; i<arguments.length ; i++){
+				this[i] = arguments[i];
+			}
+			this.length = arguments.length;
 		}
 
 		List.prototype.push = function(item) {
@@ -776,7 +779,6 @@ define(
 				if(numberFormat.numberingSystem!==undefined&&numberFormat.numberingSystem!="latn"){
 					var alldigits = /\d/g;
 					n = n.replace(alldigits, function(m) {
-						console.log("ns = "+numberFormat.numberingSystem);
 						return numberingSystems[numberFormat.numberingSystem]._digits.charAt(m);
 					});
 				}
@@ -815,8 +817,8 @@ define(
 			var result = {};
 			result.symbols = {};
 			var numberExp = /[0-9#.,]+/;
-			key = "symbols-numberSystem-"+numberingSystem;
-			altkey = "symbols-numberSystem-latn";
+			var key = "symbols-numberSystem-"+numberingSystem;
+			var altkey = "symbols-numberSystem-latn";
 			var cldrSymbols = numbers[key] ? numbers[key] : numbers[altkey];
 			result.symbols = cldrSymbols;
 
@@ -1241,9 +1243,9 @@ define(
 			for( var format in availableFormats){
 				var format12 = availableFormats[format.replace("H", "h")];
 				if(usableFormatSkeletons.test(format)&&format12!=undefined){
-					outputFormat = _ToIntlDateTimeFormat(availableFormats[format]);
+					var outputFormat = _ToIntlDateTimeFormat(availableFormats[format]);
 					if(/H/.test(format)){
-						outputFormat12 = _ToIntlDateTimeFormat(format12);
+						var outputFormat12 = _ToIntlDateTimeFormat(format12);
 						outputFormat.hour12 = outputFormat12.hour12;
 						outputFormat.pattern12 = outputFormat12.pattern;
 					}
