@@ -101,9 +101,8 @@ define([ 'intern!object', 'intern/chai!assert' ],
 						+"used in a \"new\" statement.");
 			}
 
-			if(isFunction&&!isConstructor){
-				assert.isFalse(obj.hasOwnProperty("prototype"),
-					"Built-in functions that aren't constructors must not have a prototype property.");
+		    if (isFunction && !isConstructor && obj.hasOwnProperty("prototype")) {
+				assert(false,"Built-in functions that aren't constructors must not have a prototype property.");
 			}
 
 			// passed the complete test!

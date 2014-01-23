@@ -599,7 +599,7 @@ define(
 
 		// ECMA 402 Section 11.1.1.1
 		function InitializeNumberFormat(numberFormat, locales, options) {
-			if(numberFormat.initializedIntlObject){
+			if(numberFormat.hasOwnProperty("initializedIntlObject") && numberFormat.initializedIntlObject){
 				throw new TypeError("NumberFormat is already initialized.");
 			}
 			numberFormat.initializedIntlObject = true;
@@ -1278,6 +1278,8 @@ define(
 				throw new TypeError("Intl.Collator is not supported.");
 			},
 			NumberFormat : function() {
+				this.prototype = Intl.NumberFormat.prototype;
+				this.extensible = true;
 				// ECMA 402 Section 11.1.3.1
 				var locales = undefined;
 				var options = undefined;
@@ -1334,12 +1336,6 @@ define(
 			return obj;
 		};
 
-		// ECMA 402 Section 11.2.1
-		Object.defineProperty(Intl.NumberFormat, "prototype", {
-			writable : false,
-			enumerable : false,
-			configurable : false
-		});
 
 		// ECMA 402 Section 11.2.2
 		Intl.NumberFormat.supportedLocalesOf = function(locales, options) {
@@ -1353,20 +1349,40 @@ define(
 			configurable : true
 		});
 
+		Intl.NumberFormat.prototype = Intl.NumberFormat.call({});
+		
+		// ECMA 402 Section 11.2.1
+		Object.defineProperty(Intl.NumberFormat, "prototype", {
+			writable : false,
+			enumerable : false,
+			configurable : false
+		});
+		// ECMA 402 Section 11.3.1
+		Intl.NumberFormat.prototype.constructor = Intl.NumberFormat;
+
 		// ECMA 402 Section 11.3.2
-		Intl.NumberFormat.prototype.format = function(value) {
-			if(this.boundFormat===undefined){
-				var F = function(value) {
-					var x = Number(value);
-					return FormatNumber(this, x);
-				};
-				var bf = F.bind(this);
-				this.boundFormat = bf;
+		Object.defineProperty(Intl.NumberFormat.prototype, "format", {
+			get : function() {
+				if(this!==Object(this)||!this.initializedNumberFormat){
+					throw new TypeError("Intl.NumberFormat format getter: 'this' is not a valid Intl.NumberFormat instance");
+				}
+				if(this.boundFormat===undefined){
+					var F = function(value) {
+						var x = Number(value);
+						return FormatNumber(this, x);
+					};
+					var bf = F.bind(this);
+					this.boundFormat = bf;
+				}
+				return this.boundFormat;				
 			}
-			return this.boundFormat(value);
-		};
+		});
+
 		// ECMA 402 Section 11.3.3
 		Intl.NumberFormat.prototype.resolvedOptions = function() {
+			if(this!==Object(this)||!this.initializedNumberFormat){
+				throw new TypeError("Intl.NumberFormat.resolvedOptions: 'this' is not a valid Intl.NumberFormat instance");
+			}
 			var fields = [
 				"locale",
 				"numberingSystem",
