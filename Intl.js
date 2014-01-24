@@ -8,7 +8,6 @@ define(
 		var unicodeLocaleExtensions = /-u(-[a-z0-9]{2,8})+/g;
 		var numberingSystems = getCLDRJson("supplemental", "numberingSystems").supplemental.numberingSystems;
 		var dateTimeProperties = [ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ];
-		var calendarPreferenceData = getCLDRJson("supplemental", "calendarPreferenceData").supplemental.calendarPreferenceData;
 		var timeData = getCLDRJson("supplemental", "timeData").supplemental.timeData;
 		var likelySubtags = getCLDRJson("supplemental", "likelySubtags").supplemental.likelySubtags;
 		var availableNumberingSystems = [ "latn" ];
@@ -43,7 +42,7 @@ define(
 
 		// Implementation of the List abstract data type from ECMA 402.
 		function List() {
-			for(var i=0; i<arguments.length ; i++){
+			for(var i = 0; i<arguments.length; i++){
 				this[i] = arguments[i];
 			}
 			this.length = arguments.length;
@@ -599,7 +598,7 @@ define(
 
 		// ECMA 402 Section 11.1.1.1
 		function InitializeNumberFormat(numberFormat, locales, options) {
-			if(numberFormat.hasOwnProperty("initializedIntlObject") && numberFormat.initializedIntlObject){
+			if(numberFormat.hasOwnProperty("initializedIntlObject")&&numberFormat.initializedIntlObject){
 				throw new TypeError("NumberFormat is already initialized.");
 			}
 			numberFormat.initializedIntlObject = true;
@@ -680,10 +679,13 @@ define(
 				numberFormat.numberingSystem = numbers.defaultNumberingSystem;
 			}
 			var numberInfo = _getNumberInfo(numbers, numberFormat.numberingSystem);
-			numberFormat.localeData = {
-				"symbols" : numberInfo.symbols,
-				"patterns" : numberInfo.patterns[s],
-			};
+			var stylePatterns = numberInfo.patterns[s];
+			numberFormat.positivePattern = stylePatterns["positivePattern"];
+			numberFormat.negativePattern = stylePatterns["negativePattern"];
+			// The CLDR number format pattern is necessary in order to do localized
+			// grouping properly, for example #,##,##0.00 grouping in India.
+			numberFormat.cldrPattern = stylePatterns["cldrPattern"];
+			numberFormat.symbols = numberInfo.symbols;
 			numberFormat.boundFormat = undefined;
 			numberFormat.initializedNumberFormat = true;
 		}
@@ -731,7 +733,7 @@ define(
 		function ToRawFixed(x, minInteger, minFraction, maxFraction) {
 			var m = x.toFixed(maxFraction).toString();
 			//var parts = m.split(){
-				
+
 			//}
 			var cut = maxFraction-minFraction;
 			while (cut>0&&/0$/.test(m)){
@@ -757,9 +759,9 @@ define(
 			var n;
 			if(!isFinite(x)){
 				if(isNaN(x)){
-					n = numberFormat.localeData.symbols.nan;
+					n = numberFormat.symbols.nan;
 				}else{
-					n = numberFormat.localeData.symbols.infinity;
+					n = numberFormat.symbols.infinity;
 					if(x<0){
 						negative = true;
 					}
@@ -779,7 +781,7 @@ define(
 						numberFormat.maximumFractionDigits);
 				}
 				if(numberFormat.useGrouping){
-					n = doGrouping(n, numberFormat.localeData.patterns.cldrPattern);
+					n = doGrouping(n, numberFormat.cldrPattern);
 				}
 				if(numberFormat.numberingSystem!==undefined&&numberFormat.numberingSystem!="latn"){
 					var alldigits = /\d/g;
@@ -789,19 +791,19 @@ define(
 				}
 				n = n.replace(/[.,]/g, function(m) {
 					if(m=="."){
-						return numberFormat.localeData.symbols.decimal ? numberFormat.localeData.symbols.decimal : m;
+						return numberFormat.symbols.decimal ? numberFormat.symbols.decimal : m;
 					}
-					return numberFormat.localeData.symbols.group ? numberFormat.localeData.symbols.group : m;
+					return numberFormat.symbols.group ? numberFormat.symbols.group : m;
 				});
 			}
 			var result;
 			if(negative){
-				result = numberFormat.localeData.patterns.negativePattern;
+				result = numberFormat.negativePattern;
 			}else{
-				result = numberFormat.localeData.patterns.positivePattern;
+				result = numberFormat.positivePattern;
 			}
-			result = result.replace("-", numberFormat.localeData.symbols.minusSign);
-			result = result.replace("%", numberFormat.localeData.symbols.percentSign);
+			result = result.replace("-", numberFormat.symbols.minusSign);
+			result = result.replace("%", numberFormat.symbols.percentSign);
 			result = result.replace("{number}", n);
 			if(numberFormat.style=="currency"){
 				var currency = numberFormat.currency;
@@ -959,7 +961,7 @@ define(
 
 		// ECMA 402 Section 12.1.1.1
 		function InitializeDateTimeFormat(dateTimeFormat, locales, options) {
-			if(dateTimeFormat.initializedIntlObject){
+			if(dateTimeFormat.hasOwnProperty("initializedIntlObject")&&dateTimeFormat.initializedIntlObject){
 				throw new TypeError("DateTimeFormat is already initialized.");
 			}
 			dateTimeFormat.initializedIntlObject = true;
@@ -998,7 +1000,7 @@ define(
 			dateTimeFormat.calData = calData;
 			var formats = _convertAvailableDateTimeFormats(calData.dateTimeFormats.availableFormats);
 			matcher = GetOption(options, "formatMatcher", "string", [ "basic", "best fit" ], "best fit");
-			var bestFormat = matcher=="basic" ? BasicFormatatcher(opt, formats) : BestFitFormatMatcher(opt, formats);
+			var bestFormat = matcher=="basic" ? BasicFormatMatcher(opt, formats) : BestFitFormatMatcher(opt, formats);
 			dateTimeProperties.forEach(function(prop) {
 				var pDesc = Object.getOwnPropertyDescriptor(bestFormat, prop);
 				if(pDesc!=undefined){
@@ -1027,7 +1029,7 @@ define(
 			}
 			dateTimeFormat.pattern = pattern;
 			dateTimeFormat.boundFormat = undefined;
-			dateTimeFormat.initializedNumberFormat = true;
+			dateTimeFormat.initializedDateTimeFormat = true;
 		}
 
 		// ECMA 402 Section 12.3.2
@@ -1278,39 +1280,28 @@ define(
 		}
 
 		// Creation of the Intl object begins here.
-		var Intl = {
-			Collator : function() {
-				throw new TypeError("Intl.Collator is not supported.");
-			},
-			NumberFormat : function() {
-				this.prototype = Intl.NumberFormat.prototype;
-				this.extensible = true;
-				// ECMA 402 Section 11.1.3.1
-				var locales = undefined;
-				var options = undefined;
-				if(arguments.length>0){
-					locales = arguments[0];
-				}
-				if(arguments.length>1){
-					options = arguments[1];
-				}
-				InitializeNumberFormat(this, locales, options);
-			},
-			DateTimeFormat : function() {
-				// ECMA 402 Section 11.1.3.1
-				var locales = undefined;
-				var options = undefined;
-				if(arguments.length>0){
-					locales = arguments[0];
-				}
-				if(arguments.length>1){
-					options = arguments[1];
-				}
-				InitializeDateTimeFormat(this, locales, options);
-			}
+		var Intl = {};
+
+		Intl.Collator = function() {
+			throw new TypeError("Intl.Collator is not supported.");
 		};
 
 		// Intl.NumberFormat begins here.
+		Intl.NumberFormat = function() {
+			this.prototype = Intl.NumberFormat.prototype;
+			this.extensible = true;
+			// ECMA 402 Section 11.1.3.1
+			var locales = undefined;
+			var options = undefined;
+			if(arguments.length>0){
+				locales = arguments[0];
+			}
+			if(arguments.length>1){
+				options = arguments[1];
+			}
+			InitializeNumberFormat(this, locales, options);
+		};
+
 		// ECMA 402 Section 7
 		Object.defineProperty(Intl, "NumberFormat", {
 			writable : true,
@@ -1335,18 +1326,17 @@ define(
 			}
 			var obj = Object(thisObject);
 			if(!Object.isExtensible(obj)){
-				throw new TypeError;
+				throw new TypeError("Intl.NumberFormat.call: object is not extensible");
 			}
 			InitializeNumberFormat(obj, locales, options);
 			return obj;
 		};
 
-
 		// ECMA 402 Section 11.2.2
 		Object.defineProperty(Intl.NumberFormat, "supportedLocalesOf", {
-			value: function(locales) {
+			value : function(locales) {
 				var availableLocales = Intl.NumberFormat.availableLocales;
-				var	requestedLocales = CanonicalizeLocaleList(locales);
+				var requestedLocales = CanonicalizeLocaleList(locales);
 				var options = undefined;
 				if(arguments.length>1){
 					options = arguments[1];
@@ -1357,16 +1347,16 @@ define(
 			enumerable : false,
 			configurable : true
 		});
-				
+
 		Intl.NumberFormat.prototype = Intl.NumberFormat.call({});
-		
+
 		// ECMA 402 Section 11.2.1
 		Object.defineProperty(Intl.NumberFormat, "prototype", {
 			writable : false,
 			enumerable : false,
 			configurable : false
 		});
-		
+
 		// ECMA 402 Section 11.3.1
 		Object.defineProperty(Intl.NumberFormat.prototype, "constructor", {
 			value : Intl.NumberFormat,
@@ -1379,7 +1369,8 @@ define(
 		Object.defineProperty(Intl.NumberFormat.prototype, "format", {
 			get : function() {
 				if(this!==Object(this)||!this.initializedNumberFormat){
-					throw new TypeError("Intl.NumberFormat format getter: 'this' is not a valid Intl.NumberFormat instance");
+					throw new TypeError(
+						"Intl.NumberFormat format getter: 'this' is not a valid Intl.NumberFormat instance");
 				}
 				if(this.boundFormat===undefined){
 					var F = function(value) {
@@ -1389,7 +1380,7 @@ define(
 					var bf = F.bind(this);
 					this.boundFormat = bf;
 				}
-				return this.boundFormat;				
+				return this.boundFormat;
 			},
 			configurable : true
 		});
@@ -1427,6 +1418,20 @@ define(
 		});
 
 		// Intl.DateTimeFormat begins here.
+		Intl.DateTimeFormat = function() {
+			this.prototype = Intl.DateTimeFormat.prototype;
+			this.extensible = true;
+			// ECMA 402 Section 12.1.3.1
+			var locales = undefined;
+			var options = undefined;
+			if(arguments.length>0){
+				locales = arguments[0];
+			}
+			if(arguments.length>1){
+				options = arguments[1];
+			}
+			InitializeDateTimeFormat(this, locales, options);
+		};
 		// ECMA 402 Section 7
 		Object.defineProperty(Intl, "DateTimeFormat", {
 			writable : true,
@@ -1465,16 +1470,35 @@ define(
 
 		// ECMA 402 Section 12.1.2.1
 		Intl.DateTimeFormat.call = function(thisObject, locales, options) {
-			if(thisObject==Intl||thisObject===undefined){
+			if(thisObject===Intl||thisObject===undefined){
 				return new Intl.DateTimeFormat(locales, options);
 			}
 			var obj = Object(thisObject);
-			if(!obj.isExtensible()){
-				throw new TypeError;
+			if(!Object.isExtensible(obj)){
+				throw new TypeError("Intl.DateTimeFormat.call: object is not extensible");
+				;
 			}
 			InitializeDateTimeFormat(obj, locales, options);
 			return obj;
 		};
+
+		// ECMA 402 Section 12.2.2
+		Object.defineProperty(Intl.DateTimeFormat, "supportedLocalesOf", {
+			value : function(locales) {
+				var availableLocales = Intl.DateTimeFormat.availableLocales;
+				var requestedLocales = CanonicalizeLocaleList(locales);
+				var options = undefined;
+				if(arguments.length>1){
+					options = arguments[1];
+				}
+				return SupportedLocales(availableLocales, requestedLocales, options);
+			},
+			writable : true,
+			enumerable : false,
+			configurable : true
+		});
+
+		Intl.DateTimeFormat.prototype = Intl.DateTimeFormat.call({});
 
 		// ECMA 402 Section 12.2.1
 		Object.defineProperty(Intl.DateTimeFormat, "prototype", {
@@ -1483,62 +1507,73 @@ define(
 			configurable : false
 		});
 
-		// ECMA 402 Section 12.2.2
-		Intl.DateTimeFormat.supportedLocalesOf = function(locales, options) {
-			var availableLocales = getAvailableLocales();
-			var requestedLocales = CanonicalizeLocaleList(locales);
-			return SupportedLocales(availableLocales, requestedLocales, options);
-		};
-		Object.defineProperty(Intl.DateTimeFormat, "supportedLocalesOf", {
+		// ECMA 402 Section 11.3.1
+		Object.defineProperty(Intl.DateTimeFormat.prototype, "constructor", {
+			value : Intl.DateTimeFormat,
+			writable : true,
+			configurable : true,
+			enumerable : false
+		});
+
+		// ECMA 402 Section 12.3.2
+		Object.defineProperty(Intl.DateTimeFormat.prototype, "format", {
+			get : function() {
+				if(this!==Object(this)||!this.initializedDateTimeFormat){
+					throw new TypeError(
+						"Intl.DateTimeFormat format getter: 'this' is not a valid Intl.DateTimeFormat instance");
+				}
+				if(this.boundFormat===undefined){
+					var F = function(date) {
+						var x;
+						if(date==undefined){
+							x = Date.now();
+						}else{
+							x = Number(date);
+						}
+						return FormatDateTime(this, x);
+					};
+					var bf = F.bind(this);
+					this.boundFormat = bf;
+				}
+				return this.boundFormat;
+			},
+			configurable : true
+		});
+
+		// ECMA 402 Section 12.3.3
+		Object.defineProperty(Intl.DateTimeFormat.prototype, "resolvedOptions", {
+			value : function() {
+				if(this!==Object(this)||!this.initializedDateTimeFormat){
+					throw new TypeError(
+						"Intl.DateTimeFormat.resolvedOptions: 'this' is not a valid Intl.DateTimeFormat instance");
+				}
+				var fields = [
+					"locale",
+					"calendar",
+					"numberingSystem",
+					"timeZone",
+					"hour12",
+					"weekday",
+					"era",
+					"year",
+					"month",
+					"day",
+					"hour",
+					"minute",
+					"second",
+					"timeZoneName" ];
+				var result = {};
+				for( var f in fields){
+					if(this[fields[f]]!==undefined){
+						result[fields[f]] = this[fields[f]];
+					}
+				}
+				return result;
+			},
 			writable : true,
 			enumerable : false,
 			configurable : true
 		});
-
-		// ECMA 402 Section 12.3.2
-		Intl.DateTimeFormat.prototype.format = function(value) {
-			if(this.boundFormat===undefined){
-				var F = function(date) {
-					var x;
-					if(date==undefined){
-						x = Date.now();
-					}else{
-						x = Number(value);
-					}
-					return FormatDateTime(this, x);
-				};
-				var bf = F.bind(this);
-				this.boundFormat = bf;
-			}
-			return this.boundFormat(value);
-		};
-
-		// ECMA 402 Section 12.3.3
-		Intl.DateTimeFormat.prototype.resolvedOptions = function() {
-			var fields = [
-				"locale",
-				"calendar",
-				"numberingSystem",
-				"timeZone",
-				"hour12",
-				"weekday",
-				"era",
-				"year",
-				"month",
-				"day",
-				"hour",
-				"minute",
-				"second",
-				"timeZoneName" ];
-
-			result = {};
-			for( var f in fields){
-				if(this[fields[f]]!==undefined){
-					result[fields[f]] = this[fields[f]];
-				}
-			}
-			return result;
-		};
 
 		return Intl;
 	});

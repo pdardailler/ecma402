@@ -799,8 +799,9 @@ define(
 							assert.strictEqual(actual, fallback, "Option fallback value "+fallback+" for property "
 								+property+" was not used; got "+actual+" instead.");
 						}else{
-							assert(!(values.indexOf(actual)===-1&&!(isILD&&actual===undefined)), "Invalid value "
-								+actual+" returned for property "+property+".");
+			                if (values.indexOf(actual) === -1 && !(isILD && actual === undefined)) {
+			                    assert(false,"Invalid value " + actual + " returned for property " + property + ".");
+			                }
 						}
 					}
 				}
@@ -1079,75 +1080,61 @@ define(
 							}
 						});
 				});
+			},
+			/**
+			 * Return the components of date-time formats.
+			 * 
+			 * @return {Array} an array with all date-time components.
+			 */
+
+			getDateTimeComponents : function() {
+				return [ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ];
+			},
+			/**
+			 * Return the valid values for the given date-time component, as specified by the table in section 12.1.1.
+			 * 
+			 * @param {string}
+			 *            component a date-time component.
+			 * @return {Array} an array with the valid values for the component.
+			 */
+
+			getDateTimeComponentValues : function(component) {
+
+				var components = {
+					weekday : [ "narrow", "short", "long" ],
+					era : [ "narrow", "short", "long" ],
+					year : [ "2-digit", "numeric" ],
+					month : [ "2-digit", "numeric", "narrow", "short", "long" ],
+					day : [ "2-digit", "numeric" ],
+					hour : [ "2-digit", "numeric" ],
+					minute : [ "2-digit", "numeric" ],
+					second : [ "2-digit", "numeric" ],
+					timeZoneName : [ "short", "long" ]
+				};
+
+				var result = components[component];
+				assert.isDefined(result,
+					"Internal error: No values defined for date-time component "+component+".");
+				return result;
+			},
+
+			/**
+			 * Tests that the given value is valid for the given date-time component.
+			 * 
+			 * @param {string}
+			 *            component a date-time component.
+			 * @param {string}
+			 *            value the value to be tested.
+			 * @return {boolean} true if the test succeeds.
+			 * @exception if
+			 *                the test fails.
+			 */
+
+			testValidDateTimeComponentValue : function(component, value) {
+				assert.notStrictEqual(this.getDateTimeComponentValues(component).indexOf(value),-1,
+					"Invalid value "+value+" for date-time component "+component+".");
+				return true;
 			}
 		};
-
-		/**
-		 * Provides the digits of numbering systems with simple digit mappings, as specified in 11.3.2.
-		 */
-
-		/**
-		 * Return the components of date-time formats.
-		 * 
-		 * @return {Array} an array with all date-time components.
-		 */
-
-		function getDateTimeComponents() {
-			return
-
-			
-
-			[ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ];
-		}
-
-		/**
-		 * Return the valid values for the given date-time component, as specified by the table in section 12.1.1.
-		 * 
-		 * @param {string}
-		 *            component a date-time component.
-		 * @return {Array} an array with the valid values for the component.
-		 */
-
-		function getDateTimeComponentValues(component) {
-
-			var components = {
-				weekday : [ "narrow", "short", "long" ],
-				era : [ "narrow", "short", "long" ],
-				year : [ "2-digit", "numeric" ],
-				month : [ "2-digit", "numeric", "narrow", "short", "long" ],
-				day : [ "2-digit", "numeric" ],
-				hour : [ "2-digit", "numeric" ],
-				minute : [ "2-digit", "numeric" ],
-				second : [ "2-digit", "numeric" ],
-				timeZoneName : [ "short", "long" ]
-			};
-
-			var result = components[component];
-			if(result===undefined){
-				$ERROR("Internal error: No values defined for date-time component "+component+".");
-			}
-			return result;
-		}
-
-		/**
-		 * Tests that the given value is valid for the given date-time component.
-		 * 
-		 * @param {string}
-		 *            component a date-time component.
-		 * @param {string}
-		 *            value the value to be tested.
-		 * @return {boolean} true if the test succeeds.
-		 * @exception if
-		 *                the test fails.
-		 */
-
-		function testValidDateTimeComponentValue(component, value) {
-			if(getDateTimeComponentValues(component).indexOf(value)===-1){
-				$ERROR("Invalid value "+value+" for date-time component "+component+".");
-			}
-			return true;
-		}
-
-		;
 		return testIntl;
 	});
