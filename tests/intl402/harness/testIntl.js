@@ -3,8 +3,8 @@
 // This code is governed by the BSD license found in the LICENSE file.
 
 /**
- * This file contains shared functions for the tests in the conformance test
- * suite for the ECMAScript Internationalization API.
+ * This file contains shared functions for the tests in the conformance test suite for the ECMAScript Internationalization API.
+ * 
  * @author Norbert Lindenberg
  */
 define(
@@ -12,9 +12,8 @@ define(
 	function(registerSuite, assert, Intl) {
 
 		/**
-		 * Properties of the RegExp constructor that may be affected by use of regular
-		 * expressions, and the default values of these properties. Properties are from
-		 * https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Deprecated_and_obsolete_features#RegExp_Properties
+		 * Properties of the RegExp constructor that may be affected by use of regular expressions, and the default values of these properties. Properties are
+		 * from https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Deprecated_and_obsolete_features#RegExp_Properties
 		 */
 		var regExpProperties = [
 			"$1",
@@ -49,16 +48,16 @@ define(
 		var testIntl = {
 
 			/**
-			 * @description Calls the provided function for every service constructor in
-			 * the Intl object, until f returns a falsy value. It returns the result of the
-			 * last call to f, mapped to a boolean.
-			 * @param {Function} f the function to call for each service constructor in
-			 *     the Intl object.
-			 *     @param {Function} Constructor the constructor object to test with.
+			 * @description Calls the provided function for every service constructor in the Intl object, until f returns a falsy value. It returns the result
+			 *              of the last call to f, mapped to a boolean.
+			 * @param {Function}
+			 *            f the function to call for each service constructor in the Intl object.
+			 * @param {Function}
+			 *            Constructor the constructor object to test with.
 			 * @result {Boolean} whether the test succeeded.
 			 */
 			testWithIntlConstructors : function(f) {
-				var constructors = [ /*"Collator", */"NumberFormat", "DateTimeFormat" ];
+				var constructors = [ /* "Collator", */"NumberFormat", "DateTimeFormat" ];
 				return constructors.every(function(constructor) {
 					var Constructor = Intl[constructor];
 					var result;
@@ -73,9 +72,10 @@ define(
 			},
 
 			/**
-			 * Returns the name of the given constructor object, which must be one of
-			 * Intl.Collator, Intl.NumberFormat, or Intl.DateTimeFormat.
-			 * @param {object} Constructor a constructor
+			 * Returns the name of the given constructor object, which must be one of Intl.Collator, Intl.NumberFormat, or Intl.DateTimeFormat.
+			 * 
+			 * @param {object}
+			 *            Constructor a constructor
 			 * @return {string} the name of the constructor
 			 */
 			getConstructorName : function(Constructor) {
@@ -92,10 +92,12 @@ define(
 			},
 
 			/**
-			 * Taints a named data property of the given object by installing
-			 * a setter that throws an exception.
-			 * @param {object} obj the object whose data property to taint
-			 * @param {string} property the property to taint
+			 * Taints a named data property of the given object by installing a setter that throws an exception.
+			 * 
+			 * @param {object}
+			 *            obj the object whose data property to taint
+			 * @param {string}
+			 *            property the property to taint
 			 */
 			taintDataProperty : function(obj, property) {
 				Object.defineProperty(obj, property, {
@@ -108,10 +110,12 @@ define(
 			},
 
 			/**
-			 * Taints a named method of the given object by replacing it with a function
-			 * that throws an exception.
-			 * @param {object} obj the object whose method to taint
-			 * @param {string} property the name of the method to taint
+			 * Taints a named method of the given object by replacing it with a function that throws an exception.
+			 * 
+			 * @param {object}
+			 *            obj the object whose method to taint
+			 * @param {string}
+			 *            property the name of the method to taint
 			 */
 			taintMethod : function(obj, property) {
 				Object.defineProperty(obj, property, {
@@ -125,9 +129,10 @@ define(
 			},
 
 			/**
-			 * Taints the given properties (and similarly named properties) by installing
-			 * setters on Object.prototype that throw exceptions.
-			 * @param {Array} properties an array of property names to taint
+			 * Taints the given properties (and similarly named properties) by installing setters on Object.prototype that throw exceptions.
+			 * 
+			 * @param {Array}
+			 *            properties an array of property names to taint
 			 */
 			taintProperties : function(properties) {
 				properties.forEach(function(property) {
@@ -139,8 +144,7 @@ define(
 			},
 
 			/**
-			 * Taints the Array object by creating a setter for the property "0" and
-			 * replacing some key methods with functions that throw exceptions.
+			 * Taints the Array object by creating a setter for the property "0" and replacing some key methods with functions that throw exceptions.
 			 */
 			taintArray : function() {
 				this.taintDataProperty(Array.prototype, "0");
@@ -152,13 +156,12 @@ define(
 			},
 
 			/**
-			 * Gets locale support info for the given constructor object, which must be one
-			 * of Intl.Collator, Intl.NumberFormat, Intl.DateTimeFormat.
-			 * @param {object} Constructor the constructor for which to get locale support info
-			 * @return {object} locale support info with the following properties:
-			 *     supported: array of fully supported language tags
-			 *     byFallback: array of language tags that are supported through fallbacks
-			 *     unsupported: array of unsupported language tags
+			 * Gets locale support info for the given constructor object, which must be one of Intl.Collator, Intl.NumberFormat, Intl.DateTimeFormat.
+			 * 
+			 * @param {object}
+			 *            Constructor the constructor for which to get locale support info
+			 * @return {object} locale support info with the following properties: supported: array of fully supported language tags byFallback: array of
+			 *         language tags that are supported through fallbacks unsupported: array of unsupported language tags
 			 */
 			getLocaleSupportInfo : function(Constructor) {
 				// auxiliary data for getLocaleSupportInfo
@@ -219,18 +222,17 @@ define(
 			},
 
 			/**
-			 * @description Tests whether locale is a String value representing a
-			 * structurally valid and canonicalized BCP 47 language tag, as defined in
-			 * sections 6.2.2 and 6.2.3 of the ECMAScript Internationalization API
-			 * Specification.
-			 * @param {String} locale the string to be tested.
+			 * @description Tests whether locale is a String value representing a structurally valid and canonicalized BCP 47 language tag, as defined in
+			 *              sections 6.2.2 and 6.2.3 of the ECMAScript Internationalization API Specification.
+			 * @param {String}
+			 *            locale the string to be tested.
 			 * @result {Boolean} whether the test succeeded.
 			 */
 			isCanonicalizedStructurallyValidLanguageTag : function(locale) {
 
 				/**
 				 * Regular expression defining BCP 47 language tags.
-				 *
+				 * 
 				 * Spec: RFC 5646 section 2.1.
 				 */
 				var alpha = "[a-zA-Z]", digit = "[0-9]", alphanum = "("+alpha+"|"+digit+")", regular = "(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)", irregular = "(en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)", grandfathered = "("
@@ -246,9 +248,8 @@ define(
 					+"{2,8}-)*\\3(?!"+alphanum+")", duplicateVariantRE = new RegExp(duplicateVariant, "i");
 
 				/**
-				 * Verifies that the given string is a well-formed BCP 47 language tag
-				 * with no duplicate variant or singleton subtags.
-				 *
+				 * Verifies that the given string is a well-formed BCP 47 language tag with no duplicate variant or singleton subtags.
+				 * 
 				 * Spec: ECMAScript Internationalization API Specification, draft, 6.2.2.
 				 */
 				function isStructurallyValidLanguageTag(locale) {
@@ -261,7 +262,7 @@ define(
 
 				/**
 				 * Mappings from complete tags to preferred values.
-				 *
+				 * 
 				 * Spec: IANA Language Subtag Registry.
 				 */
 				var __tagMappings = {
@@ -326,7 +327,7 @@ define(
 
 				/**
 				 * Mappings from non-extlang subtags to preferred values.
-				 *
+				 * 
 				 * Spec: IANA Language Subtag Registry.
 				 */
 				var __subtagMappings = {
@@ -359,7 +360,7 @@ define(
 
 				/**
 				 * Mappings from extlang subtags to preferred values.
-				 *
+				 * 
 				 * Spec: IANA Language Subtag Registry.
 				 */
 				var __extlangMappings = {
@@ -594,9 +595,8 @@ define(
 
 				/**
 				 * Canonicalizes the given well-formed BCP 47 language tag, including regularized case of subtags.
-				 *
-				 * Spec: ECMAScript Internationalization API Specification, draft, 6.2.3.
-				 * Spec: RFC 5646, section 4.5.
+				 * 
+				 * Spec: ECMAScript Internationalization API Specification, draft, 6.2.3. Spec: RFC 5646, section 4.5.
 				 */
 				function canonicalizeLanguageTag(locale) {
 
@@ -675,16 +675,27 @@ define(
 			},
 			/**
 			 * Tests whether the named options property is correctly handled by the given constructor.
-			 * @param {object} Constructor the constructor to test.
-			 * @param {string} property the name of the options property to test.
-			 * @param {string} type the type that values of the property are expected to have
-			 * @param {Array} [values] an array of allowed values for the property. Not needed for boolean.
-			 * @param {any} fallback the fallback value that the property assumes if not provided.
-			 * @param {object} testOptions additional options:
-			 *     @param {boolean} isOptional whether support for this property is optional for implementations.
-			 *     @param {boolean} noReturn whether the resulting value of the property is not returned.
-			 *     @param {boolean} isILD whether the resulting value of the property is implementation and locale dependent.
-			 *     @param {object} extra additional option to pass along, properties are value -> {option: value}.
+			 * 
+			 * @param {object}
+			 *            Constructor the constructor to test.
+			 * @param {string}
+			 *            property the name of the options property to test.
+			 * @param {string}
+			 *            type the type that values of the property are expected to have
+			 * @param {Array}
+			 *            [values] an array of allowed values for the property. Not needed for boolean.
+			 * @param {any}
+			 *            fallback the fallback value that the property assumes if not provided.
+			 * @param {object}
+			 *            testOptions additional options:
+			 * @param {boolean}
+			 *            isOptional whether support for this property is optional for implementations.
+			 * @param {boolean}
+			 *            noReturn whether the resulting value of the property is not returned.
+			 * @param {boolean}
+			 *            isILD whether the resulting value of the property is implementation and locale dependent.
+			 * @param {object}
+			 *            extra additional option to pass along, properties are value -> {option: value}.
 			 * @return {boolean} whether the test succeeded.
 			 */
 			testOption : function(Constructor, property, type, values, fallback, testOptions) {
@@ -795,13 +806,16 @@ define(
 				}
 			},
 			/**
-			 * Tests whether the named property of the given object has a valid value
-			 * and the default attributes of the properties of an object literal.
-			 * @param {Object} obj the object to be tested.
-			 * @param {string} property the name of the property
-			 * @param {Function|Array} valid either a function that tests value for validity and returns a boolean,
-			 *     an array of valid values.
-			 * @exception if the property has an invalid value.
+			 * Tests whether the named property of the given object has a valid value and the default attributes of the properties of an object literal.
+			 * 
+			 * @param {Object}
+			 *            obj the object to be tested.
+			 * @param {string}
+			 *            property the name of the property
+			 * @param {Function|Array}
+			 *            valid either a function that tests value for validity and returns a boolean, an array of valid values.
+			 * @exception if
+			 *                the property has an invalid value.
 			 */
 			testProperty : function(obj, property, valid) {
 				var desc = Object.getOwnPropertyDescriptor(obj, property);
@@ -813,13 +827,17 @@ define(
 				assert(isValid, "Property value "+value+" is not allowed for property "+property+".");
 			},
 			/**
-			 * Tests whether the named property of the given object, if present at all, has a valid value
-			 * and the default attributes of the properties of an object literal.
-			 * @param {Object} obj the object to be tested.
-			 * @param {string} property the name of the property
-			 * @param {Function|Array} valid either a function that tests value for validity and returns a boolean,
-			 *     an array of valid values.
-			 * @exception if the property is present and has an invalid value.
+			 * Tests whether the named property of the given object, if present at all, has a valid value and the default attributes of the properties of an
+			 * object literal.
+			 * 
+			 * @param {Object}
+			 *            obj the object to be tested.
+			 * @param {string}
+			 *            property the name of the property
+			 * @param {Function|Array}
+			 *            valid either a function that tests value for validity and returns a boolean, an array of valid values.
+			 * @exception if
+			 *                the property is present and has an invalid value.
 			 */
 			mayHaveProperty : function(obj, property, valid) {
 				if(obj.hasOwnProperty(property)){
@@ -827,13 +845,16 @@ define(
 				}
 			},
 			/**
-			 * Tests whether the given object has the named property with a valid value
-			 * and the default attributes of the properties of an object literal.
-			 * @param {Object} obj the object to be tested.
-			 * @param {string} property the name of the property
-			 * @param {Function|Array} valid either a function that tests value for validity and returns a boolean,
-			 *     an array of valid values.
-			 * @exception if the property is missing or has an invalid value.
+			 * Tests whether the given object has the named property with a valid value and the default attributes of the properties of an object literal.
+			 * 
+			 * @param {Object}
+			 *            obj the object to be tested.
+			 * @param {string}
+			 *            property the name of the property
+			 * @param {Function|Array}
+			 *            valid either a function that tests value for validity and returns a boolean, an array of valid values.
+			 * @exception if
+			 *                the property is missing or has an invalid value.
 			 */
 			mustHaveProperty : function(obj, property, valid) {
 				assert(obj.hasOwnProperty(property), "Object is missing property "+property+".");
@@ -842,17 +863,20 @@ define(
 
 			/**
 			 * Tests whether the given object does not have the named property.
-			 * @param {Object} obj the object to be tested.
-			 * @param {string} property the name of the property
-			 * @exception if the property is present.
+			 * 
+			 * @param {Object}
+			 *            obj the object to be tested.
+			 * @param {string}
+			 *            property the name of the property
+			 * @exception if
+			 *                the property is present.
 			 */
 			mustNotHaveProperty : function(obj, property) {
 				assert.isFalse(obj.hasOwnProperty(property), "Object has property it mustn't have: "+property+".");
 			},
 			/**
-			 * Tests that executing the provided function (which may use regular expressions
-			 * in its implementation) does not create or modify unwanted properties on the
-			 * RegExp constructor.
+			 * Tests that executing the provided function (which may use regular expressions in its implementation) does not create or modify unwanted
+			 * properties on the RegExp constructor.
 			 */
 			testForUnwantedRegExpChanges : function(testFunc) {
 				regExpProperties.forEach(function(property) {
@@ -860,16 +884,16 @@ define(
 				});
 				testFunc();
 				regExpProperties.forEach(function(property) {
-					assert.strictEqual(RegExp[property],regExpPropertiesDefaultValues[property],
+					assert.strictEqual(RegExp[property], regExpPropertiesDefaultValues[property],
 						"RegExp has unexpected property "+property+" with value "+RegExp[property]+".");
 				});
 			},
 			/**
-			 * Tests whether name is a valid BCP 47 numbering system name
-			 * and not excluded from use in the ECMAScript Internationalization API.
-			 * @param {string} name the name to be tested.
-			 * @return {boolean} whether name is a valid BCP 47 numbering system name and
-			 *     allowed for use in the ECMAScript Internationalization API.
+			 * Tests whether name is a valid BCP 47 numbering system name and not excluded from use in the ECMAScript Internationalization API.
+			 * 
+			 * @param {string}
+			 *            name the name to be tested.
+			 * @return {boolean} whether name is a valid BCP 47 numbering system name and allowed for use in the ECMAScript Internationalization API.
 			 */
 
 			isValidNumberingSystem : function(name) {
@@ -944,142 +968,143 @@ define(
 			},
 
 			/**
-			 * Verifies that the actual array matches the expected one in length, elements,
-			 * and element order.
-			 * @param {Array} expected the expected array.
-			 * @param {Array} actual the actual array.
+			 * Verifies that the actual array matches the expected one in length, elements, and element order.
+			 * 
+			 * @param {Array}
+			 *            expected the expected array.
+			 * @param {Array}
+			 *            actual the actual array.
 			 * @return {boolean} true if the test succeeds.
-			 * @exception if the test fails.
+			 * @exception if
+			 *                the test fails.
 			 */
 			testArraysAreSame : function(expected, actual) {
 				for(var i = 0; i<Math.max(actual.length, expected.length); i++){
-					assert.strictEqual(actual[i],expected[i],
-						"Result array element at index "+i+" should be \""+expected[i]+"\" but is \""+actual[i]
-							+"\".");
+					assert.strictEqual(actual[i], expected[i], "Result array element at index "+i+" should be \""
+						+expected[i]+"\" but is \""+actual[i]+"\".");
 				}
-			}
+			},
+			/**
+			 * Tests that number formatting is handled correctly. The function checks that the digit sequences in formatted output are as specified, converted
+			 * to the selected numbering system, and embedded in consistent localized patterns.
+			 * 
+			 * @param {Array}
+			 *            locales the locales to be tested.
+			 * @param {Array}
+			 *            numberingSystems the numbering systems to be tested.
+			 * @param {Object}
+			 *            options the options to pass to Intl.NumberFormat. Options must include {useGrouping: false}, and must cause 1.1 to be formatted pre-
+			 *            and post-decimal digits.
+			 * @param {Object}
+			 *            testData maps input data (in ES5 9.3.1 format) to expected output strings in unlocalized format with Western digits.
+			 */
 
-		};
+			testNumberFormat : function(locales, numberingSystems, options, testData) {
+				var numberingSystemDigits = {
+					arab : "٠١٢٣٤٥٦٧٨٩",
+					arabext : "۰۱۲۳۴۵۶۷۸۹",
+					beng : "০১২৩৪৫৬৭৮৯",
+					deva : "०१२३४५६७८९",
+					fullwide : "０１２３４５６７８９",
+					gujr : "૦૧૨૩૪૫૬૭૮૯",
+					guru : "੦੧੨੩੪੫੬੭੮੯",
+					hanidec : "〇一二三四五六七八九",
+					khmr : "០១២៣៤៥៦៧៨៩",
+					knda : "೦೧೨೩೪೫೬೭೮೯",
+					laoo : "໐໑໒໓໔໕໖໗໘໙",
+					latn : "0123456789",
+					mlym : "൦൧൨൩൪൫൬൭൮൯",
+					mong : "᠐᠑᠒᠓᠔᠕᠖᠗᠘᠙",
+					mymr : "၀၁၂၃၄၅၆၇၈၉",
+					orya : "୦୧୨୩୪୫୬୭୮୯",
+					tamldec : "௦௧௨௩௪௫௬௭௮௯",
+					telu : "౦౧౨౩౪౫౬౭౮౯",
+					thai : "๐๑๒๓๔๕๖๗๘๙",
+					tibt : "༠༡༢༣༤༥༦༧༨༩"
+				};
+				locales.forEach(function(locale) {
+					numberingSystems
+						.forEach(function(numbering) {
+							var digits = numberingSystemDigits[numbering];
+							var format = new Intl.NumberFormat([ locale+"-u-nu-"+numbering ], options);
 
+							function getPatternParts(positive) {
+								var n = positive ? 1.1 : -1.1;
+								var formatted = format.format(n);
+								var oneoneRE = "([^"+digits+"]*)["+digits+"]+([^"+digits+"]+)["+digits+"]+([^"+digits
+									+"]*)";
+								var match = formatted.match(new RegExp(oneoneRE));
+								assert.isNotNull(match, "Unexpected formatted "+n+" for "
+									+format.resolvedOptions().locale+" and options "+JSON.stringify(options)+": "
+									+formatted);
+								return match;
+							}
 
+							function toNumbering(raw) {
+								return raw.replace(/[0-9]/g, function(digit) {
+									return digits[digit.charCodeAt(0)-"0".charCodeAt(0)];
+								});
+							}
 
-		/**
-		 * Provides the digits of numbering systems with simple digit mappings,
-		 * as specified in 11.3.2.
-		 */
+							function buildExpected(raw, patternParts) {
+								var period = raw.indexOf(".");
+								if(period===-1){
+									return patternParts[1]+toNumbering(raw)+patternParts[3];
+								}
+								return patternParts[1]+toNumbering(raw.substring(0, period))+patternParts[2]
+									+toNumbering(raw.substring(period+1))+patternParts[3];
+							}
 
-		var numberingSystemDigits = {
-			arab : "٠١٢٣٤٥٦٧٨٩",
-			arabext : "۰۱۲۳۴۵۶۷۸۹",
-			beng : "০১২৩৪৫৬৭৮৯",
-			deva : "०१२३४५६७८९",
-			fullwide : "０１２３４５６７８９",
-			gujr : "૦૧૨૩૪૫૬૭૮૯",
-			guru : "੦੧੨੩੪੫੬੭੮੯",
-			hanidec : "〇一二三四五六七八九",
-			khmr : "០១២៣៤៥៦៧៨៩",
-			knda : "೦೧೨೩೪೫೬೭೮೯",
-			laoo : "໐໑໒໓໔໕໖໗໘໙",
-			latn : "0123456789",
-			mlym : "൦൧൨൩൪൫൬൭൮൯",
-			mong : "᠐᠑᠒᠓᠔᠕᠖᠗᠘᠙",
-			mymr : "၀၁၂၃၄၅၆၇၈၉",
-			orya : "୦୧୨୩୪୫୬୭୮୯",
-			tamldec : "௦௧௨௩௪௫௬௭௮௯",
-			telu : "౦౧౨౩౪౫౬౭౮౯",
-			thai : "๐๑๒๓๔๕๖๗๘๙",
-			tibt : "༠༡༢༣༤༥༦༧༨༩"
-		};
+							if(format.resolvedOptions().numberingSystem===numbering){
+								// figure out prefixes, infixes, suffixes for positive and negative values
+								var posPatternParts = getPatternParts(true);
+								var negPatternParts = getPatternParts(false);
 
-		/**
-		 * Tests that number formatting is handled correctly. The function checks that the
-		 * digit sequences in formatted output are as specified, converted to the
-		 * selected numbering system, and embedded in consistent localized patterns.
-		 * @param {Array} locales the locales to be tested.
-		 * @param {Array} numberingSystems the numbering systems to be tested.
-		 * @param {Object} options the options to pass to Intl.NumberFormat. Options
-		 *     must include {useGrouping: false}, and must cause 1.1 to be formatted
-		 *     pre- and post-decimal digits.
-		 * @param {Object} testData maps input data (in ES5 9.3.1 format) to expected output strings
-		 *     in unlocalized format with Western digits.
-		 */
-
-		function testNumberFormat(locales, numberingSystems, options, testData) {
-			locales.forEach(function(locale) {
-				numberingSystems.forEach(function(numbering) {
-					var digits = numberingSystemDigits[numbering];
-					var format = new Intl.NumberFormat([ locale+"-u-nu-"+numbering ], options);
-
-					function getPatternParts(positive) {
-						var n = positive ? 1.1 : -1.1;
-						var formatted = format.format(n);
-						var oneoneRE = "([^"+digits+"]*)["+digits+"]+([^"+digits+"]+)["+digits+"]+([^"+digits+"]*)";
-						var match = formatted.match(new RegExp(oneoneRE));
-						if(match===null){
-							$ERROR("Unexpected formatted "+n+" for "+format.resolvedOptions().locale+" and options "
-								+JSON.stringify(options)+": "+formatted);
-						}
-						return match;
-					}
-
-					function toNumbering(raw) {
-						return raw.replace(/[0-9]/g, function(digit) {
-							return digits[digit.charCodeAt(0)-"0".charCodeAt(0)];
+								Object.getOwnPropertyNames(testData).forEach(
+									function(input) {
+										var rawExpected = testData[input];
+										var patternParts;
+										if(rawExpected[0]==="-"){
+											patternParts = negPatternParts;
+											rawExpected = rawExpected.substring(1);
+										}else{
+											patternParts = posPatternParts;
+										}
+										var expected = buildExpected(rawExpected, patternParts);
+										var actual = format.format(input);
+										assert.strictEqual(actual, expected, "Formatted value for "+input+", "
+											+format.resolvedOptions().locale+" and options "+JSON.stringify(options)
+											+" is "+actual+"; expected "+expected+".");
+									});
+							}
 						});
-					}
-
-					function buildExpected(raw, patternParts) {
-						var period = raw.indexOf(".");
-						if(period===-1){
-							return patternParts[1]+toNumbering(raw)+patternParts[3];
-						}
-						return patternParts[1]+toNumbering(raw.substring(0, period))+patternParts[2]
-								+toNumbering(raw.substring(period+1))+patternParts[3];
-					}
-
-					if(format.resolvedOptions().numberingSystem===numbering){
-						// figure out prefixes, infixes, suffixes for positive and negative values
-						var posPatternParts = getPatternParts(true);
-						var negPatternParts = getPatternParts(false);
-
-						Object.getOwnPropertyNames(testData).forEach(
-							function(input) {
-								var rawExpected = testData[input];
-								var patternParts;
-								if(rawExpected[0]==="-"){
-									patternParts = negPatternParts;
-									rawExpected = rawExpected.substring(1);
-								}else{
-									patternParts = posPatternParts;
-								}
-								var expected = buildExpected(rawExpected, patternParts);
-								var actual = format.format(input);
-								if(actual!==expected){
-									$ERROR("Formatted value for "+input+", "+format.resolvedOptions().locale
-										+" and options "+JSON.stringify(options)+" is "+actual+"; expected "+expected
-										+".");
-								}
-							});
-					}
 				});
-			});
-		}
+			}
+		};
+
+		/**
+		 * Provides the digits of numbering systems with simple digit mappings, as specified in 11.3.2.
+		 */
 
 		/**
 		 * Return the components of date-time formats.
+		 * 
 		 * @return {Array} an array with all date-time components.
 		 */
 
 		function getDateTimeComponents() {
 			return
 
+			
+
 			[ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ];
 		}
 
 		/**
-		 * Return the valid values for the given date-time component, as specified
-		 * by the table in section 12.1.1.
-		 * @param {string} component a date-time component.
+		 * Return the valid values for the given date-time component, as specified by the table in section 12.1.1.
+		 * 
+		 * @param {string}
+		 *            component a date-time component.
 		 * @return {Array} an array with the valid values for the component.
 		 */
 
@@ -1106,10 +1131,14 @@ define(
 
 		/**
 		 * Tests that the given value is valid for the given date-time component.
-		 * @param {string} component a date-time component.
-		 * @param {string} value the value to be tested.
+		 * 
+		 * @param {string}
+		 *            component a date-time component.
+		 * @param {string}
+		 *            value the value to be tested.
 		 * @return {boolean} true if the test succeeds.
-		 * @exception if the test fails.
+		 * @exception if
+		 *                the test fails.
 		 */
 
 		function testValidDateTimeComponentValue(component, value) {

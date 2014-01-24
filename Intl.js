@@ -633,14 +633,16 @@ define(
 				numberFormat.currencySymbol = c;
 				numberFormat.currencyDisplayName = c;
 				cDigits = CurrencyDigits(c);
-				var cd = GetOption(options, "currencyDisplay", "string", [ "code", "symbol", "name" ], "symbol");
+			}
+			var cd = GetOption(options, "currencyDisplay", "string", [ "code", "symbol", "name" ], "symbol");
+			if(s=="currency"){
 				numberFormat.currencyDisplay = cd;
-				if(cd=="symbol"||cd=="name"){
-					var currencies = getCLDRJson(numberFormat.dataLocale, "currencies").main[numberFormat.dataLocale].numbers.currencies;
-					if(currencies[numberFormat.currency]){
-						numberFormat.currencySymbol = currencies[numberFormat.currency].symbol;
-						numberFormat.currencyDisplayName = currencies[numberFormat.currency].displayName;
-					}
+			}
+			if(cd=="symbol"||cd=="name"){
+				var currencies = getCLDRJson(numberFormat.dataLocale, "currencies").main[numberFormat.dataLocale].numbers.currencies;
+				if(currencies[numberFormat.currency]){
+					numberFormat.currencySymbol = currencies[numberFormat.currency].symbol;
+					numberFormat.currencyDisplayName = currencies[numberFormat.currency].displayName;
 				}
 			}
 			var mnid = GetNumberOption(options, "minimumIntegerDigits", 1, 21, 1);
@@ -659,7 +661,7 @@ define(
 			}else if(s=="percent"){
 				mxfdDefault = Math.max(mnfd, 0);
 			}else{
-				mxfdDefault = Math.max(mnfd, 0);
+				mxfdDefault = Math.max(mnfd, 3);
 			}
 			var mxfd = GetNumberOption(options, "maximumFractionDigits", mnfd, 20, mxfdDefault);
 			numberFormat.maximumFractionDigits = mxfd;
@@ -690,7 +692,7 @@ define(
 		// based on the CLDR pattern string.
 		function doGrouping(n, pattern) {
 			var numExp = /[0-9#.,]+/;
-			var number = pattern.match(numExp)[0];
+			var number = numExp.exec(pattern)[0];
 			var dPos = number.lastIndexOf(".");
 			if(dPos!=-1){
 				number = number.substring(0, dPos);
@@ -699,14 +701,14 @@ define(
 			groupings.reverse();
 			groupings.pop();
 			var currentGrouping = groupings.shift();
-			var ungroupedDigits = n.match(/^\d+/);
+			var ungroupedDigits = /^\d+/.exec(n);
 			while (ungroupedDigits&&ungroupedDigits[0].length>currentGrouping.length){
 				var digitsLeft = ungroupedDigits[0].length-currentGrouping.length;
 				n = n.substr(0, digitsLeft)+","+n.substring(digitsLeft);
 				if(groupings.length>1){
 					currentGrouping = groupings.shift();
 				}
-				ungroupedDigits = n.match(/^\d+/);
+				ungroupedDigits = /^\d+/.exec(n);
 			}
 			return n;
 		}
@@ -719,7 +721,7 @@ define(
 					m = m.replace(/0$/, "");
 					cut--;
 				}
-				if(m.test(/\.$/)){
+				if(/\.$/.test(m)){
 					m = m.replace(/\.$/, "");
 				}
 			}
@@ -728,6 +730,9 @@ define(
 		// ECMA 402 Section 11.3.2
 		function ToRawFixed(x, minInteger, minFraction, maxFraction) {
 			var m = x.toFixed(maxFraction).toString();
+			//var parts = m.split(){
+				
+			//}
 			var cut = maxFraction-minFraction;
 			while (cut>0&&/0$/.test(m)){
 				m = m.replace(/0$/, "");
@@ -1338,17 +1343,21 @@ define(
 
 
 		// ECMA 402 Section 11.2.2
-		Intl.NumberFormat.supportedLocalesOf = function(locales, options) {
-			var availableLocales = Intl.NumberFormat.availableLocales;
-			var requestedLocales = CanonicalizeLocaleList(locales);
-			return SupportedLocales(availableLocales, requestedLocales, options);
-		};
 		Object.defineProperty(Intl.NumberFormat, "supportedLocalesOf", {
+			value: function(locales) {
+				var availableLocales = Intl.NumberFormat.availableLocales;
+				var	requestedLocales = CanonicalizeLocaleList(locales);
+				var options = undefined;
+				if(arguments.length>1){
+					options = arguments[1];
+				}
+				return SupportedLocales(availableLocales, requestedLocales, options);
+			},
 			writable : true,
 			enumerable : false,
 			configurable : true
 		});
-
+				
 		Intl.NumberFormat.prototype = Intl.NumberFormat.call({});
 		
 		// ECMA 402 Section 11.2.1
@@ -1357,8 +1366,14 @@ define(
 			enumerable : false,
 			configurable : false
 		});
+		
 		// ECMA 402 Section 11.3.1
-		Intl.NumberFormat.prototype.constructor = Intl.NumberFormat;
+		Object.defineProperty(Intl.NumberFormat.prototype, "constructor", {
+			value : Intl.NumberFormat,
+			writable : true,
+			configurable : true,
+			enumerable : false
+		});
 
 		// ECMA 402 Section 11.3.2
 		Object.defineProperty(Intl.NumberFormat.prototype, "format", {
@@ -1375,34 +1390,41 @@ define(
 					this.boundFormat = bf;
 				}
 				return this.boundFormat;				
-			}
+			},
+			configurable : true
 		});
 
 		// ECMA 402 Section 11.3.3
-		Intl.NumberFormat.prototype.resolvedOptions = function() {
-			if(this!==Object(this)||!this.initializedNumberFormat){
-				throw new TypeError("Intl.NumberFormat.resolvedOptions: 'this' is not a valid Intl.NumberFormat instance");
-			}
-			var fields = [
-				"locale",
-				"numberingSystem",
-				"style",
-				"currency",
-				"currencyDisplay",
-				"minimumIntegerDigits",
-				"minimumFractionDigits",
-				"maximumFractionDigits",
-				"minimumSignificantDigits",
-				"maximumSignificantDigits",
-				"useGrouping" ];
-			var result = {};
-			for( var f in fields){
-				if(this[fields[f]]!==undefined){
-					result[fields[f]] = this[fields[f]];
+		Object.defineProperty(Intl.NumberFormat.prototype, "resolvedOptions", {
+			value : function() {
+				if(this!==Object(this)||!this.initializedNumberFormat){
+					throw new TypeError(
+						"Intl.NumberFormat.resolvedOptions: 'this' is not a valid Intl.NumberFormat instance");
 				}
-			}
-			return result;
-		};
+				var fields = [
+					"locale",
+					"numberingSystem",
+					"style",
+					"currency",
+					"currencyDisplay",
+					"minimumIntegerDigits",
+					"minimumFractionDigits",
+					"maximumFractionDigits",
+					"minimumSignificantDigits",
+					"maximumSignificantDigits",
+					"useGrouping" ];
+				var result = {};
+				for( var f in fields){
+					if(this[fields[f]]!==undefined){
+						result[fields[f]] = this[fields[f]];
+					}
+				}
+				return result;
+			},
+			writable : true,
+			enumerable : false,
+			configurable : true
+		});
 
 		// Intl.DateTimeFormat begins here.
 		// ECMA 402 Section 7
