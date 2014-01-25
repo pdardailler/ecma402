@@ -611,8 +611,8 @@ define(
 			var opt = {};
 			var matcher = GetOption(options, "localeMatcher", "string", [ "lookup", "best fit" ], "best fit");
 			opt.localeMatcher = matcher;
-			var r = ResolveLocale(Intl.NumberFormat.availableLocales, requestedLocales, opt,
-				Intl.NumberFormat.relevantExtensionKeys, Intl.NumberFormat.localeData);
+			var r = ResolveLocale(NumberFormat.availableLocales, requestedLocales, opt,
+				NumberFormat.relevantExtensionKeys, NumberFormat.localeData);
 			numberFormat.locale = r.locale;
 			numberFormat.dataLocale = r.dataLocale;
 			numberFormat.numberingSystem = r.nu;
@@ -970,14 +970,14 @@ define(
 			var opt = {};
 			var matcher = GetOption(options, "localeMatcher", "string", [ "lookup", "best fit" ], "best fit");
 			opt.localeMatcher = matcher;
-			var r = ResolveLocale(Intl.DateTimeFormat.availableLocales, requestedLocales, opt,
-				Intl.DateTimeFormat.relevantExtensionKeys, Intl.DateTimeFormat.localeData);
+			var r = ResolveLocale(DateTimeFormat.availableLocales, requestedLocales, opt,
+				DateTimeFormat.relevantExtensionKeys, DateTimeFormat.localeData);
 			dateTimeFormat.locale = r.locale;
 			dateTimeFormat.numberingSystem = r.nu;
 			dateTimeFormat.calendar = r.ca;
 			dateTimeFormat.dataLocale = r.dataLocale;
 			var tz = options["timeZone"];
-			if(tz!=undefined){
+			if(tz!==undefined){
 				tz = tz.toString();
 				tz = _toUpperCaseIdentifier(tz);
 				if(tz!="UTC"){
@@ -1012,13 +1012,13 @@ define(
 			var hr12 = GetOption(options, "hour12", "boolean", undefined, undefined);
 			if(dateTimeFormat.hour!=undefined){
 				if(hr12==undefined){
-					hr12 = Intl.DateTimeFormat.localeData[dateTimeFormat.dataLocale]
-						&&Intl.DateTimeFormat.localeData[dateTimeFormat.dataLocale].hour12;
+					hr12 = DateTimeFormat.localeData[dateTimeFormat.dataLocale]
+						&&DateTimeFormat.localeData[dateTimeFormat.dataLocale].hour12;
 				}
 				dateTimeFormat.hour12 = hr12;
 				if(hr12){
-					var hourNo0 = Intl.DateTimeFormat.localeData[dateTimeFormat.dataLocale]
-						&&Intl.DateTimeFormat.localeData[dateTimeFormat.dataLocale].hourNo0;
+					var hourNo0 = DateTimeFormat.localeData[dateTimeFormat.dataLocale]
+						&&DateTimeFormat.localeData[dateTimeFormat.dataLocale].hourNo0;
 					dateTimeFormat.hourNo0 = hourNo0;
 					pattern = bestFormat.pattern12;
 				}else{
@@ -1038,10 +1038,10 @@ define(
 				throw new RangeError;
 			}
 			var locale = dateTimeFormat.locale;
-			var nf = new Intl.NumberFormat(locale, {
-				useGrouping : false
-			});
-			var nf2 = new Intl.NumberFormat(locale, {
+			var nf = {};
+			InitializeNumberFormat(nf,locale, {	useGrouping : false	});
+			var nf2 = {};
+			InitializeNumberFormat(nf2,locale, {
 				minimumIntegerDigits : 2,
 				useGrouping : false
 			});
@@ -1277,8 +1277,53 @@ define(
 			if(prop=="weekday"||prop=="era"){
 				return [ "narrow", "short", "long" ];
 			}
+			if(prop=="timeZoneName"){
+				return [ "short", "long" ];
+			}
 		}
 
+		var NumberFormat = {};
+		NumberFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
+		NumberFormat.relevantExtensionKeys = [ "nu" ];
+		NumberFormat.localeData = {};
+		NumberFormat.availableLocales.forEach(function(loc) {
+			NumberFormat.localeData[loc] = {
+				"nu" : availableNumberingSystems
+			};
+		});
+		Object.freeze(NumberFormat);
+		
+		// ECMA 402 Section 12.2.3
+		var DateTimeFormat = {};
+		DateTimeFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
+		DateTimeFormat.relevantExtensionKeys = [ "ca", "nu" ];
+		DateTimeFormat.localeData = {};
+		DateTimeFormat.availableLocales.forEach(function(loc) {
+			var calendarPreferences = [ "gregory" ];
+			var region = "001";
+			var hour12 = false;
+			var hourNo0 = false;
+			var regionPos = loc.search(/(?:-)([A-Z]{2})(?=(-|$))/);
+			if(regionPos>=0){
+				region = loc.substr(regionPos+1, 2);
+			}else{
+				var likelySubtag = likelySubtags[loc];
+				if(likelySubtag){
+					region = likelySubtag.substr(-2);
+				}
+			}
+
+			hour12 = timeData[region]&&(/h|K/.test(timeData[region]._preferred));
+			hourNo0 = timeData[region]&&(/h|k/.test(timeData[region]._preferred));
+			DateTimeFormat.localeData[loc] = {
+				"nu" : availableNumberingSystems,
+				"ca" : calendarPreferences,
+				"hour12" : hour12,
+				"hourNo0" : hourNo0,
+			};
+		});
+		Object.freeze(DateTimeFormat);
+		
 		// Creation of the Intl object begins here.
 		var Intl = {};
 
@@ -1406,7 +1451,7 @@ define(
 					"useGrouping" ];
 				var result = {};
 				for( var f in fields){
-					if(this[fields[f]]!==undefined){
+					if(this.hasOwnProperty(fields[f])){
 						result[fields[f]] = this[fields[f]];
 					}
 				}
@@ -1439,34 +1484,6 @@ define(
 			enumerable : false
 		});
 
-		// ECMA 402 Section 12.2.3
-		Intl.DateTimeFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
-		Intl.DateTimeFormat.relevantExtensionKeys = [ "ca", "nu" ];
-		Intl.DateTimeFormat.localeData = {};
-		Intl.DateTimeFormat.availableLocales.forEach(function(loc) {
-			var calendarPreferences = [ "gregory" ];
-			var region = "001";
-			var hour12 = false;
-			var hourNo0 = false;
-			var regionPos = loc.search(/(?:-)([A-Z]{2})(?=(-|$))/);
-			if(regionPos>=0){
-				region = loc.substr(regionPos+1, 2);
-			}else{
-				var likelySubtag = likelySubtags[loc];
-				if(likelySubtag){
-					region = likelySubtag.substr(-2);
-				}
-			}
-
-			hour12 = timeData[region]&&(/h|K/.test(timeData[region]._preferred));
-			hourNo0 = timeData[region]&&(/h|k/.test(timeData[region]._preferred));
-			Intl.DateTimeFormat.localeData[loc] = {
-				"nu" : availableNumberingSystems,
-				"ca" : calendarPreferences,
-				"hour12" : hour12,
-				"hourNo0" : hourNo0,
-			};
-		});
 
 		// ECMA 402 Section 12.1.2.1
 		Intl.DateTimeFormat.call = function(thisObject, locales, options) {
@@ -1485,7 +1502,7 @@ define(
 		// ECMA 402 Section 12.2.2
 		Object.defineProperty(Intl.DateTimeFormat, "supportedLocalesOf", {
 			value : function(locales) {
-				var availableLocales = Intl.DateTimeFormat.availableLocales;
+				var availableLocales = DateTimeFormat.availableLocales;
 				var requestedLocales = CanonicalizeLocaleList(locales);
 				var options = undefined;
 				if(arguments.length>1){
@@ -1523,7 +1540,11 @@ define(
 						"Intl.DateTimeFormat format getter: 'this' is not a valid Intl.DateTimeFormat instance");
 				}
 				if(this.boundFormat===undefined){
-					var F = function(date) {
+					var F = function() {
+						var date=undefined;
+						if(arguments.length>0){
+							date=arguments[0];
+						}
 						var x;
 						if(date==undefined){
 							x = Date.now();
@@ -1564,7 +1585,7 @@ define(
 					"timeZoneName" ];
 				var result = {};
 				for( var f in fields){
-					if(this[fields[f]]!==undefined){
+					if(this.hasOwnProperty(fields[f])){
 						result[fields[f]] = this[fields[f]];
 					}
 				}
@@ -1575,5 +1596,91 @@ define(
 			configurable : true
 		});
 
+		// ECMA 402 Section 13.2.1
+		Number.prototype.toLocaleString = function(){
+			if(!(this instanceof Number)){
+				throw new TypeError("not a valid Number");
+			}
+			var x = Number(this);
+			var locales = undefined;
+			var options = undefined;
+			if(arguments.length>0){
+				locales = arguments[0];
+			}
+			if(arguments.length>1){
+				options = arguments[1];
+			}
+			var numberFormat = {};
+			InitializeNumberFormat(numberFormat,locales,options);
+			return FormatNumber(numberFormat,x);
+		};
+		
+		// ECMA 402 Section 13.3.1
+		Date.prototype.toLocaleString = function(){
+			if(!(this instanceof Date)){
+				throw new TypeError("not a valid Date");
+			}
+			var x = this.getTime();
+			if(isNaN(x)){
+				return "Invalid Date";
+			}
+			var locales = undefined;
+			var options = undefined;
+			if(arguments.length>0){
+				locales = arguments[0];
+			}
+			if(arguments.length>1){
+				options = arguments[1];
+			}
+			options = ToDateTimeOptions(options,"any","all");
+			var dateTimeFormat = {};
+			InitializeDateTimeFormat(dateTimeFormat,locales,options);
+			return FormatDateTime(dateTimeFormat,x);
+		};
+		// ECMA 402 Section 13.3.2
+		Date.prototype.toLocaleDateString = function(){
+			if(!(this instanceof Date)){
+				throw new TypeError("not a valid Date");
+			}
+			var x = this.getTime();
+			if(isNaN(x)){
+				return "Invalid Date";
+			}
+			var locales = undefined;
+			var options = undefined;
+			if(arguments.length>0){
+				locales = arguments[0];
+			}
+			if(arguments.length>1){
+				options = arguments[1];
+			}
+			options = ToDateTimeOptions(options,"date","date");
+			var dateTimeFormat = {};
+			InitializeDateTimeFormat(dateTimeFormat,locales,options);
+			return FormatDateTime(dateTimeFormat,x);
+		};
+		// ECMA 402 Section 13.3.3
+		Date.prototype.toLocaleTimeString = function(){
+			if(!(this instanceof Date)){
+				throw new TypeError("not a valid Date");
+			}
+			var x = this.getTime();
+			if(isNaN(x)){
+				return "Invalid Date";
+			}
+			var locales = undefined;
+			var options = undefined;
+			if(arguments.length>0){
+				locales = arguments[0];
+			}
+			if(arguments.length>1){
+				options = arguments[1];
+			}
+			options = ToDateTimeOptions(options,"time","time");
+			var dateTimeFormat = {};
+			InitializeDateTimeFormat(dateTimeFormat,locales,options);
+			return FormatDateTime(dateTimeFormat,x);
+		};
+		
 		return Intl;
 	});

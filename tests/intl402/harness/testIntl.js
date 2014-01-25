@@ -748,7 +748,7 @@ define(
 					}else{
 						actual = obj.resolvedOptions()[property];
 						if(isILD){
-							assert(actual===undefined||values.indexOf(actual)===-1, "Invalid value "+actual
+							assert(actual===undefined||values.indexOf(actual)!==-1, "Invalid value "+actual
 								+" returned for property "+property+".");
 						}else{
 							if(type==="boolean"){

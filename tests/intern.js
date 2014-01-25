@@ -107,7 +107,9 @@ define({
 	            'ecma402/tests/intl402/suite/ch12/12.1',
 	            'ecma402/tests/intl402/suite/ch12/12.2',
 	            'ecma402/tests/intl402/suite/ch12/12.3',
-	            'ecma402/tests/intl402/suite/ch12/12.4'],
+	            'ecma402/tests/intl402/suite/ch12/12.4',
+	            'ecma402/tests/intl402/suite/ch13/13.2',
+	            'ecma402/tests/intl402/suite/ch13/13.3'],
 
 	// Functional test suite(s) to run in each browser once non-functional tests
 	// are completed
