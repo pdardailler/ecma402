@@ -714,27 +714,138 @@ define(
 			}
 			return n;
 		}
-		// ECMA 402 Section 11.3.2
+		// Utility function to convert a string in scientific notation to a corresponding string of digits
+		function _toDigitString(x) {
+			var m=x;
+			var negative=false;
+			if(m.charAt(0)=='-'){
+				negative=true;
+				m=m.substring(1);
+			}
+			var parts=m.split("e");
+			var mantissa = parts[0];
+			var exponent = Number(parts[1]);
+			if(exponent>0){
+				m = mantissa.substr(0,1)+mantissa.substr(2); // Get just the digits
+				if(m.length-1<exponent){ // Need to add zeroes.
+					var e = exponent+1-m.length;
+					while (e>0){
+						m = m+"0";
+						e--;
+					}
+				}else if(m.length-1>exponent){
+					m = m.substr(0, exponent+1)+"."+m.substr(exponent+1);
+				}
+			}else if(exponent<0){
+				var digits = mantissa.substr(0,1)+mantissa.substr(2); // Get just the digits
+				m = "0.";
+				for(var i=exponent;i<-1;i++){
+					m+="0";
+				}
+				m+=digits;
+			}
+			if(negative){
+				m = "-"+m;
+			}
+			return m;
+		}
+		// ECMA 402 Section 11.3.2 (ToRawPrecision abstract operation)
 		function ToRawPrecision(x, minPrecision, maxPrecision) {
-			var m = x.toPrecision(maxPrecision).toString();
+			var p = maxPrecision;
+			var e;
+			var m = "";
+			var n;
+			var target;
+			if(x==0){
+				for(var i=0;i<p;i++){
+					m+="0";
+				}
+				e=0;
+			}else{
+				target = Math.pow(10,p-1);
+				if (x<target){
+					e=p-1;
+					while(x<target){
+						target/=10;
+						e--;
+					}
+				}else{
+					target = Math.pow(10,p);
+					e=p-1;
+					while(x>=target){
+						target*=10;
+						e++;
+					}
+				}
+				m = x.toString();
+				if(/e/.test(m)){
+					m = _toDigitString(m);
+				}
+				if(!/\./.test(m)){
+					m += ".";
+				}
+				for(var i = 0; i<p; i++){
+					m += "0";
+				}
+				var placesToMove = p-1-e;
+				var mi = m.indexOf(".");
+				if(placesToMove>0){
+					m = m.substr(0, mi)+m.substr(mi+1, placesToMove)+"."+m.substr(mi+1+placesToMove, 1);
+				}
+				if(placesToMove<0){
+					m = m.substr(0, p)+"."+m.substr(p, 1);
+				}
+				m = Math.round(m).toString();
+			}
+			if(e>=p){
+				for(var i=0;i<e-p+1;i++){
+					m+="0";
+				}
+				return m;
+			}
+			if(e==p-1){
+				return m;
+			}
+			if(e>=0){
+				m=m.substr(0,e+1)+"."+m.substr(e+1,p-(e+1));
+			}else{
+				var prefix="0.";
+				for(var i=0;i<-(e+1);i++){
+					prefix+="0";
+				}
+				m=prefix+m;
+
+			}
 			if(/\./.test(m)&&maxPrecision>minPrecision){
 				var cut = maxPrecision-minPrecision;
 				while (cut>0&&/0$/.test(m)){
-					m = m.replace(/0$/, "");
+					m=m.substr(0,m.length-1);
 					cut--;
 				}
 				if(/\.$/.test(m)){
-					m = m.replace(/\.$/, "");
+					m=m.substr(0,m.length-1);
 				}
 			}
 			return m;
 		}
 		// ECMA 402 Section 11.3.2
 		function ToRawFixed(x, minInteger, minFraction, maxFraction) {
-			var m = x.toFixed(maxFraction).toString();
-			//var parts = m.split(){
-
-			//}
+			var m;
+			// if x < 10^21, then we can use the standard built in function.
+			// Otherwise, Number.toFixed is going to give us back a value in
+			// scientific notation, and we have to convert it back to a
+			// series of digits.
+			if(Math.abs(x)<Math.pow(10,21)){
+				m = x.toFixed(maxFraction).toString();
+			}else{
+				m = _toDigitString(x.toString());
+				if(maxFraction>0){
+					m+=".";
+					for(var i=0;i<maxFraction;i++){
+						m+="0";
+					}
+				}
+			}
 			var cut = maxFraction-minFraction;
 			while (cut>0&&/0$/.test(m)){
 				m = m.replace(/0$/, "");
@@ -743,7 +854,6 @@ define(
 			if(/\.$/.test(m)){
 				m = m.replace(/\.$/, "");
 			}
-
 			var dPos = m.indexOf(".");
 			var int = dPos>0 ? dPos : m.length;
 			while (int<minInteger){
@@ -751,7 +861,6 @@ define(
 				int++;
 			}
 			return m;
-
 		}
 		// ECMA 402 Section 11.3.2
 		function FormatNumber(numberFormat, x) {
