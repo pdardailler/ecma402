@@ -211,13 +211,14 @@ define(
 			 *     changes to Object.prototype.
 			 * @author Norbert Lindenberg
 			 */
-			// TODO: Deal with this! testIntl.taintProperties(["locale", "extension", "extensionIndex"]);
+			testIntl.taintProperties(["locale", "extension", "extensionIndex"]);
 
 			testIntl.testWithIntlConstructors(function (Constructor) {
 			    var locale = new Constructor(undefined, {localeMatcher: "lookup"}).resolvedOptions().locale;
 			    assert(testIntl.isCanonicalizedStructurallyValidLanguageTag(locale),
 			        "Constructor returns invalid locale " + locale + ".");
 			});
+			testIntl.untaintProperties(["locale", "extension", "extensionIndex"]);
 		},
 		Test_9_2_5_6 : function() {
 			/**
@@ -225,13 +226,14 @@ define(
 			 *     changes to Object.prototype.
 			 * @author Norbert Lindenberg
 			 */
-			// TODO: Deal with this! testIntl.taintProperties(["dataLocale", "nu", "ca", "co", "locale"]);
+			testIntl.taintProperties(["dataLocale", "nu", "ca", "co", "locale"]);
 
 			testIntl.testWithIntlConstructors(function (Constructor) {
 			    var locale = new Constructor(undefined, {localeMatcher: "lookup"}).resolvedOptions().locale;
 			    assert(testIntl.isCanonicalizedStructurallyValidLanguageTag(locale),
 			        "Constructor returns invalid locale " + locale + ".");
 			});
+			testIntl.untaintProperties(["dataLocale", "nu", "ca", "co", "locale"]);
 
 		},
 		Test_9_2_6_2 : function() {

@@ -169,12 +169,11 @@ define(
 			 *     changes to Object.prototype.
 			 * @author Norbert Lindenberg
 			 */
-			// TODO : Deal with this!
-			//testIntl.taintProperties(["localeMatcher"]);
-
+			testIntl.taintProperties(["localeMatcher"]);
 			var locale = new Intl.DateTimeFormat(undefined, {localeMatcher: "lookup"}).resolvedOptions().locale;
 			assert(testIntl.isCanonicalizedStructurallyValidLanguageTag(locale),
 			    "DateTimeFormat returns invalid locale " + locale + ".");
+			testIntl.untaintProperties(["localeMatcher"]);
 		},
 		Test_12_1_1_6 : function() {
 			/**
@@ -199,12 +198,12 @@ define(
 			 *     changes to Object.prototype.
 			 * @author Norbert Lindenberg
 			 */
-			// TODO: Deal with this!
-			//testIntl.taintProperties(["weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZone"]);
+			testIntl.taintProperties(["weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZone"]);
 
 			var locale = new Intl.DateTimeFormat(undefined, {localeMatcher: "lookup"}).resolvedOptions().locale;
 			assert(testIntl.isCanonicalizedStructurallyValidLanguageTag(locale),
 			    "DateTimeFormat returns invalid locale " + locale + ".");
+			testIntl.untaintProperties(["weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZone"]);
 		},
 		Test_12_1_1_23 : function() {
 			/**

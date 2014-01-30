@@ -92,7 +92,7 @@ define(
 			},
 
 			/**
-			 * Taints a named data property of the given object by installing a setter that throws an exception.
+			 * Taints a named data property of the given object by installing a setter that always asserts false.
 			 * 
 			 * @param {object}
 			 *            obj the object whose data property to taint
@@ -107,6 +107,22 @@ define(
 					enumerable : false,
 					configurable : true
 				});
+			},
+			/**
+			 * Untaints a named data property of the given object by removing a setter that throws an exception.
+			 * 
+			 * @param {object}
+			 *            obj the object whose data property to untaint
+			 * @param {string}
+			 *            property the property to untaint
+			 */
+			untaintDataProperty : function(obj, property) {
+					Object.defineProperty(obj, property, {
+						writable : true,
+						enumerable : false,
+						configurable : true
+					});
+					delete obj[property];
 			},
 
 			/**
@@ -129,7 +145,7 @@ define(
 			},
 
 			/**
-			 * Taints the given properties (and similarly named properties) by installing setters on Object.prototype that throw exceptions.
+			 * Taints the given properties (and similarly named properties) by installing setters on Object.prototype that assert false.
 			 * 
 			 * @param {Array}
 			 *            properties an array of property names to taint
@@ -139,6 +155,20 @@ define(
 					var adaptedProperties = [ property, "__"+property, "_"+property, property+"_", property+"__" ];
 					adaptedProperties.forEach(function(property) {
 						testIntl.taintDataProperty(Object.prototype, property);
+					});
+				});
+			},
+			/**
+			 * Untaints the given properties (and similarly named properties) by installing setters on Object.prototype that always assert false.
+			 * 
+			 * @param {Array}
+			 *            properties an array of property names to taint
+			 */
+			untaintProperties : function(properties) {
+				properties.forEach(function(property) {
+					var adaptedProperties = [ property, "__"+property, "_"+property, property+"_", property+"__" ];
+					adaptedProperties.forEach(function(property) {
+						testIntl.untaintDataProperty(Object.prototype, property);
 					});
 				});
 			},

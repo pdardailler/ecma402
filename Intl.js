@@ -62,6 +62,15 @@ define(
 			}
 			return result;
 		};
+		// Implementation of the Record abstract data type from ECMA 402.
+		function Record() {
+			this.length = 0;
+		}
+
+		Record.prototype.set = function(field,val) {
+			Object.defineProperty(this,field,{value:val,writable:true,enumerable:true,configurable:true});
+		};
+
 
 		// ECMA 262 Section 9.1
 		function IsPrimitive(x) {
@@ -277,7 +286,7 @@ define(
 		// ECMA 402 Section 9.2.1
 		function CanonicalizeLocaleList(locales) {
 			if(locales===undefined){
-				return [];
+				return new List();
 			}
 			if(locales===null){
 				throw new TypeError("Locale list can not be null");
@@ -335,15 +344,15 @@ define(
 				availableLocale = BestAvailableLocale(availableLocales, noExtensionsLocale);
 				i++;
 			}
-			var result = {};
+			var result = new Record();
 			if(availableLocale){
-				result.locale = availableLocale;
+				result.set("locale",availableLocale);
 				if(locale!=noExtensionsLocale){
-					result.extension = locale.match(unicodeLocaleExtensions)[0];
-					result.extensionIndex = locale.search(unicodeLocaleExtensions);
+					result.set("extension",locale.match(unicodeLocaleExtensions)[0]);
+					result.set("extensionIndex",locale.search(unicodeLocaleExtensions));
 				}
 			}else{
-				result.locale = DefaultLocale();
+				result.set("locale",DefaultLocale());
 			}
 
 			return result;
@@ -401,15 +410,15 @@ define(
 				availableLocale = BestFitAvailableLocale(availableLocales, noExtensionsLocale);
 				i++;
 			}
-			var result = {};
+			var result = new Record();
 			if(availableLocale){
-				result.locale = availableLocale;
+				result.set("locale",availableLocale);
 				if(locale!=noExtensionsLocale){
-					result.extension = locale.match(unicodeLocaleExtensions)[0];
-					result.extensionIndex = locale.search(unicodeLocaleExtensions);
+					result.set("extension",locale.match(unicodeLocaleExtensions)[0]);
+					result.set("extensionIndex",locale.search(unicodeLocaleExtensions));
 				}
 			}else{
-				result.locale = DefaultLocale();
+				result.set("locale",DefaultLocale());
 			}
 			return result;
 		}
@@ -430,8 +439,8 @@ define(
 				extensionSubtags = extension.split("-");
 				extensionSubtagsLength = extensionSubtags["length"];
 			}
-			var result = {};
-			result.dataLocale = foundLocale;
+			var result = new Record();
+			result.set("dataLocale",foundLocale);
 			var supportedExtension = "-u";
 			var i = 0;
 			var len = relevantExtensionKeys["length"];
@@ -469,7 +478,7 @@ define(
 						}
 					}
 				}
-				result[key] = value;
+				result.set(key,value);
 				supportedExtension += supportedExtensionAddition;
 				i++;
 			}
@@ -478,7 +487,7 @@ define(
 				var postExtension = foundLocale.substring(extensionIndex);
 				foundLocale = preExtension+supportedExtension+postExtension;
 			}
-			result.locale = foundLocale;
+			result.set("locale",foundLocale);
 			return result;
 		}
 
@@ -608,9 +617,9 @@ define(
 			}else{
 				options = Object(options);
 			}
-			var opt = {};
+			var opt = new Record();
 			var matcher = GetOption(options, "localeMatcher", "string", [ "lookup", "best fit" ], "best fit");
-			opt.localeMatcher = matcher;
+			opt.set("localeMatcher",matcher);
 			var r = ResolveLocale(NumberFormat.availableLocales, requestedLocales, opt,
 				NumberFormat.relevantExtensionKeys, NumberFormat.localeData);
 			numberFormat.locale = r.locale;
@@ -1076,9 +1085,9 @@ define(
 			dateTimeFormat.initializedIntlObject = true;
 			var requestedLocales = CanonicalizeLocaleList(locales);
 			options = ToDateTimeOptions(options, "any", "date");
-			var opt = {};
+			var opt = new Record();
 			var matcher = GetOption(options, "localeMatcher", "string", [ "lookup", "best fit" ], "best fit");
-			opt.localeMatcher = matcher;
+			opt.set("localeMatcher",matcher);
 			var r = ResolveLocale(DateTimeFormat.availableLocales, requestedLocales, opt,
 				DateTimeFormat.relevantExtensionKeys, DateTimeFormat.localeData);
 			dateTimeFormat.locale = r.locale;
@@ -1094,10 +1103,10 @@ define(
 				}
 			}
 			dateTimeFormat.timeZone = tz;
-			opt = {};
+			opt = new Record();
 			dateTimeProperties.forEach(function(prop) {
 				var value = GetOption(options, prop, "string", _validDateTimePropertyValues(prop), undefined);
-				opt[prop] = value;
+				opt.set(prop,value);
 			});
 
 			// Steps 20-21: Here we deviate slightly from the strict definition as defined in ECMA 402.
@@ -1114,7 +1123,8 @@ define(
 				var pDesc = Object.getOwnPropertyDescriptor(bestFormat, prop);
 				if(pDesc!=undefined){
 					var p = bestFormat[prop];
-					dateTimeFormat[prop] = p;
+					//dateTimeFormat[prop] = p;
+					Object.defineProperty(dateTimeFormat,prop,{value:p});
 				}
 			});
 			var pattern;
@@ -1255,98 +1265,98 @@ define(
 		// in CLDR, refer to http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
 		function _ToIntlDateTimeFormat(format) {
 			var dateFields = /G{1,5}|y{1,4}|[ML]{1,5}|E{1,5}|d{1,2}|a|[Hh]{1,2}|m{1,2}|s{1,2}/g;
-			var result = {};
+			var result = new Record();
 			var pieces = format.split("'");
 			for(var x = 0; x<pieces.length; x += 2){ // Don't do replacements for fields that are quoted
 				pieces[x] = pieces[x].replace(dateFields, function(field) {
 					switch(field) {
 						case "GGGGG":
-							result.era = "narrow";
+							result.set("era","narrow");
 							return "{era}";
 						case "GGGG":
-							result.era = "long";
+							result.set("era","long");
 							return "{era}";
 						case "GGG", "GG", "G":
-							result.era = "short";
+							result.set("era","short");
 							return "{era}";
 						case "yy":
-							result.year = "2-digit";
+							result.set("year","2-digit");
 							return "{year}";
 						case "y":
 						case "yyy":
 						case "yyyy":
-							result.year = "numeric";
+							result.set("year","numeric");
 							return "{year}";
 						case "LLLLL":
-							result.standaloneMonth = true;
+							result.set("standaloneMonth",true);
 						case "MMMMM":
-							result.month = "narrow";
+							result.set("month","narrow");
 							return "{month}";
 						case "LLLL":
-							result.standaloneMonth = true;
+							result.set("standaloneMonth",true);
 						case "MMMM":
-							result.month = "long";
+							result.set("month","long");
 							return "{month}";
 						case "LLL":
-							result.standaloneMonth = true;
+							result.set("standaloneMonth",true);
 						case "MMM":
-							result.month = "short";
+							result.set("month","short");
 							return "{month}";
 						case "LL":
 						case "MM":
-							result.month = "2-digit";
+							result.set("month","2-digit");
 							return "{month}";
 						case "L":
 						case "M":
-							result.month = "numeric";
+							result.set("month","numeric");
 							return "{month}";
 						case "EEEEE":
-							result.weekday = "narrow";
+							result.set("weekday","narrow");
 							return "{weekday}";
 						case "EEEE":
-							result.weekday = "long";
+							result.set("weekday","long");
 							return "{weekday}";
 						case "EEE":
 						case "EE":
 						case "E":
-							result.weekday = "short";
+							result.set("weekday","short");
 							return "{weekday}";
 						case "dd":
-							result.day = "2-digit";
+							result.set("day","2-digit");
 							return "{day}";
 						case "d":
-							result.day = "numeric";
+							result.set("day","numeric");
 							return "{day}";
 						case "a":
 							return "{ampm}";
 						case "hh":
-							result.hour12 = "2-digit";
+							result.set("hour12","2-digit");;
 						case "HH":
-							result.hour = "2-digit";
+							result.set("hour","2-digit");;
 							return "{hour}";
 						case "h":
-							result.hour12 = "numeric";
+							result.set("hour12","numeric");;
 						case "H":
-							result.hour = "numeric";
+							result.set("hour","numeric");;
 							return "{hour}";
 						case "mm":
-							result.minute = "2-digit";
+							result.set("minute","2-digit");;
 							return "{minute}";
 						case "m":
-							result.minute = "numeric";
+							result.set("minute","numeric");;
 							return "{minute}";
 						case "ss":
-							result.second = "2-digit";
+							result.set("second","2-digit");;
 							return "{second}";
 						case "s":
-							result.second = "numeric";
+							result.set("second","numeric");;
 							return "{second}";
 						default:
 							return field;
 					}
 				});
 			}
-			result.pattern = pieces.join("");
+			result.set("pattern",pieces.join(""));
 			return result;
 		}
 
@@ -1362,8 +1372,8 @@ define(
 					var outputFormat = _ToIntlDateTimeFormat(availableFormats[format]);
 					if(/H/.test(format)){
 						var outputFormat12 = _ToIntlDateTimeFormat(format12);
-						outputFormat.hour12 = outputFormat12.hour12;
-						outputFormat.pattern12 = outputFormat12.pattern;
+						outputFormat.set("hour12",outputFormat12.hour12);
+						outputFormat.set("pattern12", outputFormat12.pattern);
 					}
 					result.push(outputFormat);
 				}
@@ -1558,10 +1568,10 @@ define(
 					"minimumSignificantDigits",
 					"maximumSignificantDigits",
 					"useGrouping" ];
-				var result = {};
+				var result = new Record();
 				for( var f in fields){
 					if(this.hasOwnProperty(fields[f])){
-						result[fields[f]] = this[fields[f]];
+						result.set(fields[f],this[fields[f]]);
 					}
 				}
 				return result;
@@ -1692,10 +1702,10 @@ define(
 					"minute",
 					"second",
 					"timeZoneName" ];
-				var result = {};
+				var result = new Record();
 				for( var f in fields){
 					if(this.hasOwnProperty(fields[f])){
-						result[fields[f]] = this[fields[f]];
+						result.set(fields[f],this[fields[f]]);
 					}
 				}
 				return result;

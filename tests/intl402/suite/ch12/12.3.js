@@ -173,11 +173,11 @@ define(
 			 *     changes to Object.prototype.
 			 * @author Norbert Lindenberg
 			 */
-			// TODO: Deal with this!
-			//testIntl.taintProperties(["weekday", "era", "year", "month", "day", "hour", "minute", "second", "inDST"]);
+			testIntl.taintProperties(["weekday", "era", "year", "month", "day", "hour", "minute", "second", "inDST"]);
 
 			var format = new Intl.DateTimeFormat();
 			var time = format.format();
+			testIntl.untaintProperties(["weekday", "era", "year", "month", "day", "hour", "minute", "second", "inDST"]);
 		},
 		Test_12_3_3_L15 : function() {
 			/**

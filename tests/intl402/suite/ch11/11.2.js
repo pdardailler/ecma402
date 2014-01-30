@@ -48,9 +48,9 @@ define(
 			 *     doesn't access arguments that it's not given.
 			 * @author Norbert Lindenberg
 			 */
-			// TODO: Deal with this.
-			// testIntl.taintDataProperty(Object.prototype, "1");
-			// new Intl.NumberFormat("und");
+			testIntl.taintDataProperty(Object.prototype, "1");
+			new Intl.NumberFormat("und");
+			testIntl.untaintDataProperty(Object.prototype, "1");
 		},
 		Test_11_2_2_L15 : function() {
 			/**

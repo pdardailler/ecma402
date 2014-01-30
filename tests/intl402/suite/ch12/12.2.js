@@ -52,6 +52,7 @@ define(
 			 */
 			testIntl.taintDataProperty(Object.prototype, "1");
 			new Intl.DateTimeFormat("und");
+			testIntl.untaintDataProperty(Object.prototype, "1");
 		},
 		Test_12_2_2_L15 : function() {			
 			/**

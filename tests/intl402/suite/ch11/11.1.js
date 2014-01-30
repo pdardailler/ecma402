@@ -44,6 +44,20 @@ define(
 			    assert.strictEqual(error.name,"TypeError","Re-initializing object created with constructor as function as NumberFormat was rejected with wrong error " + error.name + ".");
 			});
 		},
+		Test_11_1_1_6 : function() {
+			/**
+			 * @description Tests that the behavior of a Record is not affected by adversarial
+			 *     changes to Object.prototype.
+			 * @author Norbert Lindenberg
+			 */
+			testIntl.taintProperties(["localeMatcher"]);
+
+			var locale = new Intl.NumberFormat(undefined, {localeMatcher: "lookup"}).resolvedOptions().locale;
+			assert(testIntl.isCanonicalizedStructurallyValidLanguageTag(locale),
+			    "NumberFormat returns invalid locale " + locale + ".");
+			
+			testIntl.untaintProperties(["localeMatcher"]);
+		},
 		Test_11_1_1_15 : function() {
 			/**
 			 * @description Tests that the option style is processed correctly.
@@ -407,18 +421,6 @@ define(
 			 */
 			testIntl.testOption(Intl.NumberFormat, "useGrouping", "boolean", undefined, true);
 		},
-		Test_11_1_1_6 : function() {
-			/**
-			 * @description Tests that the behavior of a Record is not affected by adversarial
-			 *     changes to Object.prototype.
-			 * @author Norbert Lindenberg
-			 */
-			// TODO: Deal with this! testIntl.taintProperties(["localeMatcher"]);
-
-			var locale = new Intl.NumberFormat(undefined, {localeMatcher: "lookup"}).resolvedOptions().locale;
-			assert(testIntl.isCanonicalizedStructurallyValidLanguageTag(locale),
-			    "NumberFormat returns invalid locale " + locale + ".");
-		},
 		Test_11_1_1_7 : function() {
 			/**
 			 * @description Tests that the option localeMatcher is processed correctly.
@@ -498,6 +500,7 @@ define(
 
 			assert(Object.isExtensible(obj),
 			    "Object constructed by Intl.NumberFormat must be extensible.");
-		}
+		},
+
 	});
 });
