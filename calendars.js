@@ -1,15 +1,7 @@
 // Copyright 2013 International Business Machines Corporation. All rights reserved.
 define(
-	[],
-	function() {
-		// Implementation of the Record abstract data type from ECMA 402.
-		function Record() {
-			this.length = 0;
-		}
-
-		Record.prototype.set = function(field,val) {
-			Object.defineProperty(this,field,{value:val});
-		};
+	["./Record"],
+	function(Record) {
 
 		function LocalTimeGregorian(date, timeZone) {
 			var result = new Record();
@@ -34,6 +26,7 @@ define(
 			result.set("inDST",timeZone=="UTC"?false:localMinutes+dt.getTimezoneOffset()!=UTCMinutes);
 			return result;
 		}
+
 		var calendars = {};
 		calendars.ToLocalTime = function (date, calendar, timeZone) {
 			switch (calendar) {

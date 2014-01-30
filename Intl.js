@@ -1,7 +1,8 @@
 define(
-	[ "dojo/request", "./calendars" ],
-	function(request, calendars) {
+	[ "dojo/request", "./calendars", "./Record" ],
+	function(request, calendars, Record) {
 
+		var availableLocalesList = CanonicalizeLocaleList(getCLDRJson("config", "availableLocales").availableLocales);
 		var aliases = getCLDRJson("supplemental", "aliases").supplemental.metadata.alias;
 		var localeAliases = getCLDRJson("supplemental", "localeAliases").supplemental.metadata.alias;
 		var parentLocales = getCLDRJson("supplemental", "parentLocales").supplemental.parentLocales;
@@ -32,14 +33,6 @@ define(
 			return result;
 		}
 
-		// Utility function to determine the available locales list.
-		// TODO: Determine this dynamically from the JSON files that are there.
-		function getAvailableLocales() {
-			return Array("ar", "ca", "cs", "da", "de", "el", "en", "en-AU", "en-CA", "en-GB", "en-HK", "en-IN",
-				"en-US", "es", "fi", "fr", "he", "hi", "hr", "hu", "it", "ja", "ko", "nb", "nl", "pl", "pt", "pt-PT",
-				"ro", "root", "ru", "sk", "sl", "sr", "sv", "th", "tr", "uk", "vi", "zh", "zh-Hant");
-		}
-
 		// Implementation of the List abstract data type from ECMA 402.
 		function List() {
 			for(var i = 0; i<arguments.length; i++){
@@ -62,15 +55,6 @@ define(
 			}
 			return result;
 		};
-		// Implementation of the Record abstract data type from ECMA 402.
-		function Record() {
-			this.length = 0;
-		}
-
-		Record.prototype.set = function(field,val) {
-			Object.defineProperty(this,field,{value:val,writable:true,enumerable:true,configurable:true});
-		};
-
 
 		// ECMA 262 Section 9.1
 		function IsPrimitive(x) {
@@ -272,13 +256,13 @@ define(
 			return wellFormed.test(currency.toString()); // Boolean
 		}
 
-		// ECMA 402 Section 6.4
+		// ECMA 402 Section 6.2.4
 		function DefaultLocale() {
 			if(IsStructurallyValidLanguageTag(navigator.language)){
-				return CanonicalizeLanguageTag(navigator.language);
+				return BestFitAvailableLocale(availableLocalesList, CanonicalizeLanguageTag(navigator.language));
 			}
 			if(IsStructurallyValidLanguageTag(navigator.userLanguage)){
-				return CanonicalizeLanguageTag(navigator.userLanguage);
+				return BestFitAvailableLocale(availableLocalesList, CanonicalizeLanguageTag(navigator.userLanguage));
 			}
 			return "root";
 		}
@@ -1122,9 +1106,7 @@ define(
 			dateTimeProperties.forEach(function(prop) {
 				var pDesc = Object.getOwnPropertyDescriptor(bestFormat, prop);
 				if(pDesc!=undefined){
-					var p = bestFormat[prop];
-					//dateTimeFormat[prop] = p;
-					Object.defineProperty(dateTimeFormat,prop,{value:p});
+					dateTimeFormat[prop] = bestFormat[prop];
 				}
 			});
 			var pattern;
@@ -1139,6 +1121,7 @@ define(
 					var hourNo0 = DateTimeFormat.localeData[dateTimeFormat.dataLocale]
 						&&DateTimeFormat.localeData[dateTimeFormat.dataLocale].hourNo0;
 					dateTimeFormat.hourNo0 = hourNo0;
+					dateTimeFormat.hour = bestFormat.hour12;
 					pattern = bestFormat.pattern12;
 				}else{
 					pattern = bestFormat.pattern;
@@ -1417,8 +1400,9 @@ define(
 			}
 		}
 
+		// ECMA 402 Section 11.3.2
 		var NumberFormat = {};
-		NumberFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
+		NumberFormat.availableLocales = availableLocalesList;
 		NumberFormat.relevantExtensionKeys = [ "nu" ];
 		NumberFormat.localeData = {};
 		NumberFormat.availableLocales.forEach(function(loc) {
@@ -1430,7 +1414,7 @@ define(
 		
 		// ECMA 402 Section 12.2.3
 		var DateTimeFormat = {};
-		DateTimeFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
+		DateTimeFormat.availableLocales = availableLocalesList;
 		DateTimeFormat.relevantExtensionKeys = [ "ca", "nu" ];
 		DateTimeFormat.localeData = {};
 		DateTimeFormat.availableLocales.forEach(function(loc) {
@@ -1489,16 +1473,6 @@ define(
 			enumerable : false
 		});
 
-		Intl.NumberFormat.availableLocales = CanonicalizeLocaleList(getAvailableLocales());
-		Intl.NumberFormat.relevantExtensionKeys = [ "nu" ];
-		// ECMA 402 Section 11.3.2
-		Intl.NumberFormat.localeData = {};
-		Intl.NumberFormat.availableLocales.forEach(function(loc) {
-			Intl.NumberFormat.localeData[loc] = {
-				"nu" : availableNumberingSystems
-			};
-		});
-
 		// ECMA 402 Section 11.1.2.1
 		Intl.NumberFormat.call = function(thisObject, locales, options) {
 			if(thisObject==Intl||thisObject===undefined){
@@ -1515,7 +1489,7 @@ define(
 		// ECMA 402 Section 11.2.2
 		Object.defineProperty(Intl.NumberFormat, "supportedLocalesOf", {
 			value : function(locales) {
-				var availableLocales = Intl.NumberFormat.availableLocales;
+				var availableLocales = NumberFormat.availableLocales;
 				var requestedLocales = CanonicalizeLocaleList(locales);
 				var options = undefined;
 				if(arguments.length>1){
