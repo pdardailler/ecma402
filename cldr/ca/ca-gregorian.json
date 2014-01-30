@@ -217,6 +217,7 @@
               }
             },
             "dateTimeFormats": {
+              "full": "{1} {0}",
               "availableFormats": {
                 "EHm": "E H:mm",
                 "EHms": "E H:mm:ss",

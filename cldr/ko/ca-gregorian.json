@@ -217,6 +217,7 @@
               }
             },
             "dateTimeFormats": {
+              "full": "{1} {0}",
               "availableFormats": {
                 "EEEEd": "d일 EEEE",
                 "EHm": "(E) HH:mm",

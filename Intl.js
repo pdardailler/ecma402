@@ -1116,7 +1116,7 @@ define(
 			var cldrCalendar = dateTimeFormat.calendar.replace("gregory", "gregorian");
 			var calData = getCLDRJson(dateTimeFormat.dataLocale, "ca-"+cldrCalendar).main[dateTimeFormat.dataLocale].dates.calendars[cldrCalendar];
 			dateTimeFormat.calData = calData;
-			var formats = _convertAvailableDateTimeFormats(calData.dateTimeFormats.availableFormats);
+			var formats = _convertAvailableDateTimeFormats(calData.dateTimeFormats);
 			matcher = GetOption(options, "formatMatcher", "string", [ "basic", "best fit" ], "best fit");
 			var bestFormat = matcher=="basic" ? BasicFormatMatcher(opt, formats) : BestFitFormatMatcher(opt, formats);
 			dateTimeProperties.forEach(function(prop) {
@@ -1363,7 +1363,8 @@ define(
 		// Utility function to convert the availableFormats from a CLDR JSON object into
 		// an array of available formats as defined by ECMA 402. For definition of fields,
 		// in CLDR, refer to http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
-		function _convertAvailableDateTimeFormats(availableFormats) {
+		function _convertAvailableDateTimeFormats(dateTimeFormats) {
+			var availableFormats = dateTimeFormats.availableFormats;
 			var result = [];
 			var usableFormatSkeletons = /^G{0,5}y{0,4}M{0,5}E{0,5}d{0,2}H{0,2}m{0,2}s{0,2}$/;
 			for( var format in availableFormats){
@@ -1378,6 +1379,21 @@ define(
 					result.push(outputFormat);
 				}
 			}
+			// ECMA402 requires us to have a full date format that includes weekday, year, month
+			// day, hour, minute, and second.  Since CLDR doesn't specifically have that combination,
+			// we have to piece it together using three pieces:
+			// a). The yMMMMEd or yMMMEd format from available formats
+			// b). The "full" date/time format combiner.
+			// c). The Hms format in locales using 24-hour clock, or the hms format in locales using a 12-hour clock.
+			var combinedDateFormat = dateTimeFormats.full||"{1} {0}";
+			combinedDateFormat = combinedDateFormat.replace("{1}",availableFormats.yMMMMEd||availableFormats.yMMMEd);
+			var combinedDateTimeFormat24 = combinedDateFormat.replace("{0}",availableFormats.Hms);
+			var combinedDateTimeFormat12 = combinedDateFormat.replace("{0}",availableFormats.hms);
+			outputFormat = _ToIntlDateTimeFormat(combinedDateTimeFormat24);
+			outputFormat12 = _ToIntlDateTimeFormat(combinedDateTimeFormat12);
+			outputFormat.set("hour12",outputFormat12.hour12);
+			outputFormat.set("pattern12", outputFormat12.pattern);
+			result.push(outputFormat);
 			return result;
 		}
 
