@@ -656,7 +656,7 @@
             "_reason": "macrolanguage"
           },
           "mo": {
-            "_replacement": "ro",
+            "_replacement": "ro-MD",
             "_reason": "deprecated"
           },
           "mol": {

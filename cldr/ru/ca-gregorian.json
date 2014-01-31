@@ -175,30 +175,30 @@
             "dayPeriods": {
               "format": {
                 "abbreviated": {
-                  "am": "до полудня",
-                  "pm": "после полудня"
+                  "am": "AM",
+                  "pm": "PM"
                 },
                 "narrow": {
-                  "am": "дп",
-                  "pm": "пп"
+                  "am": "AM",
+                  "pm": "PM"
                 },
                 "wide": {
-                  "am": "до полудня",
-                  "pm": "после полудня"
+                  "am": "AM",
+                  "pm": "PM"
                 }
               },
               "stand-alone": {
                 "abbreviated": {
-                  "am": "до полудня",
-                  "pm": "после полудня"
+                  "am": "AM",
+                  "pm": "PM"
                 },
                 "narrow": {
-                  "am": "дп",
-                  "pm": "пп"
+                  "am": "AM",
+                  "pm": "PM"
                 },
                 "wide": {
-                  "am": "до полудня",
-                  "pm": "после полудня"
+                  "am": "AM",
+                  "pm": "PM"
                 }
               }
             },

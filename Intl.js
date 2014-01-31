@@ -258,13 +258,17 @@ define(
 
 		// ECMA 402 Section 6.2.4
 		function DefaultLocale() {
+			var result = undefined;
 			if(IsStructurallyValidLanguageTag(navigator.language)){
-				return BestFitAvailableLocale(availableLocalesList, CanonicalizeLanguageTag(navigator.language));
+				result = BestFitAvailableLocale(availableLocalesList, CanonicalizeLanguageTag(navigator.language));
 			}
-			if(IsStructurallyValidLanguageTag(navigator.userLanguage)){
-				return BestFitAvailableLocale(availableLocalesList, CanonicalizeLanguageTag(navigator.userLanguage));
+			if(!result&&IsStructurallyValidLanguageTag(navigator.userLanguage)){
+				result = BestFitAvailableLocale(availableLocalesList, CanonicalizeLanguageTag(navigator.userLanguage));
 			}
-			return "root";
+			if(!result){
+				result = "root";
+			}
+			return result;
 		}
 
 		// ECMA 402 Section 9.2.1

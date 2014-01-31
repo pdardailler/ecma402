@@ -21,8 +21,8 @@ define([ 'intern!object', 'intern/chai!assert', '../Intl' ], function(registerSu
 				"bestfit" : "de",
 			}, {
 				"input" : "de-ch",
-				"lookup" : "de",
-				"bestfit" : "de",
+				"lookup" : "de-CH",
+				"bestfit" : "de-CH",
 			}, {
 				"input" : "ja-jp",
 				"lookup" : "ja",
@@ -34,7 +34,11 @@ define([ 'intern!object', 'intern/chai!assert', '../Intl' ], function(registerSu
 			}, {
 				"input" : "zh-CN",
 				"lookup" : "zh",
-				"bestfit" : "zh",
+				"bestfit" : "zh-Hans",
+			}, {
+				"input" : "zh-SG",
+				"lookup" : "zh",
+				"bestfit" : "zh-Hans-SG",
 			}, {
 				"input" : "zh-TW",
 				"lookup" : "zh",
@@ -42,15 +46,15 @@ define([ 'intern!object', 'intern/chai!assert', '../Intl' ], function(registerSu
 			}, {
 				"input" : "zh-MO",
 				"lookup" : "zh",
-				"bestfit" : "zh-Hant",
+				"bestfit" : "zh-Hant-HK",
 			}, {
 				"input" : "zh-HK-VARIANT",
 				"lookup" : "zh",
-				"bestfit" : "zh-Hant",
+				"bestfit" : "zh-Hant-HK",
 			}, {
 				"input" : "sr-ME",
 				"lookup" : "sr",
-				"bestfit" : "root",
+				"bestfit" : "sr-Latn",
 			}, {
 				"input" : "sr-YU",
 				"lookup" : "sr",
@@ -58,7 +62,7 @@ define([ 'intern!object', 'intern/chai!assert', '../Intl' ], function(registerSu
 			}, {
 				"input" : "pt-AO",
 				"lookup" : "pt",
-				"bestfit" : "pt-PT",
+				"bestfit" : "pt-AO",
 			}, {
 				"input" : "en-GB-u-co-phonebk",
 				"lookup" : "en-GB",
@@ -66,7 +70,7 @@ define([ 'intern!object', 'intern/chai!assert', '../Intl' ], function(registerSu
 			}, {
 				"input" : "en-NZ-u-ca-japanese",
 				"lookup" : "en",
-				"bestfit" : "en-GB",
+				"bestfit" : "en-NZ",
 			} ];
 
 			testLanguageTags.forEach(function(currentTag) {
