@@ -25,6 +25,7 @@ define(
 			 */
 			// TODO: Deal with this properly...!
 			// testIntl.taintArray();
+			assert(false,"TODO: fix the taintArray() testcase...");
 			testIntl.testWithIntlConstructors(function (Constructor) {
 			    var defaultLocale = new Constructor().resolvedOptions().locale;
 			    var canonicalized = Constructor.supportedLocalesOf([defaultLocale, defaultLocale]);
@@ -242,6 +243,7 @@ define(
 			 *     changes to Array.prototype.
 			 * @author Norbert Lindenberg
 			 */
+			assert(false,"TODO: fix the taintArray() testcase...");
 			// TODO: Deal with this! testIntl.taintArray();
 
 			testIntl.testWithIntlConstructors(function (Constructor) {

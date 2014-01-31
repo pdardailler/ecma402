@@ -11,6 +11,7 @@ define(
 		var aliases = getCLDRJson("supplemental", "aliases").supplemental.metadata.alias;
 		var localeAliases = getCLDRJson("supplemental", "localeAliases").supplemental.metadata.alias;
 		var parentLocales = getCLDRJson("supplemental", "parentLocales").supplemental.parentLocales;
+		var currencyData = getCLDRJson("supplemental", "currencyData").supplemental.currencyData.fractions;
 		var timeData = getCLDRJson("supplemental", "timeData").supplemental.timeData;
 		var likelySubtags = getCLDRJson("supplemental", "likelySubtags").supplemental.likelySubtags;
 		var numberingSystems = getCLDRJson("supplemental", "numberingSystems").supplemental.numberingSystems;
@@ -231,12 +232,6 @@ define(
 			return result; // String
 		}
 
-		// ECMA 402 Section 6.3.1
-		function IsWellFormedCurrencyCode(currency) {
-			var wellFormed = /^[A-Za-z]{3}$/;
-			return wellFormed.test(currency.toString()); // Boolean
-		}
-
 		// ECMA 402 Section 6.2.4
 		function DefaultLocale() {
 			var result = undefined;
@@ -250,6 +245,12 @@ define(
 				result = "root";
 			}
 			return result;
+		}
+
+		// ECMA 402 Section 6.3.1
+		function IsWellFormedCurrencyCode(currency) {
+			var wellFormed = /^[A-Za-z]{3}$/;
+			return wellFormed.test(currency.toString()); // Boolean
 		}
 
 		// ECMA 402 Section 9.2.1
@@ -567,7 +568,6 @@ define(
 		}
 
 		function CurrencyDigits(currency) {
-			var currencyData = getCLDRJson("supplemental", "currencyData").supplemental.currencyData.fractions;
 			if(currencyData[currency]){
 				return currencyData[currency]._digits;
 			}
@@ -806,11 +806,11 @@ define(
 			}
 			return m;
 		}
-		// ECMA 402 Section 11.3.2
+		// ECMA 402 Section 11.3.2 (ToRawFixed abstract operation)
 		function ToRawFixed(x, minInteger, minFraction, maxFraction) {
 			var m;
 			// if x < 10^21, then we can use the standard built in function.
-			// Otherwise, Number.toFixed is going to give us back a value in
+			// Otherwise, Number.toFixed() is going to give us back a value in
 			// scientific notation, and we have to convert it back to a
 			// series of digits.
 			if(Math.abs(x)<Math.pow(10,21)){
@@ -840,7 +840,7 @@ define(
 			}
 			return m;
 		}
-		// ECMA 402 Section 11.3.2
+		// ECMA 402 Section 11.3.2 (FormatNumber abstract operation)
 		function FormatNumber(numberFormat, x) {
 			var negative = false;
 			var n;
@@ -942,7 +942,7 @@ define(
 			return result;
 		}
 
-		// ECMA 402 Section 12.1.1.1
+		// ECMA 402 Section 12.1.1.1 (ToDateTimeOptions abstract operation)
 		function ToDateTimeOptions(options, required, defaults) {
 			if(options===undefined){
 				options = null;
@@ -991,7 +991,7 @@ define(
 			}
 			return options;
 		}
-		// ECMA 402 Section 12.1.1.1
+		// ECMA 402 Section 12.1.1.1 (BasicFormatMatcher abstract operation)
 		function BasicFormatMatcher(options, formats) {
 			var removalPenalty = 120;
 			var additionPenalty = 20;
