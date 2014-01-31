@@ -1,6 +1,6 @@
 #ecma402
 
-This project provides a Javascript implementation of ECMA 402 internationalization APIs for number formatting and
+This project provides a JavaScript implementation of ECMA 402 internationalization APIs for number formatting and
 date/time formatting.
 
 ## Status
@@ -20,11 +20,12 @@ All contributions require a [Dojo Foundation CLA](http://dojofoundation.org/abou
 
  To install the latest master, go to the root Dojo installation directory and clone ecma402 from github
 
- git clone git://github.com/ibm-dojo/ecma402.git
+ git clone git://github.com/ibm-js/ecma402.git
 
 ## Documentation
 
+For information on adding or removing locales from the supported list, refer to the instructions in cldr/config/README.md
 
 ## Credits
 
-
+John Emmons (IBM)

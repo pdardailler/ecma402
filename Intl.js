@@ -1,22 +1,26 @@
 define(
-	[ "dojo/request", "./calendars", "./Record" ],
-	function(request, calendars, Record) {
-
+	[ "dojo/request", "./calendars", "./Record", "./List" ],
+	function(request, calendars, Record, List) {
+		//
+		// JavaScript implementation of Internationalization APIs as defined in ECMA standard 402 version 1.0
+		//
+		
+		var unicodeLocaleExtensions = /-u(-[a-z0-9]{2,8})+/g;
+		var dateTimeProperties = [ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ];
 		var availableLocalesList = CanonicalizeLocaleList(getCLDRJson("config", "availableLocales").availableLocales);
 		var aliases = getCLDRJson("supplemental", "aliases").supplemental.metadata.alias;
 		var localeAliases = getCLDRJson("supplemental", "localeAliases").supplemental.metadata.alias;
 		var parentLocales = getCLDRJson("supplemental", "parentLocales").supplemental.parentLocales;
-		var unicodeLocaleExtensions = /-u(-[a-z0-9]{2,8})+/g;
-		var numberingSystems = getCLDRJson("supplemental", "numberingSystems").supplemental.numberingSystems;
-		var dateTimeProperties = [ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ];
 		var timeData = getCLDRJson("supplemental", "timeData").supplemental.timeData;
 		var likelySubtags = getCLDRJson("supplemental", "likelySubtags").supplemental.likelySubtags;
+		var numberingSystems = getCLDRJson("supplemental", "numberingSystems").supplemental.numberingSystems;
 		var availableNumberingSystems = [ "latn" ];
 		for( var ns in numberingSystems){
 			if(numberingSystems[ns]._type=="numeric"&&ns!="latn"){
 				availableNumberingSystems.push(ns);
 			}
 		}
+
 		// Utility function for Synchronous JSON loading using Dojo require.
 		function getCLDRJson(locale, path) {
 			var result = undefined;
@@ -32,29 +36,6 @@ define(
 			});
 			return result;
 		}
-
-		// Implementation of the List abstract data type from ECMA 402.
-		function List() {
-			for(var i = 0; i<arguments.length; i++){
-				this[i] = arguments[i];
-			}
-			this.length = arguments.length;
-		}
-
-		List.prototype.push = function(item) {
-			this[this.length] = item;
-			this.length++;
-		};
-
-		List.prototype.toArray = function() {
-			var i = 0;
-			var result = new Array(this.length);
-			while (i<this.length){
-				result[i] = this[i];
-				i++;
-			}
-			return result;
-		};
 
 		// ECMA 262 Section 9.1
 		function IsPrimitive(x) {

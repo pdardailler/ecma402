@@ -19,17 +19,17 @@ Currently we create the data in three passes:
 1). Currencies - Since the list of currencies is potentially quite large, we only are interested in currencies in the "modern" coverage level
 for CLDR.
 
-Ldml2JsonConverter -t main -r true -i false -k dojo_cldr_currencies_config.txt -s contributed -o false
+Ldml2JsonConverter -t main -r true -i false -k ecma402_cldr_currencies_config.txt -s contributed -o false
   -m (${DESIRED_LOCALES}) -l modern
 
 2). Everything else in main...
 
-Ldml2JsonConverter -t main -r true -i false -k dojo_cldr_config.txt -s contributed -o false
+Ldml2JsonConverter -t main -r true -i false -k ecma402_cldr_config.txt -s contributed -o false
   -m (${DESIRED_LOCALES})
 
-Third pass: Supplemental data used by Dojo (supplemental currency data and language tag canonicalization data).
+Third pass: Supplemental data (currency data and language tag canonicalization data).
 
-Ldml2JsonConverter -t supplemental -i false -k dojo_cldr_config.txt -s contributed -o false
+Ldml2JsonConverter -t supplemental -i false -k ecma402_cldr_config.txt -s contributed -o false
 
 In the first and second pass steps above, ${DESIRED_LOCALES} is a regular expression that matches the locale identifiers from CLDR
 for which you want to generate data.
